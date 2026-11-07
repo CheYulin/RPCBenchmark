@@ -53,3 +53,21 @@ cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
 计数采用闭环负载。预热使用同一组连接，预热 RPC 不计入测量。Client 在约定时点开始测量，每个 lane 到测量截止时停止发起新请求，并等待已发请求返回。JSON 中 `drained` 是截止后完成的请求数，`elapsed_s` 至少为指定的测量时长，包含最后请求的排空时间。`rps = success / elapsed_s`。每个成功样本的耗时从发起到 RPC 返回且数据校验完成。全量成功样本写入逐 lane 的直方图，再合并生成 P50、P95、P99 和 P99.9；`histogram` 条目为 `[微秒上界, 次数]`。1,024 µs 以内桶宽 1 µs，之后按 2 的幂分桶，长尾量化上界在输出时不超过实测最大值向上取整。均值与最大值直接从成功样本计算。
 
 该负载用于对比框架调度、编解码、拷贝和 TCP 路径的合计成本。一次 Echo 的延迟无法直接拆成这些阶段。应用层重试、队列、连接池、缓存/对象接口、跨机网络、TLS、共享内存和 RDMA 均属于另外的实验条件。
+
+## Matched host matrix and process evidence
+
+Use a Linux host with cgroup v2, systemd, `ss`, and separate CPU sets. The
+recorded host used CPUs 16–23 for the server, 24–31 for the client, and CPU
+15 for monitoring. The 4-worker cases use the first four CPUs per role.
+
+    mkdir -p results
+    sudo env "PATH=$PATH" "LD_LIBRARY_PATH=${LD_LIBRARY_PATH:-}" \
+      RPC_SECONDS=4 RPC_WARMUP=1 bash tools/run-host.sh build results main
+    python3 tools/summarize.py results/main/cases results/summary
+
+The runner alternates the engine order across cases and repeats. It verifies
+the observed TCP connection count, records cgroup CPU consumption for each role,
+and saves per-thread Linux counters, process RSS, and host CPU counters.
+For a different CPU layout, run `python3 tools/run_matrix.py --help` and
+substitute the appropriate CPU sets. The profiling command in
+`tools/profile_one.sh` runs separately from the comparison matrix.
