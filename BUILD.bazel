@@ -1,0 +1,76 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_proto_library")
+load("@rules_proto//proto:defs.bzl", "proto_library")
+
+LAB_COPTS = ["-std=c++20", "-pthread"]
+
+cc_library(
+    name = "lab",
+    srcs = ["src/lab.cpp"],
+    hdrs = ["src/lab.h"],
+    copts = LAB_COPTS,
+    linkopts = ["-pthread"],
+)
+
+proto_library(
+    name = "echo_proto",
+    srcs = ["src/echo.proto"],
+    strip_import_prefix = "src",
+)
+
+cc_proto_library(
+    name = "echo_cc_proto",
+    deps = [":echo_proto"],
+)
+
+cc_binary(
+    name = "rpc_brpc",
+    srcs = ["src/brpc.cpp"],
+    copts = LAB_COPTS,
+    deps = [
+        ":echo_cc_proto",
+        ":lab",
+        "@brpc//:brpc",
+    ],
+)
+
+cc_binary(
+    name = "rpc_coro",
+    srcs = ["src/coro.cpp"],
+    copts = LAB_COPTS,
+    deps = [
+        ":lab",
+        "@yalantinglibs",
+    ],
+)
+
+sh_test(
+    name = "rpc_brpc_smoke",
+    size = "small",
+    srcs = ["tests/bazel_smoke.sh"],
+    args = ["$(rootpath tests/smoke.py)", "./$(rootpath :rpc_brpc)"],
+    data = [":rpc_brpc", "tests/smoke.py"],
+    tags = ["requires-network"],
+)
+
+sh_test(
+    name = "rpc_coro_smoke",
+    size = "small",
+    srcs = ["tests/bazel_smoke.sh"],
+    args = ["$(rootpath tests/smoke.py)", "./$(rootpath :rpc_coro)"],
+    data = [":rpc_coro", "tests/smoke.py"],
+    tags = ["requires-network"],
+)
+
+sh_test(
+    name = "rpc_coro_pooled_smoke",
+    size = "small",
+    srcs = ["tests/bazel_smoke.sh"],
+    args = [
+        "$(rootpath tests/smoke.py)",
+        "./$(rootpath :rpc_coro)",
+        "--handler-workers",
+        "4",
+    ],
+    data = [":rpc_coro", "tests/smoke.py"],
+    tags = ["requires-network"],
+)

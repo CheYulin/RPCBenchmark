@@ -1,0 +1,16 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+cc_library(
+    name = "yalantinglibs",
+    hdrs = glob([
+        "include/**/*.h",
+        "include/**/*.hpp",
+        "include/**/*.ipp",
+    ]),
+    includes = [
+        "include",
+        "include/ylt/standalone",
+        "include/ylt/thirdparty",
+    ],
+    visibility = ["//visibility:public"],
+)

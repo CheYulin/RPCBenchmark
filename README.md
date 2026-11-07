@@ -6,10 +6,12 @@
 
 | 组件 | 来源与版本 | 实验边界 |
 | --- | --- | --- |
-| Apache bRPC | [1.15.0](https://github.com/apache/brpc/tree/50a9075de62f1d2b825b902acbfecfddb3d9f314)，Apache 发布包 SHA256 `0bc8c2aee810c96e6c77886f828fbfdf32ae353ce997eb46f2772c0088010c35`，对应 DataSystem 的依赖版本 | 原版 bRPC 的 `baidu_std` + protobuf，使用构建主机的 protobuf、gflags、LevelDB、OpenSSL 与 zlib；DataSystem 的兼容补丁、生成 stub、认证和业务处理不在本仓 |
+| Apache bRPC | [1.15.0](https://github.com/apache/brpc/tree/50a9075de62f1d2b825b902acbfecfddb3d9f314)，Apache 发布包 SHA256 `0bc8c2aee810c96e6c77886f828fbfdf32ae353ce997eb46f2772c0088010c35`，对应 DataSystem 的依赖版本 | 原版 bRPC 的 `baidu_std` + protobuf。CMake 路径使用构建主机的 protobuf、gflags、LevelDB、OpenSSL 与 zlib。DataSystem 的兼容补丁、生成 stub、认证和业务处理不在本仓 |
 | yaLanTingLibs | [45c6463](https://github.com/alibaba/yalantinglibs/tree/45c6463c0afbcc46262e373effa30635be3846a0)，[Mooncake v0.3.14 的版本锁](https://github.com/kvcache-ai/Mooncake/blob/e1ea5d31bb5e46ff2df9f90e7c2fbaf52fcdee8c/mooncake-common/FindYLT.cmake)，GitHub 源码包 SHA256 `baa6b5c9ffcc0af8252742bba8f0fb9c6d37387c13b2ff5b26d29c6aaff6ee37` | coro_rpc + struct_pack，使用源码包自带 Asio 与 async_simple；可选应用 handler 线程池复现 `coro_io::post` 调度边界 |
 
 ## 构建和验收
+
+### CMake
 
 依赖 Linux、支持 C++20 的编译器、CMake 3.20+、Ninja、Python 3 和 bRPC 的原生依赖。以 Debian/Ubuntu 为例，所需开发包为 `libprotobuf-dev protobuf-compiler libprotoc-dev libgflags-dev libleveldb-dev libssl-dev zlib1g-dev`。以 `CXX=g++-13` 为例选择编译器。
 
@@ -28,6 +30,23 @@ cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
 ```
 
 如已安装同一发布包编译出的共享 `libbrpc.so`，可通过 `-DRPC_LAB_BRPC_ROOT=/path/prefix` 复用。确保 lab 与 bRPC 使用同一 protobuf ABI，并让运行时能找到该前缀所需的动态库。`-DRPC_LAB_BUILD_BRPC=OFF` 或 `-DRPC_LAB_BUILD_CORO=OFF` 可分别跳过一个框架。运行测试需要可用的 IPv4 本地回环网络。
+
+### Bazel
+
+使用 Linux、支持 C++20 的编译器、Perl、Python 3 和 Bazel 7.4.1。若使用 Bazelisk，它会按 `.bazelversion` 选择 Bazel 版本。
+
+```bash
+CC=gcc-13 CXX=g++-13 bazel build //:rpc_brpc //:rpc_coro
+CC=gcc-13 CXX=g++-13 bazel test //:rpc_brpc_smoke //:rpc_coro_smoke //:rpc_coro_pooled_smoke
+```
+
+产物为 `bazel-bin/rpc_brpc` 和 `bazel-bin/rpc_coro`。回环和矩阵脚本使用相同的参数，可把矩阵命令中的 `build` 换成 `bazel-bin`。
+
+```bash
+./bazel-bin/rpc_coro server --port 18081 --workers 4
+```
+
+Bazel 直接构建 bRPC 发布包内的 `@brpc//:brpc`，使用其 Bzlmod 依赖和锁定的 YLT 头文件，两个框架的源码包哈希与 CMake 路径一致。Bazel 依赖图中的 protobuf 和 OpenSSL 版本由模块锁定，CMake 版本由主机安装包决定。首次构建会下载依赖并编译相关库。重复构建复用 Bazel 的增量缓存，只验证 coro_rpc 时可单独构建 `//:rpc_coro`。
 
 ## 运行
 

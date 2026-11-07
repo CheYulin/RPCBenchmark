@@ -27,7 +27,9 @@ export LC_ALL=C
     free -m
     df -h "$evidence" | sed -n '1,2p'
     g++ --version | head -1
-    cmake --version | head -1
+    if command -v cmake >/dev/null; then
+        cmake --version | head -1
+    fi
     protoc --version || true
     cat /proc/sys/kernel/sched_schedstats
     cat /proc/sys/kernel/perf_event_paranoid
