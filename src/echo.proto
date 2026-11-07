@@ -1,0 +1,12 @@
+syntax = "proto3";
+package rpc_lab_wire;
+option cc_generic_services = true;
+message EchoRequest {
+  bytes payload = 1;
+}
+message EchoResponse {
+  bytes payload = 1;
+}
+service EchoService {
+  rpc Echo(EchoRequest) returns (EchoResponse);
+}
