@@ -78,4 +78,4 @@ Mixed tiny 四个窗口的 reported P99 都是 4096 us 粗桶，不能据相同�
 - 原始 176983 B 证据归档 SHA256：`87519923841cff3c9c6b1a6f322275237b28f54ff23a313df38047bb5c5debc3`
 
 终态 binary/manifest 校验保持不变，bench/build/perf 进程均为空。未执行 counter pair；不再追加测试、性能窗或
-其他实验。候选仅留在私有实验分支，DataSystem 产品维持 `b3df79f0ee6445e06ceeae446b987e6ea06c5846`。
+其他实验。候选作为默认关闭的实验保留在私有 RPCBenchmark 的 `master`，DataSystem 产品维持 `b3df79f0ee6445e06ceeae446b987e6ea06c5846`。

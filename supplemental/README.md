@@ -1,5 +1,7 @@
 # coro_rpc 线程位置与队头阻塞探针
 
+其他实验、验证入口及结果边界见 [实验索引](experiments.md)。
+
 使用 Mooncake Store `v0.3.14` 固定的 yaLanTingLibs `45c6463c0afbcc46262e373effa30635be3846a0`。源码归档的 SHA-256 为 `baa6b5c9ffcc0af8252742bba8f0fb9c6d37387c13b2ff5b26d29c6aaff6ee37`。[Mooncake 依赖锁](https://github.com/kvcache-ai/Mooncake/blob/e1ea5d31bb5e46ff2df9f90e7c2fbaf52fcdee8c/mooncake-common/FindYLT.cmake#L20-L25)
 
 将对应源码解压后，在本目录运行。工具链需支持 Linux C++20。

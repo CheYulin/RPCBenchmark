@@ -1,6 +1,6 @@
 # 原生 coro_rpc pipeline：固定 logical concurrency
 
-本实验只保存在私有 RPCBenchmark worktree。原 `rpc_coro`、`rpc_brpc`、`lab` 数据路径不变；新增二进制
+本实验保存在私有 RPCBenchmark 的 `master`，通过独立 worktree 开发和验证。原 `rpc_coro`、`rpc_brpc`、`lab` 数据路径不变；新增二进制
 `rpc_coro_pipeline` 重用原生 coroutine loop 与 `lab::Stats`。不连接 DataSystem，也不对外发布此仓源码。
 
 | 总 logical concurrency | depth 1 连接数 | depth 8 连接数 | depth 16 连接数 |
