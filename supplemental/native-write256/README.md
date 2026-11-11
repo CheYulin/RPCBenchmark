@@ -46,3 +46,36 @@ Runtime、32 个连接、depth 1、共同 phase 和共同 drain-end 分母，按
 两臂使用同一 entry、payload 校验、CPU 绑定和编译 flags。大包 write chunk 增大可能影响同 executor 的小请求
 调度公平性，因此混合 small P99 是必要门槛。没有清楚收益或 tail 恶化即拒绝本候选，不增加更多参数扫描。
 原始 f92dd5809b0d… 冻结 binary 保留，实验结果不能直接推断 DataSystem Get 收益；产品不切换此补丁。
+
+## 固定 12 窗结果：拒绝迁移
+
+已按预声明顺序对三类负载各运行 64K、256K、256K、64K，共 12 个有效窗口。1 s warmup + 4 s 计量，
+四个 I/O executors/角色、32 连接、depth 1、同一编译 entry；混合为一个 client Runtime 的 24 tiny + 8 bulk。
+测量共 5,189,106 次成功，RPC/字节错误均为零。以下是每臂两个窗口的中位数；这是有界筛选，不是统计显著性声明。
+
+| 负载 | 64 KiB QPS | 256 KiB QPS | 中位 QPS 变化 | 其他证据 |
+|---|---:|---:|---:|---|
+| 1 MiB / c32 | 1811.6625 | 2172.7230 | +19.9298% | CPU/成功 3632.0675→3091.0880 us，−14.8945% |
+| 4 KiB / c32 | 287486.0120 | 290364.4295 | +1.0012% | reported P99 123→119.5 us，−2.8455% |
+| mixed tiny / c24 | 46240.0870 | 17746.0220 | −61.6220% | reported P50 195.5→836 us |
+| mixed bulk / c8 | 1347.8550 | 1378.3040 | +2.2591% | 两个配对 QPS 变化 +10.4280% / −4.7881% |
+
+纯大包的两个配对 QPS 均改善（+18.8957% / +20.9881%），CPU/成功均下降（−12.6192% / −17.0609%），
+通过该负载的门槛。但 mixed tiny 的两个配对 QPS 分别下降 61.0648% / 62.1624%，直接违反最多下降 3% 的
+预声明要求，因此决策为 `reject_migration`。没有改门槛、增加参数或补跑窗口。
+
+Mixed tiny 四个窗口的 reported P99 都是 4096 us 粗桶，不能据相同桶值宣称 tail 无退化或满足 5% margin；
+分辨率检查也拒绝。所有高于 1024 us 的 quantile 都使用 power-of-two 桶，纯大包 32768→16384 的 P50 桶
+变化不能称为延迟精确减半。CPU 角色窗口从 WARMUP_DONE 到进程完成，包含 phase lead/drain/teardown；
+不按 mixed 类别虚构 CPU 归属。原生 echo 的大 payload 双向传输和 inline handler 不能直接外推 DataSystem Get。
+
+工具与预声明方案保存在 stage 1 提交 `985b7aa4da7e73efc816b0cfdfa80f464ef24b89`。十个 frozen 源码输入
+逐个匹配该提交 blob；具体结果、逐窗数据摘要、预声明检查和 receipt/source-binding 见 [gate-result.json](gate-result.json)。
+
+- 64K binary SHA256：`d06b135fd5e26e7b62f0823ecca2673d2c95b3a315daeacb2c64a1c1925bf42f`
+- 256K binary SHA256：`c2e4f49880e6486063e6a03e360bc4971ed704b819e938aed03bb4621c4ddb7d`
+- 原 frozen manifest SHA256：`d39f4f3caf3e2eb50d346d1c3c3c8e944cf0e6c9b13e8af92cbe5477c4226d3f`
+- 原始 176983 B 证据归档 SHA256：`87519923841cff3c9c6b1a6f322275237b28f54ff23a313df38047bb5c5debc3`
+
+终态 binary/manifest 校验保持不变，bench/build/perf 进程均为空。未执行 counter pair；不再追加测试、性能窗或
+其他实验。候选仅留在私有实验分支，DataSystem 产品维持 `b3df79f0ee6445e06ceeae446b987e6ea06c5846`。
