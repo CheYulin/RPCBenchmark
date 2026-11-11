@@ -1,5 +1,6 @@
 #include "pacer.h"
 #include "priming_gate.h"
+#include "capture_helper.h"
 #include "datasystem/kv_client.h"
 
 #include <atomic>
@@ -190,6 +191,7 @@ struct Shared {
     std::atomic<Ns>* starts = nullptr;
     bool stop = false, producerDone = false;
     std::size_t working = 0;
+    std::uint64_t capturePhase = 0;
 };
 
 struct PrimingRecord {
@@ -252,7 +254,8 @@ void persistPriming(const Config& c, const std::vector<long>& tids,
     if (!out) throw std::runtime_error("cannot persist priming proof");
 }
 
-bool cohort(const Config& c, Shared& shared, const std::string& label, const std::vector<long>& tids)
+bool cohort(const Config& c, Shared& shared, const std::string& label, const std::vector<long>& tids,
+            benchmark_capture::Session& capture, bool finalPhase, std::uint64_t& completed)
 {
     const Ns duration = label == "warmup" ? c.warmup : c.duration;
     arrival::Ledger ledger(arrival::Plan(arrival::checkedTime(__int128(now()) + second), duration, c.rate, c.budget),
@@ -307,6 +310,7 @@ bool cohort(const Config& c, Shared& shared, const std::string& label, const std
     {
         std::lock_guard<std::mutex> guard(shared.mutex);
         shared.active = &ledger; shared.starts = starts.data();
+        shared.capturePhase = label == "warmup" ? 1 : 2;
     }
     shared.workReady.notify_all();
     waitUntil(ledger.plan.epoch, 0);
@@ -320,6 +324,7 @@ bool cohort(const Config& c, Shared& shared, const std::string& label, const std
     const Ns checkpoint = now();
     const auto cpuDrain = snapshot(c.workerPid);
     const auto counts = ledger.counts();
+    completed = counts.timely + counts.late + counts.errors + counts.mismatches;
     arrival::Histogram generation, observation, dispatchWait, queueDelay, service, e2e, verification;
     std::uint64_t fixedStarts = 0, fixedCompletions = 0, phaseStarts = 0, phaseCompletions = 0;
     bool completedBeforeCut = true;
@@ -358,9 +363,15 @@ bool cohort(const Config& c, Shared& shared, const std::string& label, const std
         && generation.percentile(99) * 1000 <= std::uint64_t(c.p99Lateness)
         && cpuBegin.sdk.available && cpuBegin.worker.available && cpuEnd.sdk.available && cpuEnd.worker.available
         && cpuDrain.sdk.available && cpuDrain.worker.available;
+    if (capture.Active()) {
+        raw.flush();
+        if (!raw) throw std::runtime_error("API ledger write failed before capture snapshot");
+        if (drained) capture.Drained(label.c_str(), finalPhase || !valid);
+    }
     std::ofstream summary(c.output / (label + "-summary.json"));
     summary << std::setprecision(18) << "{\"api_arrival_valid\":" << (valid ? "true" : "false")
-        << ",\"rpc_csend_crecv_available\":false,\"rpc_goal_eligible_without_external_probe\":false"
+        << ",\"rpc_csend_crecv_available\":" << (drained && capture.RpcAvailable() ? "true" : "false")
+        << ",\"rpc_goal_eligible_without_external_probe\":false"
         << ",\"drained\":" << (drained ? "true" : "false") << ",\"planned\":" << counts.planned
         << ",\"completions_before_drain_cut\":" << (completedBeforeCut ? "true" : "false")
         << ",\"producer_observed\":" << counts.observed << ",\"producer_unissued\":" << counts.unissued
@@ -401,14 +412,16 @@ bool cohort(const Config& c, Shared& shared, const std::string& label, const std
     raw.flush(); summary.flush();
     if (!raw || !summary) throw std::runtime_error("evidence write failed");
     if (!drained) {
+        capture.Partial(label.c_str());
         // Synchronous SDK work cannot safely be detached from its shared client.
         std::cerr << "bounded drain expired; pending receipt persisted; terminating callers\n" << std::flush;
         std::_Exit(3);
     }
-    shared.active = nullptr; shared.starts = nullptr;
+    shared.active = nullptr; shared.starts = nullptr; shared.capturePhase = 0;
     lock.unlock(); producer.join();
     return valid;
     } catch (...) {
+        capture.Partial("cohort-exception");
         // Preserve the initial planned denominator and fail the process before shared callers can outlive this ledger.
         std::cerr << "cohort failed; initial plan retained, final accounting unresolved\n" << std::flush;
         std::_Exit(4);
@@ -465,6 +478,10 @@ int run(int argc, char** argv)
         << ",\"latency_histogram\":\"1us then <=0.1percent upper bounds; merge bins,not windowP99\"}\n";
     config.close();
     if (!config) throw std::runtime_error("cannot persist config");
+    benchmark_capture::Session capture(c.output, c.callers,
+        arrival::Plan(0, c.warmup, c.rate, c.budget).count,
+        arrival::Plan(0, c.duration, c.rate, c.budget).count, c.primePerCaller);
+    const bool captureActive = capture.Active();
     Shared shared(c.callers);
     std::vector<long> tids(c.callers, -1);
     std::vector<PrimingRecord> priming(c.callers);
@@ -475,6 +492,11 @@ int run(int argc, char** argv)
         for (auto& caller : callers) if (caller.joinable()) caller.join();
     };
     bool valid = false, primingReady = false, warmupStarted = false, measureStarted = false;
+    Snapshot outerBegin{}, outerEnd{};
+    bool outerTaken = false;
+    std::uint64_t warmCompleted = 0, measureCompleted = 0;
+    const std::uint64_t requiredMethods = c.operation == "get"
+        ? benchmark_capture::ReadMethods : benchmark_capture::WriteMethods;
     try {
         callers.reserve(c.callers);
         for (std::size_t worker = 0; worker < c.callers; ++worker) {
@@ -485,31 +507,38 @@ int run(int argc, char** argv)
                 tids[worker] = syscall(SYS_gettid);
                 shared.readiness.Register(worker);
                 lock.unlock();
+                const bool registered = !captureActive || (tids[worker] > 0
+                    && static_cast<std::uint64_t>(tids[worker]) <= UINT32_MAX
+                    && capture.Register(worker, static_cast<std::uint32_t>(tids[worker])));
                 const auto setup = primeCaller(c, client, keys[worker], payload, actual);
                 lock.lock();
                 priming[worker] = setup;
-                shared.readiness.Complete(worker, !c.primePerCaller
-                    || (!setup.exception && setup.status == 0 && setup.byteValidated));
+                shared.readiness.Complete(worker, registered && (!c.primePerCaller
+                    || (!setup.exception && setup.status == 0 && setup.byteValidated)));
                 shared.changed.notify_all();
                 for (;;) {
                     shared.workReady.wait(lock, [&] {
                         return shared.stop || (shared.active && !shared.active->queue.empty());
                     });
-                    if (shared.stop) return;
+                    if (shared.stop) { lock.unlock(); capture.Unregister(worker); return; }
                     auto& ledger = *shared.active;
                     std::size_t id;
                     if (!ledger.reserve(now(), static_cast<int>(worker), id)) continue;
                     if (!ledger.dispatch(id, now())) { shared.changed.notify_all(); continue; }
                     ++shared.working;
                     auto* liveStart = shared.starts;
+                    const auto capturePhase = shared.capturePhase;
                     lock.unlock();
                     const auto key = c.operation == "get" ? id % keys.size() : worker;
+                    if (captureActive && c.operation == "get") actual.clear();
                     const auto begin = now();
                     if (begin >= ledger.records[id].deadline) {
                         lock.lock(); ledger.expireBeforeApi(id, begin); --shared.working;
                         shared.changed.notify_all(); continue;
                     }
                     liveStart[id].store(begin, std::memory_order_release);
+                    if (captureActive) capture.Begin(worker, capturePhase, id,
+                        static_cast<std::uint64_t>(ledger.records[id].scheduled), begin, requiredMethods);
                     int code = -1;
                     Ns end;
                     bool mismatch = false;
@@ -519,7 +548,10 @@ int run(int argc, char** argv)
                         end = now(); code = static_cast<int>(status.GetCode());
                         mismatch = code == 0 && c.operation == "get" && actual != payload;
                     } catch (const std::exception&) { end = now(); }
+                    catch (...) { if (!captureActive) throw; end = now(); }
                     const auto validated = now();
+                    if (captureActive) capture.End(worker, end, validated, code != 0 ? code
+                        : mismatch || end > ledger.records[id].deadline ? -1 : 0);
                     lock.lock();
                     ledger.complete(id, begin, end, validated, code != 0 ? arrival::Outcome::RpcError
                         : mismatch ? arrival::Outcome::Mismatch : arrival::Outcome::Success, code);
@@ -543,14 +575,23 @@ int run(int argc, char** argv)
         workers.close();
         if (!workers) throw std::runtime_error("cannot persist caller TIDs");
         if (primingReady) {
+            if (capture.Active()) { outerBegin = snapshot(c.workerPid); outerTaken = true; }
+        }
+        if (primingReady && capture.Arm()) {
             warmupStarted = true;
-            valid = cohort(c, shared, "warmup", tids);
+            valid = cohort(c, shared, "warmup", tids, capture, false, warmCompleted);
             if (valid) {
                 measureStarted = true;
-                valid = cohort(c, shared, "measure", tids);
+                valid = cohort(c, shared, "measure", tids, capture, true, measureCompleted);
             }
         }
-    } catch (...) { stop(); throw; }
+    } catch (...) {
+        { std::lock_guard<std::mutex> guard(shared.mutex);
+          capture.BeforeStop(!shared.active && shared.working == 0); }
+        stop(); throw;
+    }
+    { std::lock_guard<std::mutex> guard(shared.mutex);
+      capture.BeforeStop(!shared.active && shared.working == 0); }
     stop();
     if (primingReady && c.operation == "set") {
         for (const auto& key : keys) {
@@ -559,16 +600,44 @@ int run(int argc, char** argv)
         }
     }
     const bool shutdown = client.ShutDown().IsOk();
+    const bool captureOkay = capture.Close();
+    if (outerTaken) outerEnd = snapshot(c.workerPid);
+    const bool outerValid = !capture.Active() || (outerTaken && warmCompleted + measureCompleted != 0
+        && outerBegin.sdk.available && outerBegin.worker.available && outerEnd.sdk.available && outerEnd.worker.available
+        && outerBegin.before <= outerBegin.after && outerBegin.after <= outerEnd.before && outerEnd.before <= outerEnd.after
+        && outerEnd.sdk.cpuTicks >= outerBegin.sdk.cpuTicks && outerEnd.worker.cpuTicks >= outerBegin.worker.cpuTicks);
+    if (capture.Active()) {
+        std::ofstream outer(c.output / "capture-outer-cpu.json");
+        outer << "{\"mode\":\"" << capture.Mode() << "\",\"taken\":" << (outerTaken ? "true" : "false")
+              << ",\"readings_valid\":" << (outerValid ? "true" : "false")
+              << ",\"warm_completed\":" << warmCompleted << ",\"measure_completed\":" << measureCompleted
+              << ",\"completed_api_denominator\":" << warmCompleted + measureCompleted
+              << ",\"clock_ticks_per_second\":" << sysconf(_SC_CLK_TCK)
+              << ",\"cohort_proxy_not_per_api_exact_CPU\":true"
+              << ",\"boundary\":\"after_priming_register_before_Arm_to_after_seal_join_oracle_SDKShutdown_Close\""
+              << ",\"includes_readiness_lead_drain_oracle_shutdown_capture_control_and_export\":true"
+              << ",\"excludes_seed_registration_and_final_KVClient_destructor\":true,\"begin\":";
+        if (outerTaken) printSnapshot(outer, outerBegin); else outer << "null";
+        outer << ",\"end\":";
+        if (outerTaken) printSnapshot(outer, outerEnd); else outer << "null";
+        outer << ",\"rpc30_or_3percent_budget_pass\":false}\n";
+        outer.close();
+        if (!outer) throw std::runtime_error("capture outer CPU receipt write failed");
+    }
     std::ofstream final(c.output / "driver-final.json");
     final << "{\"api_arrival_valid\":" << (valid && shutdown ? "true" : "false")
           << ",\"sdk_shutdown_ok\":" << (shutdown ? "true" : "false")
           << ",\"priming_ready\":" << (primingReady ? "true" : "false")
           << ",\"warmup_started\":" << (warmupStarted ? "true" : "false")
           << ",\"measure_started\":" << (measureStarted ? "true" : "false")
-          << ",\"rpc_goal_eligible_without_external_probe\":false}\n";
+          << ",\"rpc_goal_eligible_without_external_probe\":false";
+    if (capture.Active()) final << ",\"capture_mode\":\"" << capture.Mode()
+        << "\",\"capture_or_control_ok\":" << (captureOkay ? "true" : "false")
+        << ",\"capture_outer_cpu_valid\":" << (outerValid ? "true" : "false");
+    final << "}\n";
     final.close();
     if (!final) throw std::runtime_error("cannot persist final receipt");
-    return valid && shutdown ? 0 : 2;
+    return valid && shutdown && captureOkay && outerValid ? 0 : 2;
 }
 }  // namespace
 
