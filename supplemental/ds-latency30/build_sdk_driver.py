@@ -33,7 +33,7 @@ def main():
     (args.out / "compile.stderr").write_text(result.stderr)
     receipt = {"schema": 1, "command": command, "compiler_version": version, "compile_exit": result.returncode,
                "source_sha256": {name: hashlib.sha256((source / name).read_bytes()).hexdigest()
-                                 for name in ["pacer.h", "paced_sdk.cpp", "build_sdk_driver.py"]},
+                                 for name in ["pacer.h", "priming_gate.h", "paced_sdk.cpp", "build_sdk_driver.py"]},
                "sdk_sha256": hashlib.sha256(library.read_bytes()).hexdigest(),
                "functional_or_performance_run": False}
     if result.returncode == 0:

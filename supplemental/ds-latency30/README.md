@@ -4,7 +4,7 @@ This independent Linux C++17 tool prepares a fixed-arrival API workload for the 
 the DataSystem transport nor the existing native benchmark. The same driver binary, SDK binary, Worker binary,
 flags, CPU masks, payload, rate and accounting contract must be frozen before selecting the backend externally.
 
-Current status: pure-helper C++17 compilation and fake-clock RED/GREEN passed with GCC11.5. The preserved old
+Historical f41 stage: pure-helper C++17 compilation and fake-clock RED/GREEN passed with GCC11.5. The preserved old
 contract compiled then failed as expected (exit1, fast10/slow3); the new contract and all six fake-clock scenarios
 passed (exit0). Source/evidence archive SHA256:
 `cb54115349a4ce89b10a420e1cd8d80e993d2c0983b181e3fa1931186f56555f`.
@@ -20,6 +20,39 @@ The four-window source/evidence archive SHA256 is
 No matched-load performance or RPC probe experiment has run. Functional delivery at 1000/s does not establish
 generator precision at future 50%/80% capacity rates or a 30% latency improvement. These standalone compiler
 checks do not establish CMake/Bazel integration. No local toolchain installation was performed.
+
+The later unprimed 45115/s BRPC warmup was **invalid**: 80/45115 scheduled arrivals were rejected by the fixed
+256-entry queue, although all 45035 admitted APIs succeeded. All rejects occurred in the first 19ms; the first API
+on each caller was slower than subsequent APIs. This is a startup association, not proof of an SDK root cause.
+Measurement and the coro arm did not run. The original f41 binary, fc8 sources and invalid evidence remain intact.
+
+The explicit startup policy is described in [priming-design.md](priming-design.md):
+`--prime-per-caller 0|1` defaults to 0. When enabled, each persistent caller makes one same-operation/full-size API;
+Get validates every byte, while Set has a separately recorded same-thread Get/readback oracle. Every caller must
+finish successfully before any warmup epoch is published. `priming.json` records TID, API/readback timestamps and
+statuses, bytes and exceptions. Setup is excluded from arrival/QPS accounting. A failure prevents both phases and
+marks the run invalid. GNU15.2.1 compiled the registration-only negative (expected 2 FAIL / 3 PASS, exit1), then
+the real readiness gate passed all five deterministic tests (exit0). Healthy and failure-only SDK drivers compiled
+with the original C++17/O2/strict-warning recipe against unchanged B3 SDK/public headers.
+Failed setup skips the final Set readback oracle; healthy default-0 and primed runs keep the existing oracle.
+
+The serial1 1000/s functional attempt used default0/prime1 x Get/Set x bRPC/coro, 1s warmup + 2s measurement.
+Its four bRPC healthy windows passed (12000/12000 warmup+measurement arrivals timely), and the bRPC injected
+empty-key Set case passed the expected-error contract: K_INVALID=2, no phase start, final Set readbacks0.
+The first Coro default0 Get warmup remained **invalid**: all 1000 APIs were timely/byte-correct, but maximum
+generation lateness 5.054053ms exceeded the unchanged 1ms gate (P99 76us, burst 6). Measurement and all other Coro
+cases stayed NOT_RUN. The attempt stopped without retry or tuning. Raw archive SHA256:
+`77014563fcdeeb715870eaddb7e9de00c102bb4330c2955cbe5d63e65b52992b`.
+
+A separate focused Coro semantic check reused those exact binaries: prime1 Get, prime1 Set, expected-empty-key
+Set failure. Get/Set each completed 32 same-thread primers with full-byte checks (Set adds 32 readbacks), before
+warmup/measurement epochs. Each healthy phase planned only one API: two warmup and **two measurement samples**
+total, all timely; failure blocked both phases with final Set readbacks0. This finite check passed and does not
+complete or replace serial1. It proves neither sustained 1000/s capacity nor P99/QPS or the 30% RPC goal.
+All successful guard timestamps and paired monotonic/realtime anchors were retained. The 81 main guard snapshots
+had 0 hits; actual per-case maximum gaps were 261.283/109.972/102.927ms, not continuous 100ms quiet. Actual B3 maps,
+thread masks, source/binary post-hashes and empty owned-process/netns cleanup passed. Focused raw archive SHA256:
+`93bff6dcf97d72909acdc377706744d71ca102a02eae8971f173f3af08ccb30e`.
 
 ## Bounded scheduling and ownership
 

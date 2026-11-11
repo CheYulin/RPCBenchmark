@@ -1,4 +1,5 @@
 #include "pacer.h"
+#include "priming_gate.h"
 #include "datasystem/kv_client.h"
 
 #include <atomic>
@@ -65,6 +66,7 @@ struct Config {
     std::vector<int> sdkCpus;
     std::size_t callers, capacity, payload, burstLimit;
     std::uint64_t rate;
+    bool primePerCaller;
     Ns duration, warmup, budget, drain, spin, maxLateness, p99Lateness;
 };
 Config options(int argc, char** argv)
@@ -73,7 +75,8 @@ Config options(int argc, char** argv)
         {"out", ""}, {"log-dir", ""}, {"op", "get"}, {"measure-ms", "4000"}, {"warmup-ms", "1000"},
         {"budget-ms", "2000"}, {"drain-ms", "3000"}, {"sdk-timeout-ms", "2000"}, {"queue", "256"},
         {"callers", "32"}, {"payload", "4096"}, {"spin-us", "20"}, {"max-lateness-us", "1000"},
-        {"p99-lateness-us", "100"}, {"max-burst", "64"}, {"producer-cpu", ""}, {"sdk-cpus", ""}};
+        {"p99-lateness-us", "100"}, {"max-burst", "64"}, {"producer-cpu", ""}, {"sdk-cpus", ""},
+        {"prime-per-caller", "0"}};
     std::set<std::string> seen;
     for (int i = 1; i < argc; i += 2) {
         const std::string key(argv[i]);
@@ -95,6 +98,7 @@ Config options(int argc, char** argv)
     c.capacity = static_cast<std::size_t>(number(args["queue"], 1, 65536));
     c.payload = static_cast<std::size_t>(number(args["payload"], 1, 8 * 1024 * 1024));
     c.burstLimit = static_cast<std::size_t>(number(args["max-burst"], 1, 65536));
+    c.primePerCaller = number(args["prime-per-caller"], 0, 1) != 0;
     c.duration = number(args["measure-ms"], 1, 60000) * 1000000;
     c.warmup = number(args["warmup-ms"], 1, 30000) * 1000000;
     c.budget = number(args["budget-ms"], 1, 30000) * 1000000;
@@ -178,13 +182,75 @@ void printHistogram(std::ostream& out, const arrival::Histogram& hist)
 }
 
 struct Shared {
+    explicit Shared(std::size_t callers) : readiness(callers) {}
     std::mutex mutex;
     std::condition_variable changed, workReady;
+    arrival::CallerReadiness readiness;
     arrival::Ledger* active = nullptr;
     std::atomic<Ns>* starts = nullptr;
     bool stop = false, producerDone = false;
-    std::size_t working = 0, ready = 0;
+    std::size_t working = 0;
 };
+
+struct PrimingRecord {
+    Ns begin = -1, end = -1, validationEnd = -1, readbackBegin = -1, readbackEnd = -1;
+    int status = -1, readbackStatus = -1;
+    bool byteValidated = false, exception = false;
+};
+
+PrimingRecord primeCaller(const Config& c, datasystem::KVClient& client, const std::string& key,
+                         const std::string& payload, std::string& actual)
+{
+    PrimingRecord result;
+    if (!c.primePerCaller) return result;
+    try {
+        result.begin = now();
+        const auto status = c.operation == "get" ? client.Get(key, actual) : client.Set(key, payload);
+        result.end = now(); result.status = static_cast<int>(status.GetCode());
+        if (result.status == 0) {
+            if (c.operation == "set") {
+                result.readbackBegin = now();
+                const auto readback = client.Get(key, actual);
+                result.readbackEnd = now(); result.readbackStatus = static_cast<int>(readback.GetCode());
+            }
+            result.byteValidated = (c.operation == "get" || result.readbackStatus == 0) && actual == payload;
+        }
+    } catch (...) {
+        result.exception = true;
+        if (result.end < 0) result.end = now();
+        if (result.readbackBegin >= 0 && result.readbackEnd < 0) result.readbackEnd = now();
+    }
+    result.validationEnd = now();
+    return result;
+}
+
+void persistPriming(const Config& c, const std::vector<long>& tids,
+                    const std::vector<PrimingRecord>& records, bool ready)
+{
+    std::ofstream out(c.output / "priming.json");
+    out << "{\"enabled\":" << (c.primePerCaller ? "true" : "false")
+        << ",\"all_callers_ready\":" << (ready ? "true" : "false")
+        << ",\"operation\":\"" << c.operation << "\",\"excluded_from_arrivals\":true,\"callers\":[";
+    for (std::size_t i = 0; i < records.size(); ++i) {
+        const auto& r = records[i];
+        if (i) out << ',';
+        out << "{\"caller\":" << i << ",\"tid\":" << tids[i] << ",\"payload_bytes\":" << c.payload
+            << ",\"skipped\":" << (c.primePerCaller ? "false" : "true")
+            << ",\"configured_api_calls\":" << (r.begin >= 0 ? 1 : 0)
+            << ",\"api_start_ns\":" << r.begin << ",\"api_end_ns\":" << r.end
+            << ",\"status_code\":" << (r.begin < 0 ? "null" : std::to_string(r.status))
+            << ",\"readback_api_calls\":" << (r.readbackBegin >= 0 ? 1 : 0)
+            << ",\"readback_start_ns\":" << r.readbackBegin << ",\"readback_end_ns\":" << r.readbackEnd
+            << ",\"readback_status_code\":" << (r.readbackBegin < 0 ? "null" : std::to_string(r.readbackStatus))
+            << ",\"validation_end_ns\":" << r.validationEnd << ",\"bytes_validated\":";
+        if (c.primePerCaller) out << (r.byteValidated ? "true" : "false");
+        else out << "null";
+        out << ",\"exception\":" << (r.exception ? "true" : "false") << '}';
+    }
+    out << "]}\n";
+    out.close();
+    if (!out) throw std::runtime_error("cannot persist priming proof");
+}
 
 bool cohort(const Config& c, Shared& shared, const std::string& label, const std::vector<long>& tids)
 {
@@ -384,6 +450,7 @@ int run(int argc, char** argv)
     std::ofstream config(c.output / "config.json");
     config << "{\"schema\":1,\"operation\":\"" << c.operation << "\",\"rate_api_ops_per_second\":" << c.rate
         << ",\"callers\":" << c.callers << ",\"queue_capacity\":" << c.capacity << ",\"payload_bytes\":" << c.payload
+        << ",\"prime_per_caller\":" << (c.primePerCaller ? "true" : "false")
         << ",\"seeded_key_count\":" << keys.size() << ",\"get_key_policy\":\"arrival_id modulo seeded_key_count\""
         << ",\"measure_ns\":" << c.duration << ",\"warmup_ns\":" << c.warmup << ",\"arrival_budget_ns\":" << c.budget
         << ",\"drain_ns\":" << c.drain << ",\"sdk_fixed_timeout_ms\":" << c.sdkTimeoutMs
@@ -398,15 +465,16 @@ int run(int argc, char** argv)
         << ",\"latency_histogram\":\"1us then <=0.1percent upper bounds; merge bins,not windowP99\"}\n";
     config.close();
     if (!config) throw std::runtime_error("cannot persist config");
-    Shared shared;
+    Shared shared(c.callers);
     std::vector<long> tids(c.callers, -1);
+    std::vector<PrimingRecord> priming(c.callers);
     std::vector<std::thread> callers;
     const auto stop = [&] {
         { std::lock_guard<std::mutex> lock(shared.mutex); shared.stop = true; }
         shared.workReady.notify_all();
         for (auto& caller : callers) if (caller.joinable()) caller.join();
     };
-    bool valid = false;
+    bool valid = false, primingReady = false, warmupStarted = false, measureStarted = false;
     try {
         callers.reserve(c.callers);
         for (std::size_t worker = 0; worker < c.callers; ++worker) {
@@ -415,7 +483,14 @@ int run(int argc, char** argv)
                 actual.reserve(c.payload);
                 std::unique_lock<std::mutex> lock(shared.mutex);
                 tids[worker] = syscall(SYS_gettid);
-                ++shared.ready; shared.changed.notify_all();
+                shared.readiness.Register(worker);
+                lock.unlock();
+                const auto setup = primeCaller(c, client, keys[worker], payload, actual);
+                lock.lock();
+                priming[worker] = setup;
+                shared.readiness.Complete(worker, !c.primePerCaller
+                    || (!setup.exception && setup.status == 0 && setup.byteValidated));
+                shared.changed.notify_all();
                 for (;;) {
                     shared.workReady.wait(lock, [&] {
                         return shared.stop || (shared.active && !shared.active->queue.empty());
@@ -454,8 +529,10 @@ int run(int argc, char** argv)
         }
         {
             std::unique_lock<std::mutex> lock(shared.mutex);
-            shared.changed.wait(lock, [&] { return shared.ready == c.callers; });
+            shared.changed.wait(lock, [&] { return shared.readiness.AllComplete(); });
+            primingReady = shared.readiness.ClaimReady();
         }
+        persistPriming(c, tids, priming, primingReady);
         std::ofstream workers(c.output / "caller-tids.json");
         workers << "{\"linux_tids\":[";
         for (std::size_t i = 0; i < tids.size(); ++i) {
@@ -465,11 +542,17 @@ int run(int argc, char** argv)
         workers << "]}\n";
         workers.close();
         if (!workers) throw std::runtime_error("cannot persist caller TIDs");
-        valid = cohort(c, shared, "warmup", tids);
-        if (valid) valid = cohort(c, shared, "measure", tids);
+        if (primingReady) {
+            warmupStarted = true;
+            valid = cohort(c, shared, "warmup", tids);
+            if (valid) {
+                measureStarted = true;
+                valid = cohort(c, shared, "measure", tids);
+            }
+        }
     } catch (...) { stop(); throw; }
     stop();
-    if (c.operation == "set") {
+    if (primingReady && c.operation == "set") {
         for (const auto& key : keys) {
             std::string actual;
             if (client.Get(key, actual).IsError() || actual != payload) valid = false;
@@ -479,6 +562,9 @@ int run(int argc, char** argv)
     std::ofstream final(c.output / "driver-final.json");
     final << "{\"api_arrival_valid\":" << (valid && shutdown ? "true" : "false")
           << ",\"sdk_shutdown_ok\":" << (shutdown ? "true" : "false")
+          << ",\"priming_ready\":" << (primingReady ? "true" : "false")
+          << ",\"warmup_started\":" << (warmupStarted ? "true" : "false")
+          << ",\"measure_started\":" << (measureStarted ? "true" : "false")
           << ",\"rpc_goal_eligible_without_external_probe\":false}\n";
     final.close();
     if (!final) throw std::runtime_error("cannot persist final receipt");
