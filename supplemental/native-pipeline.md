@@ -49,8 +49,21 @@ python3 supplemental/run-native-pipeline.py --binary build-pipeline/rpc_coro_pip
 均记录原有直方图；截止后排空计入 elapsed，不丢弃慢请求。四轮完整矩阵为 72 个窗口，1 s 预热+3 s 计时约
 五分钟。cgroup CPU 窗口从 WARMUP_DONE 到退出，包含约 30 ms phase lead 与 drain，并非精确的计时区间。
 
-准备阶段尚未执行远端构建、功能测试或计时。不可将待运行的测试写成已经通过，也不可用 pipeline 结果直接解释
-DataSystem 的 handler、桥接、认证、对象缓存或物理跨机成本。
+2026-11-11 已完成 Linux GCC 11.5.0 手工 `-std=c++20 -O2 -DNDEBUG -pthread -Wall -Wextra -Werror` 编译及
+`pipeline_smoke.py` 全部功能检查。旧 native binary 跑新检查因缺少 verify 契约而 RED；新 binary GREEN。
+另以相同固定 YLT 头文件完成 CMake coro-only 新目标构建，CTest `rpc_coro_pipeline_checks` 1/1 PASS，4.41 s。
+主机缺 Ninja，第一次 configure 失败；改 `-G "Unix Makefiles"` 成功，没有重建 bRPC。Bazel 新 target 尚未验证。
+CMake 默认 Release 为 O3；后续计时使用显式 O2 的手工 binary，不能把两种编译产物混用。性能计时仍待统一调度，
+不可用 pipeline 结果直接解释 DataSystem 的 handler、桥接、认证、对象缓存或物理跨机成本。
+
+无需 CMake 的精确 O2 编译方式（`ylt` 指向校验过 SHA256 的固定源码目录）：
+
+```bash
+g++ -std=c++20 -O2 -DNDEBUG -pthread -Wall -Wextra -Werror -Isrc \
+  -isystem "$ylt/include" -isystem "$ylt/include/ylt/thirdparty" -isystem "$ylt/include/ylt/standalone" \
+  src/lab.cpp src/coro_pipeline.cpp -o build-native/rpc_coro_pipeline
+python3 tests/pipeline_smoke.py build-native/rpc_coro_pipeline
+```
 
 `--caller coroutine`（默认）在原生协程内持续循环；`--caller sync --pipeline 1` 为每个 lane 建一个
 `std::thread`，每次 RPC 都 `syncAwait(requestOnce(...).via(executor))` 后回到调用线程，再发下一次。
