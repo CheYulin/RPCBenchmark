@@ -8,6 +8,7 @@
 | 实验 | 入口 | 默认行为 |
 |---|---|---|
 | 原生 pipeline 与同步调用者对照 | [native-pipeline.md](native-pipeline.md) | CMake pipeline 选项关闭 |
+| 调用线程推进 IO | [caller-owned-io/README.md](caller-owned-io/README.md) | CMake caller IO 选项关闭；已完成独立功能和 Memcheck 检查 |
 | 固定到达率 SDK 驱动 | [ds-latency30/README.md](ds-latency30/README.md) | 独立构建、显式运行 |
 | 256 KiB write 上限 | [native-write256/README.md](native-write256/README.md) | 私有 overlay，宏默认关闭；保留拒绝迁移结论 |
 
