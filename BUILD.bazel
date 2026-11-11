@@ -60,6 +60,15 @@ sh_test(
 )
 
 sh_test(
+    name = "rpc_coro_pipeline_lifecycle",
+    size = "small",
+    srcs = ["tests/bazel_smoke.sh"],
+    args = ["$(rootpath tests/pipeline_lifecycle.py)", "./$(rootpath :rpc_coro_pipeline)"],
+    data = [":rpc_coro_pipeline", "tests/pipeline_lifecycle.py", "tests/pipeline_smoke.py"],
+    tags = ["requires-network"],
+)
+
+sh_test(
     name = "rpc_brpc_smoke",
     size = "small",
     srcs = ["tests/bazel_smoke.sh"],

@@ -17,8 +17,9 @@
 executor；结果必须保留此边界，不能称为保持了有效并行 I/O 线程数。
 
 每条连接的 active/peak 只由绑定到同一 executor 的 request coroutine 更新；主控线程只在全部 phase futures
-或 caller threads join 后读取。Runtime 在 client 之前停止并 join，使已取消的 YLT timer 回调不会越过 client
-析构继续运行。统计字段不要求跨 executor 的无锁读写。
+或 caller threads join 后读取。Runtime 统一拥有连接，退出先 close 全部 client，再停止并 join I/O，随后销毁
+client，最后销毁 pool/executor。连接在 connect 前已纳入 owner，异常退出也遵守此顺序；已取消的 YLT timer
+回调不会越过 client 析构继续运行，client 析构也不会访问已销毁的 executor。统计字段不要求跨 executor 的无锁读写。
 
 构建依赖仅 Linux、C++20、pthread 与仓内锁定的 YLT 头文件（含 Asio/async_simple），不需 bRPC/protobuf。
 
@@ -82,3 +83,10 @@ python3 supplemental/run-native-pipeline.py --binary build-pipeline/rpc_coro_pip
   --out results/native-pipeline-gate --server-cpus 0,2,4,6 --client-cpus 16,18,20,22 \
   --monitor-cpu 34 --rounds 2 --warmup 1 --seconds 3 --concurrency 32 --concurrency 128
 ```
+
+生命周期回归 `pipeline_lifecycle.py` 对 128 个 owner / depth 1 重复正常退出、请求超时和连接拒绝各三次。
+`--timeout-ms` 控制请求 deadline；连接建立 timeout 至少为 1000 ms，使 1 ms 请求超时测试不会因 setup 抢先
+失败。原 2901706 在输出完整统计后 client 析构向已销毁 executor 投递 close，原始 core 与首次新回归均确认
+teardown SIGSEGV；该失败窗口不计入性能结果。修复仅改变 setup/teardown ownership，正常请求、payload、
+统计和计时循环未改。Valgrind 对原 128-client 退出报告 2569 errors / 26 contexts，修复后 focused case 为
+0 errors、0 outstanding heap blocks；该证据不代表遍历了所有请求失败/上游库路径。

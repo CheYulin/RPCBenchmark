@@ -103,5 +103,9 @@ if(BUILD_TESTING)
       COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/pipeline_smoke.py"
               "$<TARGET_FILE:rpc_coro_pipeline>")
     set_tests_properties(rpc_coro_pipeline_checks PROPERTIES TIMEOUT 20)
+    add_test(NAME rpc_coro_pipeline_lifecycle
+      COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/pipeline_lifecycle.py"
+              "$<TARGET_FILE:rpc_coro_pipeline>")
+    set_tests_properties(rpc_coro_pipeline_lifecycle PROPERTIES TIMEOUT 40)
   endif()
 endif()

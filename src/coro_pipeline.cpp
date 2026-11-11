@@ -97,19 +97,12 @@ int serve(const Options& options)
     return 0;
 }
 
-struct Runtime {
-    explicit Runtime(int workers) : pool(workers), runner([this] { pool.run(); }) {}
-    ~Runtime() { pool.stop(); runner.join(); }
-    coro_io::io_context_pool pool;
-    std::thread runner;
-};
-
 struct Connection {
     Connection(coro_io::ExecutorWrapper<>* executor, int timeoutMs) : executor(executor), client(executor, config(timeoutMs)) {}
     static coro_rpc::coro_rpc_client::config config(int timeoutMs)
     {
         coro_rpc::coro_rpc_client::config result;
-        result.connect_timeout_duration = lab::milliseconds(timeoutMs);
+        result.connect_timeout_duration = lab::milliseconds(std::max(timeoutMs, 1000));
         result.request_timeout_duration = lab::milliseconds(timeoutMs);
         return result;
     }
@@ -120,6 +113,26 @@ struct Connection {
     unsigned active = 0;
     unsigned peakLogical = 0;
     unsigned peakNative = 0;
+};
+
+struct Runtime {
+    explicit Runtime(int workers) : pool(workers), runner([this] { pool.run(); }) {}
+    ~Runtime()
+    {
+        // Join callbacks before destroying clients; keep executors alive through client destruction.
+        for (auto& connection : connections) connection->client.close();
+        pool.stop();
+        runner.join();
+        connections.clear();
+    }
+    Connection& addConnection(int timeoutMs)
+    {
+        connections.push_back(std::make_unique<Connection>(pool.get_executor(), timeoutMs));
+        return *connections.back();
+    }
+    coro_io::io_context_pool pool;
+    std::thread runner;
+    std::vector<std::unique_ptr<Connection>> connections;
 };
 
 std::string payloadFor(int bytes, unsigned lane)
@@ -232,13 +245,10 @@ void connect(Connection& connection, int port)
 int exercise(const Options& options)
 {
     const auto& common = options.common;
-    std::vector<std::unique_ptr<Connection>> connections;
     Runtime runtime(common.workers);
-    for (int i = 0; i < common.concurrency / options.depth; ++i) {
-        auto connection = std::make_unique<Connection>(runtime.pool.get_executor(), common.timeout_ms);
-        connect(*connection, common.port);
-        connections.push_back(std::move(connection));
-    }
+    for (int i = 0; i < common.concurrency / options.depth; ++i) runtime.addConnection(common.timeout_ms);
+    auto& connections = runtime.connections;
+    for (auto& connection : connections) connect(*connection, common.port);
     std::vector<std::string> payloads;
     for (int i = 0; i < common.concurrency; ++i) payloads.push_back(payloadFor(common.payload, i));
     std::vector<lab::Stats> stats(payloads.size());
@@ -303,10 +313,8 @@ int verify()
             auto completion = server.async_start();
             if (completion.hasResult()) throw std::runtime_error("barrier server failed");
             {
-                std::unique_ptr<Connection> owned;
                 Runtime runtime(4);
-                owned = std::make_unique<Connection>(runtime.pool.get_executor(), 1000);
-                auto& connection = *owned;
+                auto& connection = runtime.addConnection(1000);
                 connect(connection, server.port());
                 std::vector<std::string> payloads;
                 for (unsigned i = 0; i < depth; ++i) payloads.push_back(payloadFor(bytes, i + 1));
