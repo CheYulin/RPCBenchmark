@@ -1,0 +1,438 @@
+{
+  "schema": 2,
+  "date": "2026-11-11",
+  "status": "native_screen_signal_not_met",
+  "DataSystem_RPC30_achieved": false,
+  "models": {
+    "C": "shared-pool coroutine",
+    "S": "shared-pool synchronous caller",
+    "O": "caller-owned io_context"
+  },
+  "controls": {
+    "per_concurrency_order": [
+      "C",
+      "S",
+      "O",
+      "O",
+      "S",
+      "C"
+    ],
+    "concurrencies": [
+      1,
+      32
+    ],
+    "payload_bytes": 4096,
+    "pipeline_depth": 1,
+    "server_io_workers": 4,
+    "physical_CPU_budget_per_role": 4,
+    "fresh_server_client_each_window": true,
+    "network": "localhost TCP",
+    "warmup_seconds": 1,
+    "measurement_seconds": 3,
+    "request_timeout_ms": 1000,
+    "same_GNU11_5_O2_NDEBUG_strict_build": true
+  },
+  "frozen": {
+    "source_base_commit": "fc8e9f0ef8364a87c4cf2fe52ef358003c8b3af9",
+    "caller_stage_commit": "0340f0f65fb01c05c0128c58021e0ea9c9201e95",
+    "source43_verified": true,
+    "binaries": {
+      "rpc_coro_pipeline": "45b219854e66811446e28421c68c0a400cad69b50d01fb37655032ded5d3fbb1",
+      "rpc_coro_caller_io": "641fab4d7b07a09c8e107cdc18d4db09bacf67be5edadd0a72582a1fa42ee328"
+    },
+    "runtime_package_manifest_sha256": "c0df7526406545319979a959e3b89367728f95a6d1269930d8c8962f5eb98007",
+    "runtime_package_seven_files_sha256": {
+      "run_three_models.py": "3ef7b325fc612535c38b6cb2fe0b6873d5e9afc118ffbfd790765497b5f3b4c2",
+      "run_scoped.py": "9d8cc9543fefc88f935a1e97cfcbd383e302ff620e634b484cf9d42e5f19cf20",
+      "execution.py": "f18dace6f0a17977698f65e390c3d3a241a900b4456bfe4ee8471e00f53d834e",
+      "foreign_load_guard.py": "f4fa5283add633bcc674aab2b7b70f1035d5e5fcc6f06a86c1ac122d4d3d4f38",
+      "plan.json": "f709c6e5abd14df5add3b33f25486b731f44593c18bd02342d73edeb1fcde497",
+      "test_plan.py": "a01bfe1fecf1657b17550f5f29a9285e024da49d126bcb5a4d8a51c924f8c69d",
+      "execution-notes.md": "edb8fbf50272582bab988348378d295d7c4f3eea82d04ee35395716e2799ff48"
+    },
+    "actual_dynamic_libraries_pre_post_terminal_same": true,
+    "historical_functional_library_SHA_captured": false
+  },
+  "totals": {
+    "valid_windows": 12,
+    "measured_successes": 4225950,
+    "warmup_successes": 1416681,
+    "wholeclient_CPU_denominator": 5642631,
+    "RPC_errors": 0,
+    "mismatches": 0
+  },
+  "CPU_contract": {
+    "start": "after server READY observation, before client launch, both role cgroup raw counters with bounded reads",
+    "end": "after client exit observation, before server stop, both role raw counters with bounded reads",
+    "numerator": "server+client cgroup usage_usec delta",
+    "denominator": "warmup.success + measured.success",
+    "includes": "client application setup, warmup, leads, measurement, drain/teardown and server wait CPU until exit observation; small post-role-placement child preexec/exec is included",
+    "excludes": "server initial startup/final destruction and external observer/launcher CPU",
+    "not_pure_phase_CPU": true
+  },
+  "gate": {
+    "primary_concurrency": 32,
+    "comparison": "O/S",
+    "each_pair_and_ratio_of_arm_medians_required": true,
+    "P99_ratio_max": 0.8,
+    "QPS_ratio_min": 0.97,
+    "CPU_per_completed_RPC_ratio_max": 1.03,
+    "P99_fine_buckets_required": true,
+    "all_P99_fine": true,
+    "paired_O_over_S": [
+      {
+        "p99_us": 0.8973384030418251,
+        "rps": 1.1285456437292585,
+        "cpu_us_per_success_proxy": 0.9053314443853973
+      },
+      {
+        "p99_us": 0.45294117647058824,
+        "rps": 1.159313427265793,
+        "cpu_us_per_success_proxy": 0.8934341095818332
+      }
+    ],
+    "median_O_over_S": {
+      "p99_us": 0.6041397153945667,
+      "rps": 1.1437255801945327,
+      "cpu_us_per_success_proxy": 0.8993353721558821
+    },
+    "decision": "NOT_MET: first paired P99 ratio0.897338 exceeds0.80; favorable second pair or median cannot override",
+    "promoted": false,
+    "additional_windows": 0
+  },
+  "median_windows": [
+    {
+      "concurrency": 1,
+      "model": "C",
+      "qps": 32244.7215,
+      "P50_us": 31.0,
+      "P99_us": 43.0,
+      "wholeclient_CPU_us_per_RPC": 30.671027739855656
+    },
+    {
+      "concurrency": 1,
+      "model": "S",
+      "qps": 23316.574999999997,
+      "P50_us": 43.0,
+      "P99_us": 48.5,
+      "wholeclient_CPU_us_per_RPC": 49.92143384472065
+    },
+    {
+      "concurrency": 1,
+      "model": "O",
+      "qps": 31087.6665,
+      "P50_us": 32.0,
+      "P99_us": 37.0,
+      "wholeclient_CPU_us_per_RPC": 32.491376263422396
+    },
+    {
+      "concurrency": 32,
+      "model": "C",
+      "qps": 292766.114,
+      "P50_us": 109.0,
+      "P99_us": 116.5,
+      "wholeclient_CPU_us_per_RPC": 22.055536639509075
+    },
+    {
+      "concurrency": 32,
+      "model": "S",
+      "qps": 151546.1755,
+      "P50_us": 206.0,
+      "P99_us": 386.5,
+      "wholeclient_CPU_us_per_RPC": 35.71761866618154
+    },
+    {
+      "concurrency": 32,
+      "model": "O",
+      "qps": 173327.2375,
+      "P50_us": 184.0,
+      "P99_us": 233.5,
+      "wholeclient_CPU_us_per_RPC": 32.12211787567225
+    }
+  ],
+  "all_twelve_window_aggregates": [
+    {
+      "window": 1,
+      "concurrency": 1,
+      "model": "C",
+      "success": 97025,
+      "warmup_success": 31902,
+      "CPU_denominator": 128927,
+      "qps": 32341.498,
+      "P50_us": 31,
+      "P99_us": 43,
+      "wholeclient_CPU_us_per_RPC": 30.60761516206846,
+      "observed_client_threads_peak": 7,
+      "observed_client_FDs_peak": 7,
+      "connections": 1,
+      "native_drained_count": 1,
+      "guard_samples": 43,
+      "maximum_guard_gap_s": 0.12127956000040285
+    },
+    {
+      "window": 2,
+      "concurrency": 1,
+      "model": "S",
+      "success": 70246,
+      "warmup_success": 22889,
+      "CPU_denominator": 93135,
+      "qps": 23415.315,
+      "P50_us": 43,
+      "P99_us": 48,
+      "wholeclient_CPU_us_per_RPC": 49.794899876523324,
+      "observed_client_threads_peak": 8,
+      "observed_client_FDs_peak": 7,
+      "connections": 1,
+      "native_drained_count": 1,
+      "guard_samples": 43,
+      "maximum_guard_gap_s": 0.11475673801032826
+    },
+    {
+      "window": 3,
+      "concurrency": 1,
+      "model": "O",
+      "success": 93139,
+      "warmup_success": 29830,
+      "CPU_denominator": 122969,
+      "qps": 31046.235,
+      "P50_us": 32,
+      "P99_us": 37,
+      "wholeclient_CPU_us_per_RPC": 32.673372963917735,
+      "observed_client_threads_peak": 3,
+      "observed_client_FDs_peak": 7,
+      "connections": 1,
+      "native_drained_count": 1,
+      "guard_samples": 43,
+      "maximum_guard_gap_s": 0.11406734402407892
+    },
+    {
+      "window": 4,
+      "concurrency": 1,
+      "model": "O",
+      "success": 93388,
+      "warmup_success": 30573,
+      "CPU_denominator": 123961,
+      "qps": 31129.098,
+      "P50_us": 32,
+      "P99_us": 37,
+      "wholeclient_CPU_us_per_RPC": 32.30937956292705,
+      "observed_client_threads_peak": 3,
+      "observed_client_FDs_peak": 7,
+      "connections": 1,
+      "native_drained_count": 1,
+      "guard_samples": 43,
+      "maximum_guard_gap_s": 0.11322029598522931
+    },
+    {
+      "window": 5,
+      "concurrency": 1,
+      "model": "S",
+      "success": 69654,
+      "warmup_success": 23054,
+      "CPU_denominator": 92708,
+      "qps": 23217.835,
+      "P50_us": 43,
+      "P99_us": 49,
+      "wholeclient_CPU_us_per_RPC": 50.04796781291798,
+      "observed_client_threads_peak": 8,
+      "observed_client_FDs_peak": 7,
+      "connections": 1,
+      "native_drained_count": 1,
+      "guard_samples": 43,
+      "maximum_guard_gap_s": 0.12621739899623208
+    },
+    {
+      "window": 6,
+      "concurrency": 1,
+      "model": "C",
+      "success": 96444,
+      "warmup_success": 32254,
+      "CPU_denominator": 128698,
+      "qps": 32147.945,
+      "P50_us": 31,
+      "P99_us": 43,
+      "wholeclient_CPU_us_per_RPC": 30.734440317642854,
+      "observed_client_threads_peak": 7,
+      "observed_client_FDs_peak": 7,
+      "connections": 1,
+      "native_drained_count": 1,
+      "guard_samples": 43,
+      "maximum_guard_gap_s": 0.11893977998988703
+    },
+    {
+      "window": 7,
+      "concurrency": 32,
+      "model": "C",
+      "success": 878946,
+      "warmup_success": 291016,
+      "CPU_denominator": 1169962,
+      "qps": 292973.975,
+      "P50_us": 109,
+      "P99_us": 116,
+      "wholeclient_CPU_us_per_RPC": 22.065378191770332,
+      "observed_client_threads_peak": 10,
+      "observed_client_FDs_peak": 47,
+      "connections": 32,
+      "native_drained_count": 32,
+      "guard_samples": 41,
+      "maximum_guard_gap_s": 0.11882103598327376
+    },
+    {
+      "window": 8,
+      "concurrency": 32,
+      "model": "S",
+      "success": 460723,
+      "warmup_success": 161270,
+      "CPU_denominator": 621993,
+      "qps": 153555.332,
+      "P50_us": 210,
+      "P99_us": 263,
+      "wholeclient_CPU_us_per_RPC": 35.43298558022357,
+      "observed_client_threads_peak": 42,
+      "observed_client_FDs_peak": 47,
+      "connections": 32,
+      "native_drained_count": 32,
+      "guard_samples": 39,
+      "maximum_guard_gap_s": 0.12313550501130521
+    },
+    {
+      "window": 9,
+      "concurrency": 32,
+      "model": "O",
+      "success": 519907,
+      "warmup_success": 171553,
+      "CPU_denominator": 691460,
+      "qps": 173294.201,
+      "P50_us": 184,
+      "P99_us": 236,
+      "wholeclient_CPU_us_per_RPC": 32.07859601423076,
+      "observed_client_threads_peak": 65,
+      "observed_client_FDs_peak": 131,
+      "connections": 32,
+      "native_drained_count": 32,
+      "guard_samples": 39,
+      "maximum_guard_gap_s": 0.1238666959980037
+    },
+    {
+      "window": 10,
+      "concurrency": 32,
+      "model": "O",
+      "success": 520111,
+      "warmup_success": 171595,
+      "CPU_denominator": 691706,
+      "qps": 173360.274,
+      "P50_us": 184,
+      "P99_us": 231,
+      "wholeclient_CPU_us_per_RPC": 32.16563973711374,
+      "observed_client_threads_peak": 65,
+      "observed_client_FDs_peak": 131,
+      "connections": 32,
+      "native_drained_count": 32,
+      "guard_samples": 38,
+      "maximum_guard_gap_s": 0.1283605600183364
+    },
+    {
+      "window": 11,
+      "concurrency": 32,
+      "model": "S",
+      "success": 448669,
+      "warmup_success": 159302,
+      "CPU_denominator": 607971,
+      "qps": 149537.019,
+      "P50_us": 202,
+      "P99_us": 510,
+      "wholeclient_CPU_us_per_RPC": 36.00225175213949,
+      "observed_client_threads_peak": 42,
+      "observed_client_FDs_peak": 47,
+      "connections": 32,
+      "native_drained_count": 32,
+      "guard_samples": 39,
+      "maximum_guard_gap_s": 0.12439700402319431
+    },
+    {
+      "window": 12,
+      "concurrency": 32,
+      "model": "C",
+      "success": 877698,
+      "warmup_success": 291443,
+      "CPU_denominator": 1169141,
+      "qps": 292558.253,
+      "P50_us": 109,
+      "P99_us": 117,
+      "wholeclient_CPU_us_per_RPC": 22.045695087247818,
+      "observed_client_threads_peak": 10,
+      "observed_client_FDs_peak": 47,
+      "connections": 32,
+      "native_drained_count": 32,
+      "guard_samples": 41,
+      "maximum_guard_gap_s": 0.11764745801337995
+    }
+  ],
+  "resource_observations": {
+    "c32_client_peak_threads": {
+      "C": 10,
+      "S": 42,
+      "O": 65
+    },
+    "c32_client_peak_FDs": {
+      "C": 47,
+      "S": 47,
+      "O": 131
+    },
+    "owned_explicit_IO_runners": 0,
+    "zero_explicit_IO_runners_is_not_fewer_total_threads": true,
+    "all_recorded_role_TID_affinities_in_budget": true,
+    "physical_TCP_connections_equal_concurrency": true
+  },
+  "quality": {
+    "guard_samples": 495,
+    "foreign_or_uncertain_guard_hits": 0,
+    "maximum_guard_gap_seconds": 0.1283605600183364,
+    "child_bounded_clock_anchors": 652,
+    "parent_bounded_clock_anchors": 560,
+    "width_step_boot_checks_passed": true,
+    "both_cohort_and_full_histogram_conservation_verified": true,
+    "cgroup_CPU_raw_and_order_verified": true,
+    "unique_delegated_scope": true,
+    "own_role_and_scope_cleanup_resolved_absent": true,
+    "host_released": true,
+    "remote_local_file_SHA_matches": 153
+  },
+  "previous_V1": {
+    "valid_completed_windows": 0,
+    "first_window": "INVALID_CPU_START_QUALITY",
+    "remaining_eleven_windows": "NOT_RUN",
+    "no_performance_result": true,
+    "original_package_and_raw_preserved": true,
+    "pooled_with_V2": false,
+    "CPU_definition_change_predeclared_before_any_valid_comparison": true,
+    "not_a_relaxed30ms_threshold": true
+  },
+  "raw_evidence": {
+    "archive_sha256": "8739954f42c6e8f176a83b263cbf668ff189fc5afdaaf436b09204a5f4289908",
+    "archive_bytes": 390785,
+    "raw_file_manifest_sha256": "5e49c024db1acc9aa8c5fe3d18b1707207aba3364da354b0a93c6bf3369cac6a",
+    "raw_private_not_published": true
+  },
+  "limits": [
+    "closed-loop native bidirectional echo, no DataSystem Worker/SDK per-method RPC acceptance",
+    "C1 diagnostic only; n2 engineering screen, not statistical significance",
+    "sync creates/joins caller threads per phase; Owned keeps callers across warmup and measurement; not pure wake/context-switch causality",
+    "frozen native binaries do not emit exact absolute measurement phase timestamps; bounded process envelopes and full active guard retained instead",
+    "histogram P99 at or below1024us uses fine buckets; no fine claim for coarse tail buckets",
+    "known-identity sampling guard plus single-owner coordination, not proof every possible host task absent",
+    "no favorable repeats, parameter changes, dropped first samples or pooling with failed V1",
+    "native result does not prove production gains or DataSystem RPC30 goal"
+  ],
+  "verification_provenance": {
+    "author": {
+      "filename": "native12-v2-author-recomputation.json",
+      "sha256": "4418d6c8279dd9c2e6d1d9cbf5227bb1b3ad790f6441a53810471bd333111394"
+    },
+    "independent_reviewer": {
+      "filename": "native12-v2-submission-recomputation.json",
+      "sha256": "377f63b717b4ffb3d2baa273bb36702064a266d04e0efa71a050ce1f6dfd2ebb"
+    },
+    "raw_results_unchanged": true
+  }
+}
