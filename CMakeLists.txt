@@ -18,6 +18,7 @@ find_package(Threads REQUIRED)
 option(RPC_LAB_BUILD_BRPC "Build the bRPC adapter" ON)
 option(RPC_LAB_BUILD_CORO "Build the coro_rpc adapter" ON)
 option(RPC_LAB_BUILD_PIPELINE_EXPERIMENT "Build the independent native coro_rpc pipeline experiment" OFF)
+option(RPC_LAB_BUILD_CALLER_IO_EXPERIMENT "Build the independent caller-owned IO client" OFF)
 set(RPC_LAB_BRPC_ARCHIVE "https://archive.apache.org/dist/brpc/1.15.0/apache-brpc-1.15.0-src.tar.gz"
     CACHE STRING "Local path or URL of the exact Apache bRPC 1.15.0 release archive")
 set(RPC_LAB_YLT_ARCHIVE "https://codeload.github.com/alibaba/yalantinglibs/tar.gz/45c6463c0afbcc46262e373effa30635be3846a0"
@@ -71,6 +72,24 @@ if(RPC_LAB_BUILD_CORO)
     "${lab_ylt_upstream_SOURCE_DIR}/include/ylt/thirdparty"
     "${lab_ylt_upstream_SOURCE_DIR}/include/ylt/standalone")
   target_link_libraries(rpc_coro PRIVATE rpc_lab_common)
+  if(RPC_LAB_BUILD_CALLER_IO_EXPERIMENT)
+    add_executable(rpc_coro_caller_io supplemental/caller-owned-io/client.cpp)
+    target_include_directories(rpc_coro_caller_io SYSTEM PRIVATE
+      "${lab_ylt_upstream_SOURCE_DIR}/include"
+      "${lab_ylt_upstream_SOURCE_DIR}/include/ylt/thirdparty"
+      "${lab_ylt_upstream_SOURCE_DIR}/include/ylt/standalone")
+    target_link_libraries(rpc_coro_caller_io PRIVATE rpc_lab_common)
+    add_executable(rpc_caller_io_drain_test tests/caller_io_drain_test.cpp)
+    target_include_directories(rpc_caller_io_drain_test PRIVATE supplemental/caller-owned-io)
+    add_executable(rpc_caller_io_drain_negative tests/caller_io_drain_test.cpp)
+    target_compile_definitions(rpc_caller_io_drain_negative PRIVATE RPC_LAB_DRAIN_NEGATIVE=1)
+    add_executable(rpc_caller_io_asio_test tests/caller_io_asio_test.cpp)
+    target_include_directories(rpc_caller_io_asio_test PRIVATE supplemental/caller-owned-io)
+    target_include_directories(rpc_caller_io_asio_test SYSTEM PRIVATE
+      "${lab_ylt_upstream_SOURCE_DIR}/include/ylt/thirdparty"
+      "${lab_ylt_upstream_SOURCE_DIR}/include/ylt/standalone")
+    target_link_libraries(rpc_caller_io_asio_test PRIVATE Threads::Threads)
+  endif()
   if(RPC_LAB_BUILD_PIPELINE_EXPERIMENT)
     add_executable(rpc_coro_pipeline src/coro_pipeline.cpp)
     target_include_directories(rpc_coro_pipeline SYSTEM PRIVATE
@@ -97,6 +116,19 @@ if(BUILD_TESTING)
       COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/smoke.py"
               "$<TARGET_FILE:rpc_coro>" --handler-workers 4)
     set_tests_properties(rpc_coro_pooled_smoke PROPERTIES TIMEOUT 25)
+  endif()
+  if(TARGET rpc_coro_caller_io)
+    add_test(NAME rpc_caller_io_drain COMMAND rpc_caller_io_drain_test)
+    add_test(NAME rpc_caller_io_drain_negative COMMAND rpc_caller_io_drain_negative)
+    set_tests_properties(rpc_caller_io_drain_negative PROPERTIES WILL_FAIL TRUE)
+    add_test(NAME rpc_caller_io_asio COMMAND rpc_caller_io_asio_test)
+    set_tests_properties(rpc_caller_io_drain rpc_caller_io_drain_negative rpc_caller_io_asio PROPERTIES TIMEOUT 5)
+    if(TARGET rpc_coro_pipeline)
+      add_test(NAME rpc_caller_io_lifecycle
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/caller_io_smoke.py"
+                "$<TARGET_FILE:rpc_coro_caller_io>" "$<TARGET_FILE:rpc_coro_pipeline>")
+      set_tests_properties(rpc_caller_io_lifecycle PROPERTIES TIMEOUT 35)
+    endif()
   endif()
   if(TARGET rpc_coro_pipeline)
     add_test(NAME rpc_coro_pipeline_checks
