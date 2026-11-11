@@ -43,6 +43,31 @@ cc_binary(
     ],
 )
 
+cc_binary(
+    name = "rpc_coro_pipeline",
+    srcs = ["src/coro_pipeline.cpp"],
+    copts = LAB_COPTS,
+    deps = [":lab", "@yalantinglibs"],
+)
+
+sh_test(
+    name = "rpc_coro_pipeline_checks",
+    size = "small",
+    srcs = ["tests/bazel_smoke.sh"],
+    args = ["$(rootpath tests/pipeline_smoke.py)", "./$(rootpath :rpc_coro_pipeline)"],
+    data = [":rpc_coro_pipeline", "tests/pipeline_smoke.py"],
+    tags = ["requires-network"],
+)
+
+sh_test(
+    name = "rpc_coro_pipeline_lifecycle",
+    size = "small",
+    srcs = ["tests/bazel_smoke.sh"],
+    args = ["$(rootpath tests/pipeline_lifecycle.py)", "./$(rootpath :rpc_coro_pipeline)"],
+    data = [":rpc_coro_pipeline", "tests/pipeline_lifecycle.py", "tests/pipeline_smoke.py"],
+    tags = ["requires-network"],
+)
+
 sh_test(
     name = "rpc_brpc_smoke",
     size = "small",
