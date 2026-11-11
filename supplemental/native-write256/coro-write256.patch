@@ -1,0 +1,19 @@
+--- a/include/ylt/coro_io/coro_io.hpp
++++ b/include/ylt/coro_io/coro_io.hpp
+@@ -436,7 +436,16 @@
+     Socket &socket, AsioBuffer buffer) noexcept {
+   return async_io<std::pair<std::error_code, size_t>>(
+       [&, buffer](auto &&cb) {
++#ifdef RPC_LAB_CORO_WRITE_256K
++        asio::async_write(socket, buffer,
++                          [](const std::error_code &ec,
++                             std::size_t) -> std::size_t {
++                            return ec ? 0 : 262144;
++                          },
++                          std::move(cb));
++#else
+         asio::async_write(socket, buffer, std::move(cb));
++#endif
+       },
+       socket);
+ }
