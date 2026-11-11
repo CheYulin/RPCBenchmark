@@ -1,0 +1,9 @@
+{
+ global:
+  DsBenchRpcCaptureV2;
+  DsBenchFakeSdkEmitV2;
+  DsBenchFakeInstallHookV2;
+  DsBenchTestObserveFromSlotV2;
+  DsBenchTestInstallHookV2;
+ local: *;
+};
