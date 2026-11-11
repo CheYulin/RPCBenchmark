@@ -24,16 +24,16 @@ def main():
     compiler = shlex.split(os.environ.get("CXX", "g++"))
     version = subprocess.check_output(compiler + ["--version"], text=True)
     command = compiler + [
-        "-std=c++17", "-O2", "-pthread", "-Wall", "-Wextra", "-Werror",
-        "-I", str(args.sdk_include.resolve()), str(source / "paced_sdk.cpp"),
+        "-std=c++17", "-O2", "-pthread", "-Wall", "-Wextra", "-Werror", "-fPIE", "-pie", "-fno-plt",
+        "-I", str(args.sdk_include.resolve()), str(source / "paced_sdk.cpp"), str(source / "capture_helper.cpp"),
         str(library), "-Wl,-rpath-link," + str(library.parent),
-        "-Wl,-rpath," + str(library.parent), "-o", str(binary)]
+        "-Wl,-rpath," + str(library.parent), "-ldl", "-o", str(binary)]
     result = subprocess.run(command, capture_output=True, text=True, timeout=120)
     (args.out / "compile.stdout").write_text(result.stdout)
     (args.out / "compile.stderr").write_text(result.stderr)
     receipt = {"schema": 1, "command": command, "compiler_version": version, "compile_exit": result.returncode,
                "source_sha256": {name: hashlib.sha256((source / name).read_bytes()).hexdigest()
-                                 for name in ["pacer.h", "priming_gate.h", "paced_sdk.cpp", "build_sdk_driver.py"]},
+                                 for name in ["pacer.h", "priming_gate.h", "paced_sdk.cpp", "capture_helper.h", "capture_helper.cpp", "capture_abi.h", "build_sdk_driver.py"]},
                "sdk_sha256": hashlib.sha256(library.read_bytes()).hexdigest(),
                "functional_or_performance_run": False}
     if result.returncode == 0:

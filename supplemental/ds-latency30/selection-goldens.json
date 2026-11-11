@@ -1,0 +1,244 @@
+{
+  "algorithm": "frozenABI2SplitMix64Modulo",
+  "core_capture_cpp_sha256": "928d655464f043c27b132427346b3f88c286ffbf6922627d0b066eefede7acea",
+  "cases": [
+    {
+      "seed": 0,
+      "phase": 1,
+      "arrival": 0,
+      "modulus": 7,
+      "selected": true
+    },
+    {
+      "seed": 0,
+      "phase": 1,
+      "arrival": 1,
+      "modulus": 7,
+      "selected": false
+    },
+    {
+      "seed": 0,
+      "phase": 1,
+      "arrival": 7,
+      "modulus": 7,
+      "selected": false
+    },
+    {
+      "seed": 0,
+      "phase": 1,
+      "arrival": 31,
+      "modulus": 3,
+      "selected": false
+    },
+    {
+      "seed": 0,
+      "phase": 2,
+      "arrival": 0,
+      "modulus": 7,
+      "selected": false
+    },
+    {
+      "seed": 0,
+      "phase": 2,
+      "arrival": 1,
+      "modulus": 7,
+      "selected": false
+    },
+    {
+      "seed": 0,
+      "phase": 2,
+      "arrival": 7,
+      "modulus": 7,
+      "selected": false
+    },
+    {
+      "seed": 0,
+      "phase": 2,
+      "arrival": 31,
+      "modulus": 3,
+      "selected": false
+    },
+    {
+      "seed": 17,
+      "phase": 1,
+      "arrival": 0,
+      "modulus": 7,
+      "selected": false
+    },
+    {
+      "seed": 17,
+      "phase": 1,
+      "arrival": 1,
+      "modulus": 7,
+      "selected": false
+    },
+    {
+      "seed": 17,
+      "phase": 1,
+      "arrival": 7,
+      "modulus": 7,
+      "selected": false
+    },
+    {
+      "seed": 17,
+      "phase": 1,
+      "arrival": 31,
+      "modulus": 3,
+      "selected": false
+    },
+    {
+      "seed": 17,
+      "phase": 2,
+      "arrival": 0,
+      "modulus": 7,
+      "selected": true
+    },
+    {
+      "seed": 17,
+      "phase": 2,
+      "arrival": 1,
+      "modulus": 7,
+      "selected": false
+    },
+    {
+      "seed": 17,
+      "phase": 2,
+      "arrival": 7,
+      "modulus": 7,
+      "selected": false
+    },
+    {
+      "seed": 17,
+      "phase": 2,
+      "arrival": 31,
+      "modulus": 3,
+      "selected": true
+    },
+    {
+      "seed": 5573589319906701683,
+      "phase": 1,
+      "arrival": 0,
+      "modulus": 7,
+      "selected": false
+    },
+    {
+      "seed": 5573589319906701683,
+      "phase": 1,
+      "arrival": 1,
+      "modulus": 7,
+      "selected": false
+    },
+    {
+      "seed": 5573589319906701683,
+      "phase": 1,
+      "arrival": 7,
+      "modulus": 7,
+      "selected": false
+    },
+    {
+      "seed": 5573589319906701683,
+      "phase": 1,
+      "arrival": 31,
+      "modulus": 3,
+      "selected": false
+    },
+    {
+      "seed": 5573589319906701683,
+      "phase": 2,
+      "arrival": 0,
+      "modulus": 7,
+      "selected": true
+    },
+    {
+      "seed": 5573589319906701683,
+      "phase": 2,
+      "arrival": 1,
+      "modulus": 7,
+      "selected": false
+    },
+    {
+      "seed": 5573589319906701683,
+      "phase": 2,
+      "arrival": 7,
+      "modulus": 7,
+      "selected": false
+    },
+    {
+      "seed": 5573589319906701683,
+      "phase": 2,
+      "arrival": 31,
+      "modulus": 3,
+      "selected": false
+    },
+    {
+      "seed": 18446744073709551615,
+      "phase": 1,
+      "arrival": 0,
+      "modulus": 7,
+      "selected": false
+    },
+    {
+      "seed": 18446744073709551615,
+      "phase": 1,
+      "arrival": 1,
+      "modulus": 7,
+      "selected": false
+    },
+    {
+      "seed": 18446744073709551615,
+      "phase": 1,
+      "arrival": 7,
+      "modulus": 7,
+      "selected": false
+    },
+    {
+      "seed": 18446744073709551615,
+      "phase": 1,
+      "arrival": 31,
+      "modulus": 3,
+      "selected": true
+    },
+    {
+      "seed": 18446744073709551615,
+      "phase": 2,
+      "arrival": 0,
+      "modulus": 7,
+      "selected": false
+    },
+    {
+      "seed": 18446744073709551615,
+      "phase": 2,
+      "arrival": 1,
+      "modulus": 7,
+      "selected": false
+    },
+    {
+      "seed": 18446744073709551615,
+      "phase": 2,
+      "arrival": 7,
+      "modulus": 7,
+      "selected": false
+    },
+    {
+      "seed": 18446744073709551615,
+      "phase": 2,
+      "arrival": 31,
+      "modulus": 3,
+      "selected": true
+    },
+    {
+      "seed": 17,
+      "phase": 1,
+      "arrival": 0,
+      "modulus": 1,
+      "selected": true
+    },
+    {
+      "seed": 0,
+      "phase": 2,
+      "arrival": 18446744073709551615,
+      "modulus": 17,
+      "selected": false
+    }
+  ]
+}

@@ -17,7 +17,7 @@ Actual B3 DSOs and SDK phase affinities/TIDs were checked. An initial 20us-spin 
 generation lateness (P99 2058us/max 6.707ms), despite all 1000 calls succeeding. It is preserved as invalid.
 The four-window source/evidence archive SHA256 is
 `9164613d9fd91ed63d200e849f5498d3dddc105c47659ef05a03296f4ad67474`.
-No matched-load performance or RPC probe experiment has run. Functional delivery at 1000/s does not establish
+That historical stage established no matched-load performance or RPC probe result. Functional delivery at 1000/s does not establish
 generator precision at future 50%/80% capacity rates or a 30% latency improvement. These standalone compiler
 checks do not establish CMake/Bazel integration. No local toolchain installation was performed.
 
@@ -159,10 +159,13 @@ Use fresh output directories. Preserve failed preflights. Do not lower observed 
 or tune the generator after one arm. A necessary harness fix requires a new frozen stage and both arms rerun.
 No production flags or persistent formats change; rollback is simply not using this tool.
 
-## External RPC probe boundary
+## RPC capture and external probe boundary
 
-The driver reports API and arrival timing only and always marks RPC goal eligibility false without a companion
-probe. It never invents CSend/CRecv. Associate a common per-method span with the same Linux TID and
+Default-off reports API and arrival timing only. The later opt-in [capture checkpoint](CAPTURE_README.md)
+compiled with strict GNU15 and passed finite real-SDK stock/disabled/enabled functionality; it obtains supplied
+CSend/CRecv from the actual measurement SDK. Those finite samples do not establish P99, a3% observer budget or
+the30% RPC goal, and automatic goal eligibility remains false. The earlier external-probe rules remain useful
+for independent diagnostics. Neither path invents CSend/CRecv. Associate a common per-method span with the same Linux TID and
 `api_start <= CSend <= api_end` using exact monotonic nanoseconds and an explicit RPC ordinal. Retain drain
 Create/Publish spans for a Set scheduled before the endpoint; filtering only `CSend<end` changes the cohort.
 One Set may contain multiple RPC spans: API ops/s and RPC calls/s are distinct. Require observed/lost event counts,
