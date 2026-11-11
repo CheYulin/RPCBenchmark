@@ -17,6 +17,7 @@ include(FetchContent)
 find_package(Threads REQUIRED)
 option(RPC_LAB_BUILD_BRPC "Build the bRPC adapter" ON)
 option(RPC_LAB_BUILD_CORO "Build the coro_rpc adapter" ON)
+option(RPC_LAB_BUILD_PIPELINE_EXPERIMENT "Build the independent native coro_rpc pipeline experiment" OFF)
 set(RPC_LAB_BRPC_ARCHIVE "https://archive.apache.org/dist/brpc/1.15.0/apache-brpc-1.15.0-src.tar.gz"
     CACHE STRING "Local path or URL of the exact Apache bRPC 1.15.0 release archive")
 set(RPC_LAB_YLT_ARCHIVE "https://codeload.github.com/alibaba/yalantinglibs/tar.gz/45c6463c0afbcc46262e373effa30635be3846a0"
@@ -70,6 +71,14 @@ if(RPC_LAB_BUILD_CORO)
     "${lab_ylt_upstream_SOURCE_DIR}/include/ylt/thirdparty"
     "${lab_ylt_upstream_SOURCE_DIR}/include/ylt/standalone")
   target_link_libraries(rpc_coro PRIVATE rpc_lab_common)
+  if(RPC_LAB_BUILD_PIPELINE_EXPERIMENT)
+    add_executable(rpc_coro_pipeline src/coro_pipeline.cpp)
+    target_include_directories(rpc_coro_pipeline SYSTEM PRIVATE
+      "${lab_ylt_upstream_SOURCE_DIR}/include"
+      "${lab_ylt_upstream_SOURCE_DIR}/include/ylt/thirdparty"
+      "${lab_ylt_upstream_SOURCE_DIR}/include/ylt/standalone")
+    target_link_libraries(rpc_coro_pipeline PRIVATE rpc_lab_common)
+  endif()
 endif()
 
 include(CTest)
@@ -88,5 +97,11 @@ if(BUILD_TESTING)
       COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/smoke.py"
               "$<TARGET_FILE:rpc_coro>" --handler-workers 4)
     set_tests_properties(rpc_coro_pooled_smoke PROPERTIES TIMEOUT 25)
+  endif()
+  if(TARGET rpc_coro_pipeline)
+    add_test(NAME rpc_coro_pipeline_checks
+      COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/pipeline_smoke.py"
+              "$<TARGET_FILE:rpc_coro_pipeline>")
+    set_tests_properties(rpc_coro_pipeline_checks PROPERTIES TIMEOUT 20)
   endif()
 endif()
