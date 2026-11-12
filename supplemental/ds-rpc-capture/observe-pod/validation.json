@@ -1,0 +1,69 @@
+{
+  "status": "STANDALONE_NATIVE_FIXTURE_VERIFIED_SDK_INTEGRATION_PENDING",
+  "source_sha256": {
+    "observer.py": "228475395b6d3b758a3fb03ce0e22552d562b728192ba6681fa6cf1a804e0ed3",
+    "contracts.py": "35e54c9f1e07d4fb3d576e6191d9274c5e1c6686dcbbca565a23e285793e71a5",
+    "selection.py": "f1d9aec093808bb02f5ab08ece6db9b45a0d45908157d7f35065919993b8b436",
+    "observe.bpf.c": "8641e4355d225a6a7090559ae62dff0f006de581b3aa3065b77f2a5e4168933f",
+    "test_contracts.py": "e9e13044ca9452cc51b3e54887b013930dec95810fdc79b810fdada3fbd1d2fc",
+    "test_observer.py": "965008d4fbd3d2963ed6e573b948c205e387e558ec7141069218eae19b9c9f7d",
+    "fixture.cpp": "1c945985a0ab0aef5b1f233ef5db23e5d931fb3c2dff350595f32063224c44ad"
+  },
+  "pure_fake_tests": 47,
+  "native_fixture": {
+    "date": "2026-11-12",
+    "kernel": "5.14.0-514.el9.x86_64",
+    "BCC": "0.35.0",
+    "compiler": "GNU15.2.1",
+    "native_callback_bytes": 76,
+    "stored_event_bytes": 72,
+    "normal": {
+      "listed_callers": 32,
+      "records": 64,
+      "unlisted_same_process_callers": 1,
+      "separate_negative_process": true,
+      "padding_bytes_checked": 726,
+      "padding_mismatches": 0,
+      "allowed_seen": 64,
+      "read_failed": 0,
+      "submit_succeeded": 64,
+      "submit_failed": 0,
+      "lost": 0,
+      "perf_output_FDs": 80,
+      "perf_FDs_with_attach": 81,
+      "remaining_perf_FDs": 0,
+      "target_exit_before_detach": true
+    },
+    "read_failure_negative": {
+      "normal_records": 64,
+      "allowed_seen": 96,
+      "read_failed": 32,
+      "submit_succeeded": 64,
+      "submit_failed": 0,
+      "lost": 0,
+      "strict_poll_failure": true,
+      "transport_eligible": false,
+      "counter_conserved": true,
+      "remaining_perf_FDs": 0
+    },
+    "all_owned_processes_gone": true,
+    "owned_uprobe_registrations_remaining": 0,
+    "raw_archive_sha256": "5bf99beb62231a95ad1c6b7eddb68ecb5691bcc9660a2b13842ad5c088aaddf4"
+  },
+  "provenance": {
+    "observer_library_byte_identical_to_native_fixture": true,
+    "published_fixture_change": "Only the header include uses the existing repository parent path; the C++ body and both included header contents are byte-identical to the executed fixture.",
+    "native_executed_fixture_cpp_sha256": "a9f6ac4a863c33467cb5e31868bfa5f74ff70030e4e1dced81fed5b80a2acab2",
+    "capture_observe_header_sha256": "a9b2208e937dcea650443755759744eecbd355e0f7cb8b668209fe3a8cb0fc3a",
+    "capture_abi_header_sha256": "d8a60b80a6cfbe4b2055a0ac8c1848a25ead7057556a73f3489bd4c378ca1a2c"
+  },
+  "not_run": [
+    "Actual SDK all-RPC cohort/scheduler integration",
+    "Real saturation/submit-failure/lost-callback injection",
+    "Observer3percent or RPC30 performance acceptance"
+  ],
+  "known_limits": [
+    "Aggregate counters and selected tuples cannot independently prove arbitrary unsampled per-API exact RPC distribution.",
+    "The native76 fixture result applies to this x86_64/BCC environment; the SDK reader must use an explicit proven size rather than autodetection."
+  ]
+}

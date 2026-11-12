@@ -1,5 +1,7 @@
 # Private RPC capture core
 
+The optional [all-RPC POD observer](observe-pod/README.md) adds a separate diagnostic layer with standalone native framing, thread coverage and cleanup evidence. Complete SDK collection and performance acceptance remain pending for that layer.
+
 ## 1. Scope, ABI and current status
 
 This standalone C++17 module implements the pure collector contract from SDDv2 SHA
