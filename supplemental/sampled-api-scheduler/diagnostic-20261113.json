@@ -1,0 +1,293 @@
+{
+  "scope": "diagnostic only; not a bRPC comparison or performance acceptance",
+  "SDK_revision": "04804feb0a90b438f5ca96d4f44b6084e327ec55",
+  "worker_change": "uncommitted one-IO-thread prototype",
+  "workload": "Get and Publish separately;4KiB;32callers;5000APIops/s;10s warmup+30s measure;8client+8Worker allocated physical cores",
+  "result": {
+    "get": {
+      "quality_valid": true,
+      "total_API_success": 200000,
+      "selected_APIs": 3056,
+      "offCPU_episodes": 3057,
+      "unknown_episode_count": 0,
+      "per_phase": {
+        "warmup": {
+          "metrics": {
+            "rpc_ns": {
+              "count": 777,
+              "mean_ns": 233199.05534105535,
+              "p50_ns": 223576,
+              "p99_ns": 329183,
+              "min_ns": 163990,
+              "max_ns": 1044651
+            },
+            "offcpu_ns": {
+              "count": 777,
+              "mean_ns": 114915.08108108108,
+              "p50_ns": 111355,
+              "p99_ns": 207264,
+              "min_ns": 56725,
+              "max_ns": 945704
+            },
+            "known_blocked_ns": {
+              "count": 777,
+              "mean_ns": 111893.67696267697,
+              "p50_ns": 108394,
+              "p99_ns": 204307,
+              "min_ns": 53475,
+              "max_ns": 942693
+            },
+            "runnable_lower_ns": {
+              "count": 777,
+              "mean_ns": 3021.4041184041184,
+              "p50_ns": 2941,
+              "p99_ns": 5222,
+              "min_ns": 1301,
+              "max_ns": 15845
+            },
+            "unknown_split_ns": {
+              "count": 777,
+              "mean_ns": 0.0,
+              "p50_ns": 0,
+              "p99_ns": 0,
+              "min_ns": 0,
+              "max_ns": 0
+            },
+            "unaccounted_rpc_ns": {
+              "count": 777,
+              "mean_ns": 118283.97425997426,
+              "p50_ns": 104878,
+              "p99_ns": 179246,
+              "min_ns": 45442,
+              "max_ns": 236582
+            }
+          },
+          "total_ns": {
+            "rpc_ns": 181195666,
+            "offcpu_ns": 89289018,
+            "known_blocked_ns": 86941387,
+            "runnable_lower_ns": 2347631,
+            "unknown_split_ns": 0,
+            "unaccounted_rpc_ns": 91906648
+          },
+          "offcpu_fraction": 0.49277678639399686,
+          "runnable_lower_fraction": 0.012956330864999829,
+          "unknown_split_fraction": 0.0,
+          "RPCs_with_no_offcpu": 0,
+          "RPCs_with_unknown_split": 0
+        },
+        "measure": {
+          "metrics": {
+            "rpc_ns": {
+              "count": 2279,
+              "mean_ns": 230884.27380430014,
+              "p50_ns": 222746,
+              "p99_ns": 311135,
+              "min_ns": 156063,
+              "max_ns": 1052472
+            },
+            "offcpu_ns": {
+              "count": 2279,
+              "mean_ns": 113631.21149627029,
+              "p50_ns": 111122,
+              "p99_ns": 178986,
+              "min_ns": 60962,
+              "max_ns": 952550
+            },
+            "known_blocked_ns": {
+              "count": 2279,
+              "mean_ns": 110699.43878894251,
+              "p50_ns": 108324,
+              "p99_ns": 172611,
+              "min_ns": 57589,
+              "max_ns": 949724
+            },
+            "runnable_lower_ns": {
+              "count": 2279,
+              "mean_ns": 2931.772707327775,
+              "p50_ns": 2909,
+              "p99_ns": 3883,
+              "min_ns": 1121,
+              "max_ns": 17726
+            },
+            "unknown_split_ns": {
+              "count": 2279,
+              "mean_ns": 0.0,
+              "p50_ns": 0,
+              "p99_ns": 0,
+              "min_ns": 0,
+              "max_ns": 0
+            },
+            "unaccounted_rpc_ns": {
+              "count": 2279,
+              "mean_ns": 117253.06230802984,
+              "p50_ns": 104535,
+              "p99_ns": 170748,
+              "min_ns": 37441,
+              "max_ns": 197697
+            }
+          },
+          "total_ns": {
+            "rpc_ns": 526185260,
+            "offcpu_ns": 258965531,
+            "known_blocked_ns": 252284021,
+            "runnable_lower_ns": 6681510,
+            "unknown_split_ns": 0,
+            "unaccounted_rpc_ns": 267219729
+          },
+          "offcpu_fraction": 0.4921565666814764,
+          "runnable_lower_fraction": 0.012698018184697913,
+          "unknown_split_fraction": 0.0,
+          "RPCs_with_no_offcpu": 0,
+          "RPCs_with_unknown_split": 0
+        }
+      }
+    },
+    "set": {
+      "quality_valid": true,
+      "total_API_success": 200000,
+      "selected_APIs": 3056,
+      "offCPU_episodes": 3059,
+      "unknown_episode_count": 0,
+      "per_phase": {
+        "warmup": {
+          "metrics": {
+            "rpc_ns": {
+              "count": 777,
+              "mean_ns": 247473.90347490346,
+              "p50_ns": 221726,
+              "p99_ns": 426826,
+              "min_ns": 176404,
+              "max_ns": 485706
+            },
+            "offcpu_ns": {
+              "count": 777,
+              "mean_ns": 127368.86615186615,
+              "p50_ns": 104451,
+              "p99_ns": 318087,
+              "min_ns": 72744,
+              "max_ns": 379164
+            },
+            "known_blocked_ns": {
+              "count": 777,
+              "mean_ns": 124332.70656370657,
+              "p50_ns": 101564,
+              "p99_ns": 315469,
+              "min_ns": 69204,
+              "max_ns": 376051
+            },
+            "runnable_lower_ns": {
+              "count": 777,
+              "mean_ns": 3036.159588159588,
+              "p50_ns": 2985,
+              "p99_ns": 4711,
+              "min_ns": 1607,
+              "max_ns": 6421
+            },
+            "unknown_split_ns": {
+              "count": 777,
+              "mean_ns": 0.0,
+              "p50_ns": 0,
+              "p99_ns": 0,
+              "min_ns": 0,
+              "max_ns": 0
+            },
+            "unaccounted_rpc_ns": {
+              "count": 777,
+              "mean_ns": 120105.03732303732,
+              "p50_ns": 105659,
+              "p99_ns": 190274,
+              "min_ns": 50595,
+              "max_ns": 234891
+            }
+          },
+          "total_ns": {
+            "rpc_ns": 192287223,
+            "offcpu_ns": 98965609,
+            "known_blocked_ns": 96606513,
+            "runnable_lower_ns": 2359096,
+            "unknown_split_ns": 0,
+            "unaccounted_rpc_ns": 93321614
+          },
+          "offcpu_fraction": 0.514675949113894,
+          "runnable_lower_fraction": 0.01226860507523165,
+          "unknown_split_fraction": 0.0,
+          "RPCs_with_no_offcpu": 0,
+          "RPCs_with_unknown_split": 0
+        },
+        "measure": {
+          "metrics": {
+            "rpc_ns": {
+              "count": 2279,
+              "mean_ns": 244569.84949539273,
+              "p50_ns": 218345,
+              "p99_ns": 427882,
+              "min_ns": 173827,
+              "max_ns": 609508
+            },
+            "offcpu_ns": {
+              "count": 2279,
+              "mean_ns": 124894.06537955244,
+              "p50_ns": 101351,
+              "p99_ns": 320128,
+              "min_ns": 53427,
+              "max_ns": 496784
+            },
+            "known_blocked_ns": {
+              "count": 2279,
+              "mean_ns": 121864.9091706889,
+              "p50_ns": 98465,
+              "p99_ns": 317554,
+              "min_ns": 49827,
+              "max_ns": 493921
+            },
+            "runnable_lower_ns": {
+              "count": 2279,
+              "mean_ns": 3029.1562088635364,
+              "p50_ns": 2961,
+              "p99_ns": 4569,
+              "min_ns": 1638,
+              "max_ns": 14582
+            },
+            "unknown_split_ns": {
+              "count": 2279,
+              "mean_ns": 0.0,
+              "p50_ns": 0,
+              "p99_ns": 0,
+              "min_ns": 0,
+              "max_ns": 0
+            },
+            "unaccounted_rpc_ns": {
+              "count": 2279,
+              "mean_ns": 119675.78411584029,
+              "p50_ns": 107494,
+              "p99_ns": 187806,
+              "min_ns": 64190,
+              "max_ns": 211594
+            }
+          },
+          "total_ns": {
+            "rpc_ns": 557374687,
+            "offcpu_ns": 284633575,
+            "known_blocked_ns": 277730128,
+            "runnable_lower_ns": 6903447,
+            "unknown_split_ns": 0,
+            "unaccounted_rpc_ns": 272741112
+          },
+          "offcpu_fraction": 0.5106682840801487,
+          "runnable_lower_fraction": 0.012385648578978255,
+          "unknown_split_fraction": 0.0,
+          "RPCs_with_no_offcpu": 0,
+          "RPCs_with_unknown_split": 0
+        }
+      }
+    }
+  },
+  "limits": [
+    "deterministic1/64 selected API cohort, not all request quantiles",
+    "RPC capture and kernel observer overhead uncalibrated",
+    "no bRPC ratio, mixed/peak/memory or goal30 acceptance",
+    "wake-to-in is runnable delay; blocked time includes transport/remote/coordination waits",
+    "unaccounted RPC wall residual is not independently measured CPU time"
+  ]
+}
