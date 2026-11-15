@@ -1,0 +1,335 @@
+{
+  "status": "REJECTED_SCREEN_NO_DATASYSTEM_PROMOTION",
+  "source_base_sha256": "c616782568336a0398640b80eed3fd501a72291098c95e468dd3a5730a16e923",
+  "overlay_sha256": "078c513d471146e316db926cb9d1435972eb1cf1792409437af61d43673d1b58",
+  "test_result": "30nativeRelease and30ASan+UBSan+leak+stack-after-return cases passed; FDrestored",
+  "fixture_formatting": "same tokens and quoted literals as the validated original fixture; formatting only",
+  "sanitizer_toolchain": "GCC15.2.1-7.1 with signed RedHatUBI static ASan/UBSan runtime15.2.1-7.4.el9_9 unpacked privately; no system package install",
+  "raw_archive_sha256": "1ad665daa0e07d488a30cf9da22eae8d138a85cbff7a6d326a6d89466f616321",
+  "windows": [
+    {
+      "concurrency": 1,
+      "index": 0,
+      "singleflight": false,
+      "warm_success": 36330,
+      "CPU_us_per_success": 28.522503,
+      "CPU_denominator": 149735,
+      "metric": {
+        "success": 113405,
+        "errors": 0,
+        "rpc_errors": 0,
+        "mismatches": 0,
+        "active_lanes": 1,
+        "p50_us": 26,
+        "p99_us": 42,
+        "mean_us": 26.404,
+        "rps": 37801.641,
+        "drained": 1
+      },
+      "CPU": {
+        "server": {
+          "usage_usec": 1867040,
+          "user_usec": 717232,
+          "system_usec": 1149808
+        },
+        "client": {
+          "usage_usec": 2403777,
+          "user_usec": 1077972,
+          "system_usec": 1325805
+        }
+      }
+    },
+    {
+      "concurrency": 1,
+      "index": 1,
+      "singleflight": true,
+      "warm_success": 38730,
+      "CPU_us_per_success": 26.815266,
+      "CPU_denominator": 157453,
+      "metric": {
+        "success": 118723,
+        "errors": 0,
+        "rpc_errors": 0,
+        "mismatches": 0,
+        "active_lanes": 1,
+        "p50_us": 25,
+        "p99_us": 47,
+        "mean_us": 25.22,
+        "rps": 39574.276,
+        "drained": 1
+      },
+      "CPU": {
+        "server": {
+          "usage_usec": 1942495,
+          "user_usec": 749952,
+          "system_usec": 1192543
+        },
+        "client": {
+          "usage_usec": 2279649,
+          "user_usec": 945249,
+          "system_usec": 1334400
+        }
+      }
+    },
+    {
+      "concurrency": 1,
+      "index": 2,
+      "singleflight": true,
+      "warm_success": 39413,
+      "CPU_us_per_success": 26.649727,
+      "CPU_denominator": 158705,
+      "metric": {
+        "success": 119292,
+        "errors": 0,
+        "rpc_errors": 0,
+        "mismatches": 0,
+        "active_lanes": 1,
+        "p50_us": 25,
+        "p99_us": 41,
+        "mean_us": 25.099,
+        "rps": 39763.875,
+        "drained": 1
+      },
+      "CPU": {
+        "server": {
+          "usage_usec": 1925190,
+          "user_usec": 700818,
+          "system_usec": 1224372
+        },
+        "client": {
+          "usage_usec": 2304255,
+          "user_usec": 1010422,
+          "system_usec": 1293833
+        }
+      }
+    },
+    {
+      "concurrency": 1,
+      "index": 3,
+      "singleflight": false,
+      "warm_success": 37340,
+      "CPU_us_per_success": 28.349694,
+      "CPU_denominator": 151315,
+      "metric": {
+        "success": 113975,
+        "errors": 0,
+        "rpc_errors": 0,
+        "mismatches": 0,
+        "active_lanes": 1,
+        "p50_us": 26,
+        "p99_us": 43,
+        "mean_us": 26.272,
+        "rps": 37991.655,
+        "drained": 1
+      },
+      "CPU": {
+        "server": {
+          "usage_usec": 1837991,
+          "user_usec": 713923,
+          "system_usec": 1124068
+        },
+        "client": {
+          "usage_usec": 2451743,
+          "user_usec": 1105246,
+          "system_usec": 1346496
+        }
+      }
+    },
+    {
+      "concurrency": 32,
+      "index": 0,
+      "singleflight": false,
+      "warm_success": 212385,
+      "CPU_us_per_success": 27.499953,
+      "CPU_denominator": 857350,
+      "metric": {
+        "success": 644965,
+        "errors": 0,
+        "rpc_errors": 0,
+        "mismatches": 0,
+        "active_lanes": 32,
+        "p50_us": 148,
+        "p99_us": 213,
+        "mean_us": 148.799,
+        "rps": 214977.545,
+        "drained": 32
+      },
+      "CPU": {
+        "server": {
+          "usage_usec": 9269991,
+          "user_usec": 2980121,
+          "system_usec": 6289870
+        },
+        "client": {
+          "usage_usec": 14307094,
+          "user_usec": 6115435,
+          "system_usec": 8191660
+        }
+      }
+    },
+    {
+      "concurrency": 32,
+      "index": 1,
+      "singleflight": true,
+      "warm_success": 238362,
+      "CPU_us_per_success": 25.304083,
+      "CPU_denominator": 962547,
+      "metric": {
+        "success": 724185,
+        "errors": 0,
+        "rpc_errors": 0,
+        "mismatches": 0,
+        "active_lanes": 32,
+        "p50_us": 132,
+        "p99_us": 182,
+        "mean_us": 132.521,
+        "rps": 241383.978,
+        "drained": 32
+      },
+      "CPU": {
+        "server": {
+          "usage_usec": 10171843,
+          "user_usec": 3322132,
+          "system_usec": 6849712
+        },
+        "client": {
+          "usage_usec": 14184526,
+          "user_usec": 5515187,
+          "system_usec": 8669338
+        }
+      }
+    },
+    {
+      "concurrency": 32,
+      "index": 2,
+      "singleflight": true,
+      "warm_success": 239039,
+      "CPU_us_per_success": 25.118072,
+      "CPU_denominator": 970203,
+      "metric": {
+        "success": 731164,
+        "errors": 0,
+        "rpc_errors": 0,
+        "mismatches": 0,
+        "active_lanes": 32,
+        "p50_us": 132,
+        "p99_us": 183,
+        "mean_us": 131.251,
+        "rps": 243710.258,
+        "drained": 32
+      },
+      "CPU": {
+        "server": {
+          "usage_usec": 10190793,
+          "user_usec": 3401242,
+          "system_usec": 6789551
+        },
+        "client": {
+          "usage_usec": 14178836,
+          "user_usec": 5399091,
+          "system_usec": 8779745
+        }
+      }
+    },
+    {
+      "concurrency": 32,
+      "index": 3,
+      "singleflight": false,
+      "warm_success": 213861,
+      "CPU_us_per_success": 27.332896,
+      "CPU_denominator": 864002,
+      "metric": {
+        "success": 650141,
+        "errors": 0,
+        "rpc_errors": 0,
+        "mismatches": 0,
+        "active_lanes": 32,
+        "p50_us": 148,
+        "p99_us": 199,
+        "mean_us": 147.61,
+        "rps": 216702.144,
+        "drained": 31
+      },
+      "CPU": {
+        "server": {
+          "usage_usec": 9309405,
+          "user_usec": 3043265,
+          "system_usec": 6266140
+        },
+        "client": {
+          "usage_usec": 14306272,
+          "user_usec": 6054097,
+          "system_usec": 8252176
+        }
+      }
+    }
+  ],
+  "decision": {
+    "native_screen_pass": false,
+    "RPC30_accepted": false,
+    "pairs": [
+      {
+        "c": 1,
+        "P99_ratio": 1.119048,
+        "conservative_P99_ratio": 1.146341,
+        "QPS_ratio": 1.046893,
+        "CPU_ratio": 0.940144,
+        "pass_gate": true
+      },
+      {
+        "c": 1,
+        "P99_ratio": 0.953488,
+        "conservative_P99_ratio": 0.97619,
+        "QPS_ratio": 1.046648,
+        "CPU_ratio": 0.940036,
+        "pass_gate": true
+      },
+      {
+        "c": 32,
+        "P99_ratio": 0.85446,
+        "conservative_P99_ratio": 0.858491,
+        "QPS_ratio": 1.122833,
+        "CPU_ratio": 0.92015,
+        "pass_gate": false
+      },
+      {
+        "c": 32,
+        "P99_ratio": 0.919598,
+        "conservative_P99_ratio": 0.924242,
+        "QPS_ratio": 1.124632,
+        "CPU_ratio": 0.918969,
+        "pass_gate": false
+      }
+    ],
+    "medians": [
+      {
+        "c": 1,
+        "P99_ratio": 1.035294,
+        "conservative_P99_ratio": 1.060241,
+        "QPS_ratio": 1.04677,
+        "CPU_ratio": 0.94009,
+        "pass_gate": true,
+        "control_P99_drift": 0.02381
+      },
+      {
+        "c": 32,
+        "P99_ratio": 0.885922,
+        "conservative_P99_ratio": 0.890244,
+        "QPS_ratio": 1.123737,
+        "CPU_ratio": 0.919561,
+        "pass_gate": false,
+        "control_P99_drift": -0.065728
+      }
+    ]
+  },
+  "limits": [
+    "native echo, not DataSystem workflows or bRPC comparison",
+    "no failed windows discarded or extra windows added",
+    "4physicalclient+4physicalserver cores, nice10bothmodes, sharedhost notexclusive; no observercalibration",
+    "CPU includes client fullprocess lifecycle+warm/measurement and serverwait afterREADY, not pureRPCor measureCPU",
+    "c32control P99drift6.57%; nativepredeclared paired20%gate fails evenwithout using this drift as acceptance",
+    "singleflight constructor mode is experimental plainTCP/externaldeadline only; normalAPI/default build untouched",
+    "OOM/fault-injection, wider transport modes, DataSystem integration/mixed/peak/memory qualification NOT_RUN",
+    "do not deploy or claim the user30% goal achieved"
+  ]
+}
