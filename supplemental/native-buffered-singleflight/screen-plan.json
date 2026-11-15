@@ -1,0 +1,30 @@
+{
+  "frozen_utc": "2026-11-15",
+  "scope": "NATIVE_ONLY_PAIRED_SCREEN_NO_DATASYSTEM_GAIN_ACCEPTANCE",
+  "design": "native-buffered-singleflight-v2/design-v2.json; bounded client read cache and noncoroutine actual-socket selection",
+  "order": {
+    "concurrency": [
+      1,
+      32
+    ],
+    "mode": [
+      0,
+      1,
+      1,
+      0
+    ]
+  },
+  "shape": "4KiB bidirectional bytes,1s warm3smeasure,1s externaldeadline,negative requesttimer bothmodes,noDNS endpointvector both,32 persistent callers,onephysicalconnection/caller,fourserverIOworkers,nohandlerpoolorCPUbusywork",
+  "resources": "client1,3,5,7 andserver17,19,21,23 distinctphysicalcores verified, both nice10SCHED_OTHER; metadata35nice10; privateownnet+mount namespace andsystemdscope/cgroupclient+server; no foreign process changes",
+  "same_binary": "single perf-client executable with immutableconstructor mode flag, same perf-server executable and pinnedactualDataSystem YLT patchedbase; default pipeline logic unchanged except mode-refusal check. Native defaultRPCBenchmark build not modified.",
+  "gates": "c32 eachdirectionalpair ANDarmmedians conservativefinebucketP99<=.80; QPS>=.97 and summedCPU/success<=1.03 at BOTHconcurrencies in eachpair+armmedians. c1 P99diagnostic;P50reported. P99>1024coarse unresolved, neverclaimexactgain. Allbyte/cohort/errors/connections/persistentcaller/resource/sourcelifecycle gates mandatory; no retries/addedwindows.",
+  "CPU": "two owncgroupcpu.stat deltas afterserverREADY/beforeclientspawn to afterclientexit/beforestopserver, dividedbywarmup.success+measure.success. Includesclientsetup/phaselead/drain/teardown andserverwaiting CPU, excludes serverstartup/finalstop andmetadata. Not pure RPC CPU or pure measure CPU.",
+  "latency": "existing labStats captures every sent-before-end completed success includingdrain; no droppingearly/late or successfulcalled-only afterrejection; nativeclosedloopnotDataSystemofferedload. Warm errors/mismatch mustzero;histogramconservesmeasure.success.",
+  "observation": "100ms ownrole tasks+portconnection sampling andcoldhostroleCPUcounters only. No BPF/perf/POD, no exclusivehost proof, observer uncalibrated; control drift recorded notclaimedstable unlessobserved. API cases private loopback.",
+  "failure": "firstquality/identity/lifetime/source failure stops matrix; keep originalexitandremainingNOT_RUN. Performance failure is retained negative decision, notrerun.",
+  "sanitizers": "39 Release tests passed; ASan+UBSan required before GO. Same privately extracted signed GCC15 sanitizer runtimes as v1; no system changes.",
+  "interpretation": "only native screen: ifgatespass do actualDataSystem integration + fullunit/SDK/ABBA bRPC/GetSet/P50SDKCPUthroughputmixedcapacitymemory gates; native20screen neverqualifiesRPC30.",
+  "variant": "bounded buffered singleflight v2, remove coroutine-lambda frame; default pipeline and server unchanged",
+  "source_date": "2026-11-15",
+  "pre_screen_status": "frozen before performance; correctness and sanitizers required first"
+}

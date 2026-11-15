@@ -1,0 +1,159 @@
+{
+  "status": "NATIVE_SCREEN_PASS_NOT_DATASYSTEM_ACCEPTANCE",
+  "decision": {
+    "native_screen_pass": true,
+    "RPC30_accepted": false,
+    "pairs": [
+      {
+        "c": 1,
+        "P99_ratio": 0.9512195121951219,
+        "conservative_P99_ratio": 0.975,
+        "QPS_ratio": 1.1399545171670247,
+        "CPU_ratio": 0.8702590185557063,
+        "pass_gate": true
+      },
+      {
+        "c": 1,
+        "P99_ratio": 1.2432432432432432,
+        "conservative_P99_ratio": 1.2777777777777777,
+        "QPS_ratio": 1.091406854309057,
+        "CPU_ratio": 0.9063527847799805,
+        "pass_gate": true
+      },
+      {
+        "c": 32,
+        "P99_ratio": 0.7767857142857143,
+        "conservative_P99_ratio": 0.7802690582959642,
+        "QPS_ratio": 1.2821702653733973,
+        "CPU_ratio": 0.8258977518514896,
+        "pass_gate": true
+      },
+      {
+        "c": 32,
+        "P99_ratio": 0.7853658536585366,
+        "conservative_P99_ratio": 0.7892156862745098,
+        "QPS_ratio": 1.2794085701541067,
+        "CPU_ratio": 0.8303007516244252,
+        "pass_gate": true
+      }
+    ],
+    "medians": [
+      {
+        "c": 1,
+        "P99_ratio": 1.0897435897435896,
+        "conservative_P99_ratio": 1.118421052631579,
+        "QPS_ratio": 1.1156261951071642,
+        "CPU_ratio": 0.8882625628956811,
+        "pass_gate": true,
+        "control_P99_drift": -0.09756097560975607
+      },
+      {
+        "c": 32,
+        "P99_ratio": 0.7808857808857809,
+        "conservative_P99_ratio": 0.7845433255269321,
+        "QPS_ratio": 1.2807857682481303,
+        "CPU_ratio": 0.8280938018404818,
+        "pass_gate": true,
+        "control_P99_drift": -0.0848214285714286
+      }
+    ]
+  },
+  "windows": [
+    {
+      "concurrency": 1,
+      "index": 0,
+      "singleflight": false,
+      "CPU_us_per_success": 28.015477417279833,
+      "P50_us": 26,
+      "P99_us": 41,
+      "QPS": 38436.48,
+      "success": 115310,
+      "errors": 0
+    },
+    {
+      "concurrency": 1,
+      "index": 1,
+      "singleflight": true,
+      "CPU_us_per_success": 24.3807218815315,
+      "P50_us": 23,
+      "P99_us": 39,
+      "QPS": 43815.839,
+      "success": 131448,
+      "errors": 0
+    },
+    {
+      "concurrency": 1,
+      "index": 2,
+      "singleflight": true,
+      "CPU_us_per_success": 25.270243118344386,
+      "P50_us": 24,
+      "P99_us": 46,
+      "QPS": 42138.602,
+      "success": 126416,
+      "errors": 0
+    },
+    {
+      "concurrency": 1,
+      "index": 3,
+      "singleflight": false,
+      "CPU_us_per_success": 27.881243973315318,
+      "P50_us": 26,
+      "P99_us": 37,
+      "QPS": 38609.435,
+      "success": 115829,
+      "errors": 0
+    },
+    {
+      "concurrency": 32,
+      "index": 0,
+      "singleflight": false,
+      "CPU_us_per_success": 27.483586662744944,
+      "P50_us": 156,
+      "P99_us": 224,
+      "QPS": 216200.307,
+      "success": 648633,
+      "errors": 0
+    },
+    {
+      "concurrency": 32,
+      "index": 1,
+      "singleflight": true,
+      "CPU_us_per_success": 22.698632437576634,
+      "P50_us": 116,
+      "P99_us": 174,
+      "QPS": 277205.605,
+      "success": 831646,
+      "errors": 0
+    },
+    {
+      "concurrency": 32,
+      "index": 2,
+      "singleflight": true,
+      "CPU_us_per_success": 22.706939860793298,
+      "P50_us": 116,
+      "P99_us": 161,
+      "QPS": 278074.527,
+      "success": 834254,
+      "errors": 0
+    },
+    {
+      "concurrency": 32,
+      "index": 3,
+      "singleflight": false,
+      "CPU_us_per_success": 27.34784933816905,
+      "P50_us": 147,
+      "P99_us": 205,
+      "QPS": 217346.15,
+      "success": 652065,
+      "errors": 0
+    }
+  ],
+  "correctness": "39 release and ASan/UBSan tests; FD restored; active-connect and deliberate-no-reset regressions RED on incorrect variants",
+  "limitations": [
+    "Native echo; no bRPC or DataSystem Get/Set ratio",
+    "Shared host; observer uncalibrated; control drift retained",
+    "Concurrency1 one P99 regression retained; P99 diagnostic at c1",
+    "CPU includes startup/phase lead/drain and teardown, normalized by warmup plus measure successes"
+  ],
+  "raw_archive_sha256": "47d88e44e4b5932d70db00755961a34051db5fbfa5308910c2eaee7db8a80c0d"
+}
