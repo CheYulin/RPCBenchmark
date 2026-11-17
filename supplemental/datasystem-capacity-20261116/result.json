@@ -1,0 +1,343 @@
+{
+  "date": "2026-11-16",
+  "status": "SDK_CAPACITY_VALID_P99_REGRESSION_NO_RPC30_ACCEPTANCE",
+  "DataSystem_commit": "7f7e7e34be66eb97bbca4a8643f8c9f1fa589f78",
+  "SDK_sha256": "74112f13e18ca727216d1f87b06b98b5e775932d9dcdc5c7c44d03af056308c3",
+  "load": "Additional closed-loop SDK API capacity test:32 persistent synchronous callers,4KiB,10s warm/30s measure,8client+8worker distinctphysicalCPUs,nice10OTHER,sameSDK/Worker botharms,Get thenSet eachB/C/C/B; no requestcapture/profiler",
+  "open_loop": {
+    "get": {
+      "status": "ORIGINAL_QUALITY_INVALID",
+      "later_windows": "NOT_RUN",
+      "RPC_data_available": false,
+      "phases": {
+        "warmup": {
+          "planned": 50000,
+          "timely_success": 50000,
+          "queue_rejected": 0,
+          "maximum_generation_lateness_ns": 34936,
+          "maximum_burst": 1,
+          "api_arrival_valid": true
+        },
+        "measure": {
+          "planned": 150000,
+          "timely_success": 149995,
+          "queue_rejected": 5,
+          "maximum_generation_lateness_ns": 110643,
+          "maximum_burst": 1,
+          "api_arrival_valid": false
+        }
+      }
+    },
+    "set": {
+      "status": "ORIGINAL_QUALITY_INVALID",
+      "later_windows": "NOT_RUN",
+      "RPC_data_available": false,
+      "phases": {
+        "warmup": {
+          "planned": 50000,
+          "timely_success": 49995,
+          "queue_rejected": 5,
+          "maximum_generation_lateness_ns": 223429,
+          "maximum_burst": 2,
+          "api_arrival_valid": false
+        }
+      }
+    }
+  },
+  "windows": [
+    {
+      "index": 1,
+      "operation": "get",
+      "backend": "brpc",
+      "status": "SDK_CAPACITY_WINDOW_VALID",
+      "metric": {
+        "requests_ok": 2581572,
+        "payload_bytes": 4096,
+        "errors": 0,
+        "mismatches": 0,
+        "warmup_failures": 0,
+        "qps": 86052.4,
+        "p50_us": 361.02,
+        "p99_us": 469.777,
+        "usage_window_s": 30.0,
+        "sdk_cpu_s": 120.95,
+        "sdk_threads_begin": 71,
+        "sdk_threads_end": 67,
+        "sdk_rss_kib_begin": 106140,
+        "sdk_rss_kib_end": 128276,
+        "worker_cpu_s": 171.72,
+        "worker_threads_begin": 215,
+        "worker_threads_end": 215,
+        "worker_rss_kib_begin": 175528,
+        "worker_rss_kib_end": 176168,
+        "CPU_us_per_success": 113.368909
+      }
+    },
+    {
+      "index": 2,
+      "operation": "get",
+      "backend": "coro",
+      "status": "SDK_CAPACITY_WINDOW_VALID",
+      "metric": {
+        "requests_ok": 3988378,
+        "payload_bytes": 4096,
+        "errors": 0,
+        "mismatches": 0,
+        "warmup_failures": 0,
+        "qps": 132945.933,
+        "p50_us": 180.964,
+        "p99_us": 952.972,
+        "usage_window_s": 30.0,
+        "sdk_cpu_s": 192.58,
+        "sdk_threads_begin": 72,
+        "sdk_threads_end": 60,
+        "sdk_rss_kib_begin": 89728,
+        "sdk_rss_kib_end": 124684,
+        "worker_cpu_s": 211.94,
+        "worker_threads_begin": 215,
+        "worker_threads_end": 215,
+        "worker_rss_kib_begin": 180648,
+        "worker_rss_kib_end": 181268,
+        "CPU_us_per_success": 101.424689
+      }
+    },
+    {
+      "index": 3,
+      "operation": "get",
+      "backend": "coro",
+      "status": "SDK_CAPACITY_WINDOW_VALID",
+      "metric": {
+        "requests_ok": 4057160,
+        "payload_bytes": 4096,
+        "errors": 0,
+        "mismatches": 0,
+        "warmup_failures": 0,
+        "qps": 135238.667,
+        "p50_us": 181.069,
+        "p99_us": 785.237,
+        "usage_window_s": 30.0,
+        "sdk_cpu_s": 193.55,
+        "sdk_threads_begin": 72,
+        "sdk_threads_end": 66,
+        "sdk_rss_kib_begin": 91852,
+        "sdk_rss_kib_end": 128892,
+        "worker_cpu_s": 213.08,
+        "worker_threads_begin": 215,
+        "worker_threads_end": 215,
+        "worker_rss_kib_begin": 181908,
+        "worker_rss_kib_end": 182544,
+        "CPU_us_per_success": 100.225281
+      }
+    },
+    {
+      "index": 4,
+      "operation": "get",
+      "backend": "brpc",
+      "status": "SDK_CAPACITY_WINDOW_VALID",
+      "metric": {
+        "requests_ok": 2577837,
+        "payload_bytes": 4096,
+        "errors": 0,
+        "mismatches": 0,
+        "warmup_failures": 0,
+        "qps": 85927.9,
+        "p50_us": 363.027,
+        "p99_us": 465.031,
+        "usage_window_s": 30.0,
+        "sdk_cpu_s": 122.71,
+        "sdk_threads_begin": 71,
+        "sdk_threads_end": 69,
+        "sdk_rss_kib_begin": 101620,
+        "sdk_rss_kib_end": 126456,
+        "worker_cpu_s": 175.46,
+        "worker_threads_begin": 215,
+        "worker_threads_end": 215,
+        "worker_rss_kib_begin": 182544,
+        "worker_rss_kib_end": 183184,
+        "CPU_us_per_success": 115.666739
+      }
+    },
+    {
+      "index": 5,
+      "operation": "set",
+      "backend": "brpc",
+      "status": "SDK_CAPACITY_WINDOW_VALID",
+      "metric": {
+        "requests_ok": 2326332,
+        "payload_bytes": 4096,
+        "errors": 0,
+        "mismatches": 0,
+        "warmup_failures": 0,
+        "qps": 77544.4,
+        "p50_us": 396.502,
+        "p99_us": 618.939,
+        "usage_window_s": 30.0,
+        "sdk_cpu_s": 96.22,
+        "sdk_threads_begin": 71,
+        "sdk_threads_end": 66,
+        "sdk_rss_kib_begin": 100904,
+        "sdk_rss_kib_end": 125224,
+        "worker_cpu_s": 225.09,
+        "worker_threads_begin": 215,
+        "worker_threads_end": 215,
+        "worker_rss_kib_begin": 418704,
+        "worker_rss_kib_end": 1063892,
+        "CPU_us_per_success": 138.118721
+      }
+    },
+    {
+      "index": 6,
+      "operation": "set",
+      "backend": "coro",
+      "status": "SDK_CAPACITY_WINDOW_VALID",
+      "metric": {
+        "requests_ok": 2360485,
+        "payload_bytes": 4096,
+        "errors": 0,
+        "mismatches": 0,
+        "warmup_failures": 0,
+        "qps": 78682.833,
+        "p50_us": 324.273,
+        "p99_us": 1582.635,
+        "usage_window_s": 30.0,
+        "sdk_cpu_s": 97.48,
+        "sdk_threads_begin": 72,
+        "sdk_threads_end": 69,
+        "sdk_rss_kib_begin": 91972,
+        "sdk_rss_kib_end": 116292,
+        "worker_cpu_s": 222.59,
+        "worker_threads_begin": 215,
+        "worker_threads_end": 215,
+        "worker_rss_kib_begin": 1121852,
+        "worker_rss_kib_end": 1514116,
+        "CPU_us_per_success": 135.595015
+      }
+    },
+    {
+      "index": 7,
+      "operation": "set",
+      "backend": "coro",
+      "status": "SDK_CAPACITY_WINDOW_VALID",
+      "metric": {
+        "requests_ok": 2367980,
+        "payload_bytes": 4096,
+        "errors": 0,
+        "mismatches": 0,
+        "warmup_failures": 0,
+        "qps": 78932.667,
+        "p50_us": 326.35,
+        "p99_us": 1547.054,
+        "usage_window_s": 30.0,
+        "sdk_cpu_s": 97.32,
+        "sdk_threads_begin": 72,
+        "sdk_threads_end": 70,
+        "sdk_rss_kib_begin": 91720,
+        "sdk_rss_kib_end": 115924,
+        "worker_cpu_s": 223.09,
+        "worker_threads_begin": 215,
+        "worker_threads_end": 215,
+        "worker_rss_kib_begin": 1525664,
+        "worker_rss_kib_end": 1950256,
+        "CPU_us_per_success": 135.30942
+      }
+    },
+    {
+      "index": 8,
+      "operation": "set",
+      "backend": "brpc",
+      "status": "SDK_CAPACITY_WINDOW_VALID",
+      "metric": {
+        "requests_ok": 2326431,
+        "payload_bytes": 4096,
+        "errors": 0,
+        "mismatches": 0,
+        "warmup_failures": 0,
+        "qps": 77547.7,
+        "p50_us": 397.772,
+        "p99_us": 612.946,
+        "usage_window_s": 30.0,
+        "sdk_cpu_s": 95.11,
+        "sdk_threads_begin": 71,
+        "sdk_threads_end": 67,
+        "sdk_rss_kib_begin": 102336,
+        "sdk_rss_kib_end": 125292,
+        "worker_cpu_s": 224.54,
+        "worker_threads_begin": 215,
+        "worker_threads_end": 215,
+        "worker_rss_kib_begin": 1949724,
+        "worker_rss_kib_end": 2258728,
+        "CPU_us_per_success": 137.399304
+      }
+    }
+  ],
+  "comparison": {
+    "get": {
+      "pairs": [
+        {
+          "SDK_P50_ratio": 0.501258,
+          "SDK_P99_ratio": 2.028562,
+          "QPS_ratio": 1.544942,
+          "CPU_per_success_ratio": 0.894643
+        },
+        {
+          "SDK_P50_ratio": 0.498776,
+          "SDK_P99_ratio": 1.688569,
+          "QPS_ratio": 1.573862,
+          "CPU_per_success_ratio": 0.8665
+        }
+      ],
+      "arm_medians": {
+        "p50_us": 0.500013,
+        "p99_us": 1.859429,
+        "qps": 1.559391,
+        "CPU_us_per_success": 0.880431
+      },
+      "brpc_P99_drift": 0.010103
+    },
+    "set": {
+      "pairs": [
+        {
+          "SDK_P50_ratio": 0.817834,
+          "SDK_P99_ratio": 2.557013,
+          "QPS_ratio": 1.014681,
+          "CPU_per_success_ratio": 0.981728
+        },
+        {
+          "SDK_P50_ratio": 0.820445,
+          "SDK_P99_ratio": 2.523965,
+          "QPS_ratio": 1.01786,
+          "CPU_per_success_ratio": 0.98479
+        }
+      ],
+      "arm_medians": {
+        "p50_us": 0.819142,
+        "p99_us": 2.540569,
+        "qps": 1.01627,
+        "CPU_us_per_success": 0.983255
+      },
+      "brpc_P99_drift": 0.009683
+    }
+  },
+  "all8_windows_completed": true,
+  "zero_API_errors_mismatches_warm_failures": true,
+  "source_and_actual_DSO_and_route_bindings_passed": true,
+  "all_owned_sessions_netns_veth_closed": true,
+  "RPC_csend_crecv_available": false,
+  "scheduled_arrival_E2E_available": false,
+  "RPC30_accepted": false,
+  "full_goal_achieved": false,
+  "limits": [
+    "Different achievedQPS atsame32concurrency: capacitycomparison, notmatched5K offeredload; cannotreplacefailedopenloop",
+    "All Getbyteschecked; Setstatus eachcall, writebytecorrectness verifiedseparately byfourSDKfunctionalflows; no percallSetreadbackinthisexistingbenchmark",
+    "SuccessAPIcount includes callsbegunbeforewindowend andcompletedafter; CPUfixedend excludesdrain; originalvectorreserve16K canreallocate duringmeasure",
+    "Sharedhost/uncalibratedobserver; threads/RSS endpoints notcontinuouspeaks; bRPCP99control drift reported",
+    "No trueRPCtiming/noRPC30gain; SDKtailregression retained"
+  ],
+  "next_hypothesis": {
+    "status": "SOURCE_RESEARCH_ONLY_NOT_IMPLEMENTED_OR_CAUSAL",
+    "difference": "DataSystem server idle timeout5s; native RPCBenchmark serverdefault0. PinnedYLT server cancels/rearms timerperrequest",
+    "source": "https://raw.githubusercontent.com/alibaba/yalantinglibs/45c6463c0afbcc46262e373effa30635be3846a0/include/ylt/coro_rpc/impl/coro_connection.hpp",
+    "constraint": "Anycoalescing mustpreserve5sidleeviction/longRPCsemantics, cancelpending self-heldtimeronallclosepaths andboundmemory; no disablingtimeout"
+  },
+  "public_float_precision_decimal_places": 6
+}
