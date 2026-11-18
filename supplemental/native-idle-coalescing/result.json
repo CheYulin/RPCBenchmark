@@ -1,0 +1,210 @@
+{
+  "scope": "NATIVE_ONLY_REJECTED_NO_DATASYSTEM_PROMOTION",
+  "RPC30_accepted": false,
+  "DataSystem_head": "7f7e7e34be66eb97bbca4a8643f8c9f1fa589f78",
+  "pin": "45c6463c0afbcc46262e373effa30635be3846a0",
+  "design": {
+    "scope": "NATIVE_SERVER_IDLE_ONLY_NOT_DATASYSTEM_ACCEPTANCE",
+    "order": {
+      "concurrency": [
+        1,
+        32
+      ],
+      "coalesced": [
+        0,
+        1,
+        1,
+        0
+      ]
+    },
+    "shape": "4KiB bothdirections,1s warm3s measure,4 server IO,1s externalclientdeadline,bufferedsingleflight1 fixed;5secondserveridle BOTHarms; same actualclientbinary copied frozen from previousnativejob; one serverbinary immutableconstructorpolicyruntimeflag",
+    "resources": "clientCPU1,3,5,7 server17,19,21,23 distinctphysicalcores;meta35;allnice10OTHER;ownnetnsloopback/delegatedowncgroups;no foreignchanges",
+    "gates": "All8 mandatory quality/source/byte/cohort/connection/lifetime checks. c32 BOTHdirectionalpairs+armmedian conservativebucketP99 <=.95 (incremental timer-only>=5%screen, NOTRPC30). Atc1+c32eachpair+median QPS>=.97 CPU/success<=1.03. ControlsP99driftabs<=.03bothconcurrencies; c1P99diagnostic. No rerun/extra windows for failure. NoBPF/observercalibration/exclusivehostproof; reportlimits. NoDataSystempromotionunlesspasses, thenactualWorker/GetSetfullscope stillrequired.",
+    "CPU": "ownclient+servercgroup fromafterREADY/beforeclientspawn toafterclientexit/beforestopserver, dividedwarm+measure success; includes setup/drain notpureRPCCPU",
+    "latency": "sent-beforecutoff complete success includesdrain; allhistcountsconserved; nativeclosedloop not fixedofferedload",
+    "correctness_preconditions": "9 Release+9 ASanUBSan idlefixture PASS; closecancelmutant fails exactweakrelease assertion; actualRPC bothpolicies Echo/longhandler/idleexpiry/reconnect/stop mustPASS; testseams compiledoutofperf",
+    "failure": "Stopqualityfailure no rerun;perf failuresretainall8;goalRPC30alwaysfalsehere",
+    "frozen_utc_fields": {
+      "date": "2026-11-18",
+      "hour": 5,
+      "minute": 7,
+      "second": "38.569915",
+      "UTC": true
+    }
+  },
+  "correctness": {
+    "Release_cases": 9,
+    "ASan_UBSan_cases": 9,
+    "FD_restored": true,
+    "close_cancel_mutant": "failed expected self-release assertion",
+    "real_RPC_lifecycle_cases": 4,
+    "server_policies": "both tested;40ms correctness,5s BOTH perf arms"
+  },
+  "windows": [
+    {
+      "concurrency": 1,
+      "slot": 0,
+      "idle_coalesced": false,
+      "P50_us": 24,
+      "P99_us": 40,
+      "QPS": 41104.341,
+      "success": 123314,
+      "errors": 0,
+      "CPU_us_per_success": 26.028068
+    },
+    {
+      "concurrency": 1,
+      "slot": 1,
+      "idle_coalesced": true,
+      "P50_us": 23,
+      "P99_us": 35,
+      "QPS": 41531.893,
+      "success": 124596,
+      "errors": 0,
+      "CPU_us_per_success": 24.814624
+    },
+    {
+      "concurrency": 1,
+      "slot": 2,
+      "idle_coalesced": true,
+      "P50_us": 24,
+      "P99_us": 36,
+      "QPS": 42757.975,
+      "success": 128274,
+      "errors": 0,
+      "CPU_us_per_success": 25.081825
+    },
+    {
+      "concurrency": 1,
+      "slot": 3,
+      "idle_coalesced": false,
+      "P50_us": 24,
+      "P99_us": 39,
+      "QPS": 41137.148,
+      "success": 123412,
+      "errors": 0,
+      "CPU_us_per_success": 26.00215
+    },
+    {
+      "concurrency": 32,
+      "slot": 0,
+      "idle_coalesced": false,
+      "P50_us": 114,
+      "P99_us": 177,
+      "QPS": 276385.66,
+      "success": 829204,
+      "errors": 0,
+      "CPU_us_per_success": 23.030918
+    },
+    {
+      "concurrency": 32,
+      "slot": 1,
+      "idle_coalesced": true,
+      "P50_us": 114,
+      "P99_us": 158,
+      "QPS": 279585.827,
+      "success": 838786,
+      "errors": 0,
+      "CPU_us_per_success": 22.684602
+    },
+    {
+      "concurrency": 32,
+      "slot": 2,
+      "idle_coalesced": true,
+      "P50_us": 114,
+      "P99_us": 177,
+      "QPS": 277781.68,
+      "success": 833377,
+      "errors": 0,
+      "CPU_us_per_success": 22.7839
+    },
+    {
+      "concurrency": 32,
+      "slot": 3,
+      "idle_coalesced": false,
+      "P50_us": 115,
+      "P99_us": 159,
+      "QPS": 276833.723,
+      "success": 830529,
+      "errors": 0,
+      "CPU_us_per_success": 23.054185
+    }
+  ],
+  "decision": {
+    "native_screen_pass": false,
+    "RPC30_accepted": false,
+    "pairs": [
+      {
+        "c": 1,
+        "P99_ratio": 0.875,
+        "conservative_P99_ratio": 0.897436,
+        "QPS_ratio": 1.010402,
+        "CPU_ratio": 0.953379,
+        "pass_gate": true
+      },
+      {
+        "c": 1,
+        "P99_ratio": 0.923077,
+        "conservative_P99_ratio": 0.947368,
+        "QPS_ratio": 1.039401,
+        "CPU_ratio": 0.964606,
+        "pass_gate": true
+      },
+      {
+        "c": 32,
+        "P99_ratio": 0.892655,
+        "conservative_P99_ratio": 0.897727,
+        "QPS_ratio": 1.011579,
+        "CPU_ratio": 0.984963,
+        "pass_gate": true
+      },
+      {
+        "c": 32,
+        "P99_ratio": 1.113208,
+        "conservative_P99_ratio": 1.120253,
+        "QPS_ratio": 1.003424,
+        "CPU_ratio": 0.988276,
+        "pass_gate": false
+      }
+    ],
+    "medians": [
+      {
+        "c": 1,
+        "P99_ratio": 0.898734,
+        "conservative_P99_ratio": 0.922078,
+        "QPS_ratio": 1.024907,
+        "CPU_ratio": 0.95899,
+        "pass_gate": true,
+        "control_P99_drift": -0.025
+      },
+      {
+        "c": 32,
+        "P99_ratio": 0.997024,
+        "conservative_P99_ratio": 1.002994,
+        "QPS_ratio": 1.007498,
+        "CPU_ratio": 0.98662,
+        "pass_gate": false,
+        "control_P99_drift": -0.101695
+      }
+    ],
+    "control_drift_gate": false
+  },
+  "terminal": {
+    "error": null,
+    "completed_slots": 8,
+    "all_role_groups_empty": {
+      "server": true,
+      "client": true
+    },
+    "RPC30_accepted": false
+  },
+  "archive_sha256": "0b2f07ea5dfdb638e7242753bd48399b3d2533989176cd5900321db05719a7f1",
+  "archive_verified_files": 85,
+  "limits": [
+    "No DataSystem RPC/SDK comparison in this experiment",
+    "No fixed offered load or observer calibration",
+    "Nonexclusive shared host; c32 control drift invalidated predeclared drift gate",
+    "Native c1+c32 echo only; malformed protocol, TLS, OOM and full production shutdown not qualified",
+    "Server timer hypothesis not established as root cause; no promotion or performance rerun"
+  ]
+}
