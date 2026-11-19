@@ -1,0 +1,1607 @@
+{
+  "scope": "FINITE_CLOSED_LOOP_DIAGNOSTIC_OBSERVER_GATE_FAILED",
+  "RPC30_accepted": false,
+  "DataSystem_head": "7f7e7e34be66eb97bbca4a8643f8c9f1fa589f78",
+  "SDK_sha256": "74112f13e18ca727216d1f87b06b98b5e775932d9dcdc5c7c44d03af056308c3",
+  "Worker_sha256": "98671d3762965dcc69b8a3cae74d8a0b82f3e8fcd3dec5e2a0d1103dc478e3fa",
+  "load": {
+    "callers": 32,
+    "payload_bytes": 4096,
+    "warm_per_caller": 8192,
+    "measure_per_caller": 49152,
+    "warm_total": 262144,
+    "measure_total": 1572864,
+    "sample_seed": 17,
+    "sample_modulus": 512,
+    "selected_warm": 527,
+    "selected_measure": 3065,
+    "SDK_physical_cores": 8,
+    "Worker_physical_cores": 8,
+    "nice": 10,
+    "server_IO": 4,
+    "fixed_offered_load": false,
+    "backend": "coro_rpc",
+    "caller_IO": 1,
+    "enableLocalCache": true,
+    "DS_BENCH_ROUTED_present": false
+  },
+  "validation": {
+    "plan_cpp_checks": 7,
+    "analyzer_tests": 46,
+    "file_validator_tests": 18,
+    "calibration_tests": 9,
+    "functional_cases": 4,
+    "formal_diagnostic_windows": 8,
+    "all_formal_measure_success": 12582912,
+    "all_formal_measure_API_errors": 0,
+    "Get_byte_mismatches": 0,
+    "full_caller_and_histogram_counts_conserved": true,
+    "all_preselected_keys_and_linux_TIDs_verified": true,
+    "all_source_bindings_post_match": true,
+    "all_owned_sessions_gone": true,
+    "network_cleanup_only_loopback": true,
+    "no_BPF_attached": true
+  },
+  "setup_and_qualification_failures_preserved": [
+    "Original systemd starts stopped before SDK on JSON redirected-output loss, then named namespace mount permission; direct owned SSH used same isolation/resource guards.",
+    "Original non-PIC driver: first Get/off smoke passed; Get/enabled cold DSO anchor rejected before GO. Minimal probe proved PLT address misattribution; PIC/PIE fixed it without weakening SDK identity check.",
+    "Original failures and binaries retained; no formal performance window rerun or extra favorable selection."
+  ],
+  "timing_boundaries": {
+    "API": "before capture.Begin through SDK return, includes Begin; excludes byte validation and capture.End",
+    "observer_inclusive": "same begin through after validation and capture.End",
+    "CPU": "SDK plus Worker process ticks during each complete finite phase; includes barriers, excludes between-phase dumps and later readback/shutdown",
+    "taper": "32 callers each complete fixed counts; concurrency tapers as callers finish, first/last finish reported",
+    "RPC": "generated synchronous channel CallMethod span, includes coro request/response serialization and adaptation, not socket-wire-only",
+    "server": "generated-adapter receive/exec/send spans omit pre-adapter queue/parse and post-adapter encode/IO",
+    "residual": "per-call RPC minus server processing, then quantiles; mixed scheduling/adaptation/IO/network, not pure network",
+    "Set": "status every call; distinct seed/warm/measure values and final readback verify final writes, not each individual overwrite",
+    "sampled_quantiles": "empirical preselected sample only, about31 upper-one-percent points per enabled measure; not formal population RPC99"
+  },
+  "calibration": {
+    "observer_calibrated": false,
+    "operations": [
+      {
+        "operation": "get",
+        "pairs": [
+          {
+            "ratios": {
+              "api_p50_upper_us": 0.989071,
+              "api_p99_upper_us": 0.76784,
+              "observer_p50_upper_us": 0.989071,
+              "observer_p99_upper_us": 0.768792,
+              "CPU_us_per_success": 0.979935,
+              "qps": 1.03305
+            },
+            "pass_gate": true
+          },
+          {
+            "ratios": {
+              "api_p50_upper_us": 1.011173,
+              "api_p99_upper_us": 1.074271,
+              "observer_p50_upper_us": 1.011173,
+              "observer_p99_upper_us": 1.074271,
+              "CPU_us_per_success": 1.019238,
+              "qps": 0.984427
+            },
+            "pass_gate": false
+          }
+        ],
+        "median_ratios": {
+          "api_p50_upper_us": 1.0,
+          "api_p99_upper_us": 0.895845,
+          "observer_p50_upper_us": 1.0,
+          "observer_p99_upper_us": 0.896399,
+          "CPU_us_per_success": 0.999216,
+          "qps": 1.008165
+        },
+        "control_drift": {
+          "api_p99_upper_us": -0.282588,
+          "observer_p99_upper_us": -0.282588
+        },
+        "pass_gate": false
+      },
+      {
+        "operation": "set",
+        "pairs": [
+          {
+            "ratios": {
+              "api_p50_upper_us": 1.018634,
+              "api_p99_upper_us": 1.093271,
+              "observer_p50_upper_us": 1.018634,
+              "observer_p99_upper_us": 1.093271,
+              "CPU_us_per_success": 1.035406,
+              "qps": 0.958536
+            },
+            "pass_gate": false
+          },
+          {
+            "ratios": {
+              "api_p50_upper_us": 0.993769,
+              "api_p99_upper_us": 1.009447,
+              "observer_p50_upper_us": 0.993769,
+              "observer_p99_upper_us": 1.010121,
+              "CPU_us_per_success": 0.99782,
+              "qps": 1.002422
+            },
+            "pass_gate": true
+          }
+        ],
+        "median_ratios": {
+          "api_p50_upper_us": 1.006221,
+          "api_p99_upper_us": 1.051626,
+          "observer_p50_upper_us": 1.006221,
+          "observer_p99_upper_us": 1.051961,
+          "CPU_us_per_success": 1.016649,
+          "qps": 0.980517
+        },
+        "control_drift": {
+          "api_p99_upper_us": -0.012658,
+          "observer_p99_upper_us": -0.012658
+        },
+        "pass_gate": false
+      }
+    ],
+    "RPC30_accepted": false,
+    "limits": [
+      "Finiteclosedloop API observer check only; cannot prove internal RPC phase perturbation<=3%.",
+      "No bRPC counterpart, fixedofferedload, formalRPC30, or DataSystem performance acceptance in this matrix.",
+      "Full cohort retained, with caller completion taper explicitly measured."
+    ]
+  },
+  "cases": [
+    {
+      "index": 1,
+      "operation": "get",
+      "mode": "off",
+      "smoke": true,
+      "status": "SDK_DIAGNOSTIC_VALID",
+      "metric": {
+        "attempts": 512,
+        "success": 512,
+        "errors": 0,
+        "mismatches": 0,
+        "api_p50_upper_us": 356,
+        "api_p99_upper_us": 1085,
+        "observer_p99_upper_us": 1086,
+        "qps": 66265.552991,
+        "CPU_us_per_success": 214.84375,
+        "taper_ns": 1920839
+      },
+      "diagnosis": {
+        "diagnostic_valid": true,
+        "RPC30_accepted": false,
+        "RPC_available": false,
+        "independent_ledger_rows": 1,
+        "limits": [
+          "Finite closed loop with taper; API diagnostics only; external owner/maps/routes verified separately"
+        ]
+      }
+    },
+    {
+      "index": 2,
+      "operation": "get",
+      "mode": "enabled",
+      "smoke": true,
+      "status": "SDK_DIAGNOSTIC_VALID",
+      "metric": {
+        "attempts": 512,
+        "success": 512,
+        "errors": 0,
+        "mismatches": 0,
+        "api_p50_upper_us": 341,
+        "api_p99_upper_us": 1107,
+        "observer_p99_upper_us": 1107,
+        "qps": 70411.417211,
+        "CPU_us_per_success": 156.25,
+        "taper_ns": 2013200
+      },
+      "diagnosis": {
+        "diagnostic_valid": true,
+        "validation_errors": [],
+        "RPC30_accepted": false,
+        "phases": {
+          "1": {
+            "selected_api_count": 0,
+            "statistics_complete": true,
+            "metadata_states": {
+              "processing": {
+                "valid": 0,
+                "missing": 0,
+                "invalid": 0
+              },
+              "execution": {
+                "valid": 0,
+                "missing": 0,
+                "invalid": 0
+              }
+            },
+            "rpc_by_method": {},
+            "sampled_api": {
+              "count": 0,
+              "p50_ns": null,
+              "p99_ns": null,
+              "min_ns": null,
+              "max_ns": null,
+              "mean_ns": null
+            },
+            "rpc": {
+              "count": 0,
+              "p50_ns": null,
+              "p99_ns": null,
+              "min_ns": null,
+              "max_ns": null,
+              "mean_ns": null
+            },
+            "primary_rpc": {
+              "count": 0,
+              "p50_ns": null,
+              "p99_ns": null,
+              "min_ns": null,
+              "max_ns": null,
+              "mean_ns": null
+            },
+            "server_processing": {
+              "count": 0,
+              "p50_ns": null,
+              "p99_ns": null,
+              "min_ns": null,
+              "max_ns": null,
+              "mean_ns": null
+            },
+            "server_execution": {
+              "count": 0,
+              "p50_ns": null,
+              "p99_ns": null,
+              "min_ns": null,
+              "max_ns": null,
+              "mean_ns": null
+            },
+            "rpc_minus_server_processing": {
+              "count": 0,
+              "p50_ns": null,
+              "p99_ns": null,
+              "min_ns": null,
+              "max_ns": null,
+              "mean_ns": null
+            },
+            "processing_minus_execution": {
+              "count": 0,
+              "p50_ns": null,
+              "p99_ns": null,
+              "min_ns": null,
+              "max_ns": null,
+              "mean_ns": null
+            },
+            "single_rpc_api_minus_rpc": {
+              "count": 0,
+              "p50_ns": null,
+              "p99_ns": null,
+              "min_ns": null,
+              "max_ns": null,
+              "mean_ns": null
+            }
+          },
+          "2": {
+            "selected_api_count": 1,
+            "statistics_complete": true,
+            "metadata_states": {
+              "processing": {
+                "valid": 1,
+                "missing": 0,
+                "invalid": 0
+              },
+              "execution": {
+                "valid": 1,
+                "missing": 0,
+                "invalid": 0
+              }
+            },
+            "rpc_by_method": {
+              "1": {
+                "count": 1,
+                "p50_ns": 276201,
+                "p99_ns": 276201,
+                "min_ns": 276201,
+                "max_ns": 276201,
+                "mean_ns": 276201.0
+              }
+            },
+            "sampled_api": {
+              "count": 1,
+              "p50_ns": 312091,
+              "p99_ns": 312091,
+              "min_ns": 312091,
+              "max_ns": 312091,
+              "mean_ns": 312091.0
+            },
+            "rpc": {
+              "count": 1,
+              "p50_ns": 276201,
+              "p99_ns": 276201,
+              "min_ns": 276201,
+              "max_ns": 276201,
+              "mean_ns": 276201.0
+            },
+            "primary_rpc": {
+              "count": 1,
+              "p50_ns": 276201,
+              "p99_ns": 276201,
+              "min_ns": 276201,
+              "max_ns": 276201,
+              "mean_ns": 276201.0
+            },
+            "server_processing": {
+              "count": 1,
+              "p50_ns": 18751,
+              "p99_ns": 18751,
+              "min_ns": 18751,
+              "max_ns": 18751,
+              "mean_ns": 18751.0
+            },
+            "server_execution": {
+              "count": 1,
+              "p50_ns": 11975,
+              "p99_ns": 11975,
+              "min_ns": 11975,
+              "max_ns": 11975,
+              "mean_ns": 11975.0
+            },
+            "rpc_minus_server_processing": {
+              "count": 1,
+              "p50_ns": 257450,
+              "p99_ns": 257450,
+              "min_ns": 257450,
+              "max_ns": 257450,
+              "mean_ns": 257450.0
+            },
+            "processing_minus_execution": {
+              "count": 1,
+              "p50_ns": 6776,
+              "p99_ns": 6776,
+              "min_ns": 6776,
+              "max_ns": 6776,
+              "mean_ns": 6776.0
+            },
+            "single_rpc_api_minus_rpc": {
+              "count": 1,
+              "p50_ns": 35890,
+              "p99_ns": 35890,
+              "min_ns": 35890,
+              "max_ns": 35890,
+              "mean_ns": 35890.0
+            }
+          }
+        },
+        "limits": [
+          "Empirical preselected sample quantiles are not full-population RPC P99 or formal RPC30 acceptance.",
+          "Full API count/histogram conservation is separate from sampled API/RPC rows.",
+          "The finite closed-loop workload tapers as callers finish and is not fixed offered load.",
+          "Server spans start/end inside generated adapters; RPC-minus-server is a mixed residual, not pure network.",
+          "Optional diagnostic metadata never filters primary RPCs; missing/invalid counts remain explicit.",
+          "All raw anomaly/error rows are retained; any primary error disables quantiles.",
+          "Off/on SDK API observer calibration does not prove each internal phase has <=3% perturbation."
+        ]
+      }
+    },
+    {
+      "index": 3,
+      "operation": "set",
+      "mode": "off",
+      "smoke": true,
+      "status": "SDK_DIAGNOSTIC_VALID",
+      "metric": {
+        "attempts": 512,
+        "success": 512,
+        "errors": 0,
+        "mismatches": 0,
+        "api_p50_upper_us": 445,
+        "api_p99_upper_us": 1584,
+        "observer_p99_upper_us": 1584,
+        "qps": 53193.324072,
+        "CPU_us_per_success": 195.3125,
+        "taper_ns": 2299439
+      },
+      "diagnosis": {
+        "diagnostic_valid": true,
+        "RPC30_accepted": false,
+        "RPC_available": false,
+        "independent_ledger_rows": 1,
+        "limits": [
+          "Finite closed loop with taper; API diagnostics only; external owner/maps/routes verified separately"
+        ]
+      }
+    },
+    {
+      "index": 4,
+      "operation": "set",
+      "mode": "enabled",
+      "smoke": true,
+      "status": "SDK_DIAGNOSTIC_VALID",
+      "metric": {
+        "attempts": 512,
+        "success": 512,
+        "errors": 0,
+        "mismatches": 0,
+        "api_p50_upper_us": 580,
+        "api_p99_upper_us": 1600,
+        "observer_p99_upper_us": 1601,
+        "qps": 41432.204492,
+        "CPU_us_per_success": 292.96875,
+        "taper_ns": 3669510
+      },
+      "diagnosis": {
+        "diagnostic_valid": true,
+        "validation_errors": [],
+        "RPC30_accepted": false,
+        "phases": {
+          "1": {
+            "selected_api_count": 0,
+            "statistics_complete": true,
+            "metadata_states": {
+              "processing": {
+                "valid": 0,
+                "missing": 0,
+                "invalid": 0
+              },
+              "execution": {
+                "valid": 0,
+                "missing": 0,
+                "invalid": 0
+              }
+            },
+            "rpc_by_method": {},
+            "sampled_api": {
+              "count": 0,
+              "p50_ns": null,
+              "p99_ns": null,
+              "min_ns": null,
+              "max_ns": null,
+              "mean_ns": null
+            },
+            "rpc": {
+              "count": 0,
+              "p50_ns": null,
+              "p99_ns": null,
+              "min_ns": null,
+              "max_ns": null,
+              "mean_ns": null
+            },
+            "primary_rpc": {
+              "count": 0,
+              "p50_ns": null,
+              "p99_ns": null,
+              "min_ns": null,
+              "max_ns": null,
+              "mean_ns": null
+            },
+            "server_processing": {
+              "count": 0,
+              "p50_ns": null,
+              "p99_ns": null,
+              "min_ns": null,
+              "max_ns": null,
+              "mean_ns": null
+            },
+            "server_execution": {
+              "count": 0,
+              "p50_ns": null,
+              "p99_ns": null,
+              "min_ns": null,
+              "max_ns": null,
+              "mean_ns": null
+            },
+            "rpc_minus_server_processing": {
+              "count": 0,
+              "p50_ns": null,
+              "p99_ns": null,
+              "min_ns": null,
+              "max_ns": null,
+              "mean_ns": null
+            },
+            "processing_minus_execution": {
+              "count": 0,
+              "p50_ns": null,
+              "p99_ns": null,
+              "min_ns": null,
+              "max_ns": null,
+              "mean_ns": null
+            },
+            "single_rpc_api_minus_rpc": {
+              "count": 0,
+              "p50_ns": null,
+              "p99_ns": null,
+              "min_ns": null,
+              "max_ns": null,
+              "mean_ns": null
+            }
+          },
+          "2": {
+            "selected_api_count": 1,
+            "statistics_complete": true,
+            "metadata_states": {
+              "processing": {
+                "valid": 1,
+                "missing": 0,
+                "invalid": 0
+              },
+              "execution": {
+                "valid": 1,
+                "missing": 0,
+                "invalid": 0
+              }
+            },
+            "rpc_by_method": {
+              "4": {
+                "count": 1,
+                "p50_ns": 790434,
+                "p99_ns": 790434,
+                "min_ns": 790434,
+                "max_ns": 790434,
+                "mean_ns": 790434.0
+              }
+            },
+            "sampled_api": {
+              "count": 1,
+              "p50_ns": 830404,
+              "p99_ns": 830404,
+              "min_ns": 830404,
+              "max_ns": 830404,
+              "mean_ns": 830404.0
+            },
+            "rpc": {
+              "count": 1,
+              "p50_ns": 790434,
+              "p99_ns": 790434,
+              "min_ns": 790434,
+              "max_ns": 790434,
+              "mean_ns": 790434.0
+            },
+            "primary_rpc": {
+              "count": 1,
+              "p50_ns": 790434,
+              "p99_ns": 790434,
+              "min_ns": 790434,
+              "max_ns": 790434,
+              "mean_ns": 790434.0
+            },
+            "server_processing": {
+              "count": 1,
+              "p50_ns": 71997,
+              "p99_ns": 71997,
+              "min_ns": 71997,
+              "max_ns": 71997,
+              "mean_ns": 71997.0
+            },
+            "server_execution": {
+              "count": 1,
+              "p50_ns": 68295,
+              "p99_ns": 68295,
+              "min_ns": 68295,
+              "max_ns": 68295,
+              "mean_ns": 68295.0
+            },
+            "rpc_minus_server_processing": {
+              "count": 1,
+              "p50_ns": 718437,
+              "p99_ns": 718437,
+              "min_ns": 718437,
+              "max_ns": 718437,
+              "mean_ns": 718437.0
+            },
+            "processing_minus_execution": {
+              "count": 1,
+              "p50_ns": 3702,
+              "p99_ns": 3702,
+              "min_ns": 3702,
+              "max_ns": 3702,
+              "mean_ns": 3702.0
+            },
+            "single_rpc_api_minus_rpc": {
+              "count": 1,
+              "p50_ns": 39970,
+              "p99_ns": 39970,
+              "min_ns": 39970,
+              "max_ns": 39970,
+              "mean_ns": 39970.0
+            }
+          }
+        },
+        "limits": [
+          "Empirical preselected sample quantiles are not full-population RPC P99 or formal RPC30 acceptance.",
+          "Full API count/histogram conservation is separate from sampled API/RPC rows.",
+          "The finite closed-loop workload tapers as callers finish and is not fixed offered load.",
+          "Server spans start/end inside generated adapters; RPC-minus-server is a mixed residual, not pure network.",
+          "Optional diagnostic metadata never filters primary RPCs; missing/invalid counts remain explicit.",
+          "All raw anomaly/error rows are retained; any primary error disables quantiles.",
+          "Off/on SDK API observer calibration does not prove each internal phase has <=3% perturbation."
+        ]
+      }
+    },
+    {
+      "index": 5,
+      "operation": "get",
+      "mode": "off",
+      "smoke": false,
+      "status": "SDK_DIAGNOSTIC_VALID",
+      "metric": {
+        "attempts": 1572864,
+        "success": 1572864,
+        "errors": 0,
+        "mismatches": 0,
+        "api_p50_upper_us": 183,
+        "api_p99_upper_us": 1051,
+        "observer_p99_upper_us": 1051,
+        "qps": 129821.203954,
+        "CPU_us_per_success": 103.295644,
+        "taper_ns": 275892631
+      },
+      "diagnosis": {
+        "diagnostic_valid": true,
+        "RPC30_accepted": false,
+        "RPC_available": false,
+        "independent_ledger_rows": 3592,
+        "limits": [
+          "Finite closed loop with taper; API diagnostics only; external owner/maps/routes verified separately"
+        ]
+      }
+    },
+    {
+      "index": 6,
+      "operation": "get",
+      "mode": "enabled",
+      "smoke": false,
+      "status": "SDK_DIAGNOSTIC_VALID",
+      "metric": {
+        "attempts": 1572864,
+        "success": 1572864,
+        "errors": 0,
+        "mismatches": 0,
+        "api_p50_upper_us": 181,
+        "api_p99_upper_us": 807,
+        "observer_p99_upper_us": 808,
+        "qps": 134111.752518,
+        "CPU_us_per_success": 101.222992,
+        "taper_ns": 200119541
+      },
+      "diagnosis": {
+        "diagnostic_valid": true,
+        "validation_errors": [],
+        "RPC30_accepted": false,
+        "phases": {
+          "1": {
+            "selected_api_count": 527,
+            "statistics_complete": true,
+            "metadata_states": {
+              "processing": {
+                "valid": 527,
+                "missing": 0,
+                "invalid": 0
+              },
+              "execution": {
+                "valid": 527,
+                "missing": 0,
+                "invalid": 0
+              }
+            },
+            "rpc_by_method": {
+              "1": {
+                "count": 527,
+                "p50_ns": 158006,
+                "p99_ns": 794646,
+                "min_ns": 73429,
+                "max_ns": 5205037,
+                "mean_ns": 210388.392789
+              }
+            },
+            "sampled_api": {
+              "count": 527,
+              "p50_ns": 179910,
+              "p99_ns": 815451,
+              "min_ns": 93661,
+              "max_ns": 5225095,
+              "mean_ns": 232059.542694
+            },
+            "rpc": {
+              "count": 527,
+              "p50_ns": 158006,
+              "p99_ns": 794646,
+              "min_ns": 73429,
+              "max_ns": 5205037,
+              "mean_ns": 210388.392789
+            },
+            "primary_rpc": {
+              "count": 527,
+              "p50_ns": 158006,
+              "p99_ns": 794646,
+              "min_ns": 73429,
+              "max_ns": 5205037,
+              "mean_ns": 210388.392789
+            },
+            "server_processing": {
+              "count": 527,
+              "p50_ns": 10981,
+              "p99_ns": 22680,
+              "min_ns": 9368,
+              "max_ns": 32662,
+              "mean_ns": 11504.347249
+            },
+            "server_execution": {
+              "count": 527,
+              "p50_ns": 6921,
+              "p99_ns": 15901,
+              "min_ns": 5745,
+              "max_ns": 24684,
+              "mean_ns": 7285.740038
+            },
+            "rpc_minus_server_processing": {
+              "count": 527,
+              "p50_ns": 146810,
+              "p99_ns": 783968,
+              "min_ns": 62470,
+              "max_ns": 5192899,
+              "mean_ns": 198884.045541
+            },
+            "processing_minus_execution": {
+              "count": 527,
+              "p50_ns": 4055,
+              "p99_ns": 7148,
+              "min_ns": 3427,
+              "max_ns": 15061,
+              "mean_ns": 4218.607211
+            },
+            "single_rpc_api_minus_rpc": {
+              "count": 527,
+              "p50_ns": 21024,
+              "p99_ns": 32416,
+              "min_ns": 18705,
+              "max_ns": 42533,
+              "mean_ns": 21671.149905
+            }
+          },
+          "2": {
+            "selected_api_count": 3065,
+            "statistics_complete": true,
+            "metadata_states": {
+              "processing": {
+                "valid": 3065,
+                "missing": 0,
+                "invalid": 0
+              },
+              "execution": {
+                "valid": 3065,
+                "missing": 0,
+                "invalid": 0
+              }
+            },
+            "rpc_by_method": {
+              "1": {
+                "count": 3065,
+                "p50_ns": 157633,
+                "p99_ns": 798731,
+                "min_ns": 71515,
+                "max_ns": 5805124,
+                "mean_ns": 212774.512887
+              }
+            },
+            "sampled_api": {
+              "count": 3065,
+              "p50_ns": 179297,
+              "p99_ns": 818852,
+              "min_ns": 93609,
+              "max_ns": 5825272,
+              "mean_ns": 234383.541272
+            },
+            "rpc": {
+              "count": 3065,
+              "p50_ns": 157633,
+              "p99_ns": 798731,
+              "min_ns": 71515,
+              "max_ns": 5805124,
+              "mean_ns": 212774.512887
+            },
+            "primary_rpc": {
+              "count": 3065,
+              "p50_ns": 157633,
+              "p99_ns": 798731,
+              "min_ns": 71515,
+              "max_ns": 5805124,
+              "mean_ns": 212774.512887
+            },
+            "server_processing": {
+              "count": 3065,
+              "p50_ns": 10996,
+              "p99_ns": 23153,
+              "min_ns": 9185,
+              "max_ns": 35017,
+              "mean_ns": 11493.431974
+            },
+            "server_execution": {
+              "count": 3065,
+              "p50_ns": 6913,
+              "p99_ns": 14883,
+              "min_ns": 5660,
+              "max_ns": 23939,
+              "mean_ns": 7237.494943
+            },
+            "rpc_minus_server_processing": {
+              "count": 3065,
+              "p50_ns": 146358,
+              "p99_ns": 785713,
+              "min_ns": 61834,
+              "max_ns": 5795169,
+              "mean_ns": 201281.080914
+            },
+            "processing_minus_execution": {
+              "count": 3065,
+              "p50_ns": 4034,
+              "p99_ns": 8489,
+              "min_ns": 3379,
+              "max_ns": 27573,
+              "mean_ns": 4255.937031
+            },
+            "single_rpc_api_minus_rpc": {
+              "count": 3065,
+              "p50_ns": 21049,
+              "p99_ns": 31161,
+              "min_ns": 18650,
+              "max_ns": 48724,
+              "mean_ns": 21609.028385
+            }
+          }
+        },
+        "limits": [
+          "Empirical preselected sample quantiles are not full-population RPC P99 or formal RPC30 acceptance.",
+          "Full API count/histogram conservation is separate from sampled API/RPC rows.",
+          "The finite closed-loop workload tapers as callers finish and is not fixed offered load.",
+          "Server spans start/end inside generated adapters; RPC-minus-server is a mixed residual, not pure network.",
+          "Optional diagnostic metadata never filters primary RPCs; missing/invalid counts remain explicit.",
+          "All raw anomaly/error rows are retained; any primary error disables quantiles.",
+          "Off/on SDK API observer calibration does not prove each internal phase has <=3% perturbation."
+        ]
+      }
+    },
+    {
+      "index": 7,
+      "operation": "get",
+      "mode": "enabled",
+      "smoke": false,
+      "status": "SDK_DIAGNOSTIC_VALID",
+      "metric": {
+        "attempts": 1572864,
+        "success": 1572864,
+        "errors": 0,
+        "mismatches": 0,
+        "api_p50_upper_us": 181,
+        "api_p99_upper_us": 810,
+        "observer_p99_upper_us": 810,
+        "qps": 133969.624703,
+        "CPU_us_per_success": 101.388295,
+        "taper_ns": 230324215
+      },
+      "diagnosis": {
+        "diagnostic_valid": true,
+        "validation_errors": [],
+        "RPC30_accepted": false,
+        "phases": {
+          "1": {
+            "selected_api_count": 527,
+            "statistics_complete": true,
+            "metadata_states": {
+              "processing": {
+                "valid": 527,
+                "missing": 0,
+                "invalid": 0
+              },
+              "execution": {
+                "valid": 527,
+                "missing": 0,
+                "invalid": 0
+              }
+            },
+            "rpc_by_method": {
+              "1": {
+                "count": 527,
+                "p50_ns": 157135,
+                "p99_ns": 500625,
+                "min_ns": 69031,
+                "max_ns": 3946247,
+                "mean_ns": 186297.952562
+              }
+            },
+            "sampled_api": {
+              "count": 527,
+              "p50_ns": 179116,
+              "p99_ns": 521240,
+              "min_ns": 90235,
+              "max_ns": 3966405,
+              "mean_ns": 207891.981025
+            },
+            "rpc": {
+              "count": 527,
+              "p50_ns": 157135,
+              "p99_ns": 500625,
+              "min_ns": 69031,
+              "max_ns": 3946247,
+              "mean_ns": 186297.952562
+            },
+            "primary_rpc": {
+              "count": 527,
+              "p50_ns": 157135,
+              "p99_ns": 500625,
+              "min_ns": 69031,
+              "max_ns": 3946247,
+              "mean_ns": 186297.952562
+            },
+            "server_processing": {
+              "count": 527,
+              "p50_ns": 11046,
+              "p99_ns": 20377,
+              "min_ns": 9010,
+              "max_ns": 50933,
+              "mean_ns": 11492.058824
+            },
+            "server_execution": {
+              "count": 527,
+              "p50_ns": 6955,
+              "p99_ns": 13478,
+              "min_ns": 5572,
+              "max_ns": 37534,
+              "mean_ns": 7237.787476
+            },
+            "rpc_minus_server_processing": {
+              "count": 527,
+              "p50_ns": 145822,
+              "p99_ns": 489375,
+              "min_ns": 58225,
+              "max_ns": 3934689,
+              "mean_ns": 174805.893738
+            },
+            "processing_minus_execution": {
+              "count": 527,
+              "p50_ns": 4034,
+              "p99_ns": 8288,
+              "min_ns": 3375,
+              "max_ns": 13399,
+              "mean_ns": 4254.271347
+            },
+            "single_rpc_api_minus_rpc": {
+              "count": 527,
+              "p50_ns": 20962,
+              "p99_ns": 30745,
+              "min_ns": 18791,
+              "max_ns": 55368,
+              "mean_ns": 21594.028463
+            }
+          },
+          "2": {
+            "selected_api_count": 3065,
+            "statistics_complete": true,
+            "metadata_states": {
+              "processing": {
+                "valid": 3065,
+                "missing": 0,
+                "invalid": 0
+              },
+              "execution": {
+                "valid": 3065,
+                "missing": 0,
+                "invalid": 0
+              }
+            },
+            "rpc_by_method": {
+              "1": {
+                "count": 3065,
+                "p50_ns": 159148,
+                "p99_ns": 1005379,
+                "min_ns": 74855,
+                "max_ns": 8274688,
+                "mean_ns": 219773.520392
+              }
+            },
+            "sampled_api": {
+              "count": 3065,
+              "p50_ns": 180758,
+              "p99_ns": 1025720,
+              "min_ns": 95209,
+              "max_ns": 8297124,
+              "mean_ns": 241423.682871
+            },
+            "rpc": {
+              "count": 3065,
+              "p50_ns": 159148,
+              "p99_ns": 1005379,
+              "min_ns": 74855,
+              "max_ns": 8274688,
+              "mean_ns": 219773.520392
+            },
+            "primary_rpc": {
+              "count": 3065,
+              "p50_ns": 159148,
+              "p99_ns": 1005379,
+              "min_ns": 74855,
+              "max_ns": 8274688,
+              "mean_ns": 219773.520392
+            },
+            "server_processing": {
+              "count": 3065,
+              "p50_ns": 10968,
+              "p99_ns": 23484,
+              "min_ns": 9188,
+              "max_ns": 32596,
+              "mean_ns": 11505.682545
+            },
+            "server_execution": {
+              "count": 3065,
+              "p50_ns": 6908,
+              "p99_ns": 15324,
+              "min_ns": 5595,
+              "max_ns": 24928,
+              "mean_ns": 7261.693312
+            },
+            "rpc_minus_server_processing": {
+              "count": 3065,
+              "p50_ns": 147813,
+              "p99_ns": 987040,
+              "min_ns": 64604,
+              "max_ns": 8263481,
+              "mean_ns": 208267.837847
+            },
+            "processing_minus_execution": {
+              "count": 3065,
+              "p50_ns": 4034,
+              "p99_ns": 8273,
+              "min_ns": 3426,
+              "max_ns": 16073,
+              "mean_ns": 4243.989233
+            },
+            "single_rpc_api_minus_rpc": {
+              "count": 3065,
+              "p50_ns": 20924,
+              "p99_ns": 32454,
+              "min_ns": 18451,
+              "max_ns": 49390,
+              "mean_ns": 21650.16248
+            }
+          }
+        },
+        "limits": [
+          "Empirical preselected sample quantiles are not full-population RPC P99 or formal RPC30 acceptance.",
+          "Full API count/histogram conservation is separate from sampled API/RPC rows.",
+          "The finite closed-loop workload tapers as callers finish and is not fixed offered load.",
+          "Server spans start/end inside generated adapters; RPC-minus-server is a mixed residual, not pure network.",
+          "Optional diagnostic metadata never filters primary RPCs; missing/invalid counts remain explicit.",
+          "All raw anomaly/error rows are retained; any primary error disables quantiles.",
+          "Off/on SDK API observer calibration does not prove each internal phase has <=3% perturbation."
+        ]
+      }
+    },
+    {
+      "index": 8,
+      "operation": "get",
+      "mode": "off",
+      "smoke": false,
+      "status": "SDK_DIAGNOSTIC_VALID",
+      "metric": {
+        "attempts": 1572864,
+        "success": 1572864,
+        "errors": 0,
+        "mismatches": 0,
+        "api_p50_upper_us": 179,
+        "api_p99_upper_us": 754,
+        "observer_p99_upper_us": 754,
+        "qps": 136088.912815,
+        "CPU_us_per_success": 99.474589,
+        "taper_ns": 234753295
+      },
+      "diagnosis": {
+        "diagnostic_valid": true,
+        "RPC30_accepted": false,
+        "RPC_available": false,
+        "independent_ledger_rows": 3592,
+        "limits": [
+          "Finite closed loop with taper; API diagnostics only; external owner/maps/routes verified separately"
+        ]
+      }
+    },
+    {
+      "index": 9,
+      "operation": "set",
+      "mode": "off",
+      "smoke": false,
+      "status": "SDK_DIAGNOSTIC_VALID",
+      "metric": {
+        "attempts": 1572864,
+        "success": 1572864,
+        "errors": 0,
+        "mismatches": 0,
+        "api_p50_upper_us": 322,
+        "api_p99_upper_us": 1501,
+        "observer_p99_upper_us": 1501,
+        "qps": 79863.985578,
+        "CPU_us_per_success": 134.677887,
+        "taper_ns": 172390645
+      },
+      "diagnosis": {
+        "diagnostic_valid": true,
+        "RPC30_accepted": false,
+        "RPC_available": false,
+        "independent_ledger_rows": 3592,
+        "limits": [
+          "Finite closed loop with taper; API diagnostics only; external owner/maps/routes verified separately"
+        ]
+      }
+    },
+    {
+      "index": 10,
+      "operation": "set",
+      "mode": "enabled",
+      "smoke": false,
+      "status": "SDK_DIAGNOSTIC_VALID",
+      "metric": {
+        "attempts": 1572864,
+        "success": 1572864,
+        "errors": 0,
+        "mismatches": 0,
+        "api_p50_upper_us": 328,
+        "api_p99_upper_us": 1641,
+        "observer_p99_upper_us": 1641,
+        "qps": 76552.498483,
+        "CPU_us_per_success": 139.446259,
+        "taper_ns": 173422224
+      },
+      "diagnosis": {
+        "diagnostic_valid": true,
+        "validation_errors": [],
+        "RPC30_accepted": false,
+        "phases": {
+          "1": {
+            "selected_api_count": 527,
+            "statistics_complete": true,
+            "metadata_states": {
+              "processing": {
+                "valid": 527,
+                "missing": 0,
+                "invalid": 0
+              },
+              "execution": {
+                "valid": 527,
+                "missing": 0,
+                "invalid": 0
+              }
+            },
+            "rpc_by_method": {
+              "4": {
+                "count": 527,
+                "p50_ns": 312292,
+                "p99_ns": 1696099,
+                "min_ns": 103054,
+                "max_ns": 4266504,
+                "mean_ns": 407176.643264
+              }
+            },
+            "sampled_api": {
+              "count": 527,
+              "p50_ns": 328323,
+              "p99_ns": 1710464,
+              "min_ns": 119360,
+              "max_ns": 4281104,
+              "mean_ns": 422955.377609
+            },
+            "rpc": {
+              "count": 527,
+              "p50_ns": 312292,
+              "p99_ns": 1696099,
+              "min_ns": 103054,
+              "max_ns": 4266504,
+              "mean_ns": 407176.643264
+            },
+            "primary_rpc": {
+              "count": 527,
+              "p50_ns": 312292,
+              "p99_ns": 1696099,
+              "min_ns": 103054,
+              "max_ns": 4266504,
+              "mean_ns": 407176.643264
+            },
+            "server_processing": {
+              "count": 527,
+              "p50_ns": 64293,
+              "p99_ns": 406977,
+              "min_ns": 35293,
+              "max_ns": 2199290,
+              "mean_ns": 109450.184061
+            },
+            "server_execution": {
+              "count": 527,
+              "p50_ns": 62041,
+              "p99_ns": 402930,
+              "min_ns": 34192,
+              "max_ns": 2198327,
+              "mean_ns": 107999.206831
+            },
+            "rpc_minus_server_processing": {
+              "count": 527,
+              "p50_ns": 195774,
+              "p99_ns": 1458593,
+              "min_ns": 58157,
+              "max_ns": 4108481,
+              "mean_ns": 297726.459203
+            },
+            "processing_minus_execution": {
+              "count": 527,
+              "p50_ns": 1110,
+              "p99_ns": 4735,
+              "min_ns": 833,
+              "max_ns": 11448,
+              "mean_ns": 1450.97723
+            },
+            "single_rpc_api_minus_rpc": {
+              "count": 527,
+              "p50_ns": 15182,
+              "p99_ns": 25257,
+              "min_ns": 13402,
+              "max_ns": 33239,
+              "mean_ns": 15778.734345
+            }
+          },
+          "2": {
+            "selected_api_count": 3065,
+            "statistics_complete": true,
+            "metadata_states": {
+              "processing": {
+                "valid": 3065,
+                "missing": 0,
+                "invalid": 0
+              },
+              "execution": {
+                "valid": 3065,
+                "missing": 0,
+                "invalid": 0
+              }
+            },
+            "rpc_by_method": {
+              "4": {
+                "count": 3065,
+                "p50_ns": 313008,
+                "p99_ns": 1663769,
+                "min_ns": 87178,
+                "max_ns": 4535928,
+                "mean_ns": 401825.687765
+              }
+            },
+            "sampled_api": {
+              "count": 3065,
+              "p50_ns": 328266,
+              "p99_ns": 1682133,
+              "min_ns": 101978,
+              "max_ns": 4553126,
+              "mean_ns": 418195.337684
+            },
+            "rpc": {
+              "count": 3065,
+              "p50_ns": 313008,
+              "p99_ns": 1663769,
+              "min_ns": 87178,
+              "max_ns": 4535928,
+              "mean_ns": 401825.687765
+            },
+            "primary_rpc": {
+              "count": 3065,
+              "p50_ns": 313008,
+              "p99_ns": 1663769,
+              "min_ns": 87178,
+              "max_ns": 4535928,
+              "mean_ns": 401825.687765
+            },
+            "server_processing": {
+              "count": 3065,
+              "p50_ns": 60715,
+              "p99_ns": 442079,
+              "min_ns": 35109,
+              "max_ns": 2176257,
+              "mean_ns": 101827.312561
+            },
+            "server_execution": {
+              "count": 3065,
+              "p50_ns": 59164,
+              "p99_ns": 440561,
+              "min_ns": 34017,
+              "max_ns": 2175255,
+              "mean_ns": 100354.703426
+            },
+            "rpc_minus_server_processing": {
+              "count": 3065,
+              "p50_ns": 202907,
+              "p99_ns": 1490574,
+              "min_ns": 47285,
+              "max_ns": 4347244,
+              "mean_ns": 299998.375204
+            },
+            "processing_minus_execution": {
+              "count": 3065,
+              "p50_ns": 1103,
+              "p99_ns": 5675,
+              "min_ns": 764,
+              "max_ns": 17961,
+              "mean_ns": 1472.609135
+            },
+            "single_rpc_api_minus_rpc": {
+              "count": 3065,
+              "p50_ns": 15326,
+              "p99_ns": 32646,
+              "min_ns": 13223,
+              "max_ns": 130580,
+              "mean_ns": 16369.649918
+            }
+          }
+        },
+        "limits": [
+          "Empirical preselected sample quantiles are not full-population RPC P99 or formal RPC30 acceptance.",
+          "Full API count/histogram conservation is separate from sampled API/RPC rows.",
+          "The finite closed-loop workload tapers as callers finish and is not fixed offered load.",
+          "Server spans start/end inside generated adapters; RPC-minus-server is a mixed residual, not pure network.",
+          "Optional diagnostic metadata never filters primary RPCs; missing/invalid counts remain explicit.",
+          "All raw anomaly/error rows are retained; any primary error disables quantiles.",
+          "Off/on SDK API observer calibration does not prove each internal phase has <=3% perturbation."
+        ]
+      }
+    },
+    {
+      "index": 11,
+      "operation": "set",
+      "mode": "enabled",
+      "smoke": false,
+      "status": "SDK_DIAGNOSTIC_VALID",
+      "metric": {
+        "attempts": 1572864,
+        "success": 1572864,
+        "errors": 0,
+        "mismatches": 0,
+        "api_p50_upper_us": 319,
+        "api_p99_upper_us": 1496,
+        "observer_p99_upper_us": 1497,
+        "qps": 80337.45526,
+        "CPU_us_per_success": 133.876801,
+        "taper_ns": 191154149
+      },
+      "diagnosis": {
+        "diagnostic_valid": true,
+        "validation_errors": [],
+        "RPC30_accepted": false,
+        "phases": {
+          "1": {
+            "selected_api_count": 527,
+            "statistics_complete": true,
+            "metadata_states": {
+              "processing": {
+                "valid": 527,
+                "missing": 0,
+                "invalid": 0
+              },
+              "execution": {
+                "valid": 527,
+                "missing": 0,
+                "invalid": 0
+              }
+            },
+            "rpc_by_method": {
+              "4": {
+                "count": 527,
+                "p50_ns": 295941,
+                "p99_ns": 1437900,
+                "min_ns": 92561,
+                "max_ns": 2239702,
+                "mean_ns": 369137.675522
+              }
+            },
+            "sampled_api": {
+              "count": 527,
+              "p50_ns": 310566,
+              "p99_ns": 1452998,
+              "min_ns": 106249,
+              "max_ns": 2253858,
+              "mean_ns": 384766.216319
+            },
+            "rpc": {
+              "count": 527,
+              "p50_ns": 295941,
+              "p99_ns": 1437900,
+              "min_ns": 92561,
+              "max_ns": 2239702,
+              "mean_ns": 369137.675522
+            },
+            "primary_rpc": {
+              "count": 527,
+              "p50_ns": 295941,
+              "p99_ns": 1437900,
+              "min_ns": 92561,
+              "max_ns": 2239702,
+              "mean_ns": 369137.675522
+            },
+            "server_processing": {
+              "count": 527,
+              "p50_ns": 56632,
+              "p99_ns": 373377,
+              "min_ns": 34966,
+              "max_ns": 815280,
+              "mean_ns": 99756.83112
+            },
+            "server_execution": {
+              "count": 527,
+              "p50_ns": 54974,
+              "p99_ns": 372402,
+              "min_ns": 34029,
+              "max_ns": 814028,
+              "mean_ns": 98397.210626
+            },
+            "rpc_minus_server_processing": {
+              "count": 527,
+              "p50_ns": 188250,
+              "p99_ns": 1386787,
+              "min_ns": 52916,
+              "max_ns": 2141105,
+              "mean_ns": 269380.844402
+            },
+            "processing_minus_execution": {
+              "count": 527,
+              "p50_ns": 1096,
+              "p99_ns": 4591,
+              "min_ns": 809,
+              "max_ns": 18191,
+              "mean_ns": 1359.620493
+            },
+            "single_rpc_api_minus_rpc": {
+              "count": 527,
+              "p50_ns": 15062,
+              "p99_ns": 23908,
+              "min_ns": 13016,
+              "max_ns": 46109,
+              "mean_ns": 15628.540797
+            }
+          },
+          "2": {
+            "selected_api_count": 3065,
+            "statistics_complete": true,
+            "metadata_states": {
+              "processing": {
+                "valid": 3065,
+                "missing": 0,
+                "invalid": 0
+              },
+              "execution": {
+                "valid": 3065,
+                "missing": 0,
+                "invalid": 0
+              }
+            },
+            "rpc_by_method": {
+              "4": {
+                "count": 3065,
+                "p50_ns": 302926,
+                "p99_ns": 1576861,
+                "min_ns": 90098,
+                "max_ns": 3463657,
+                "mean_ns": 384750.185971
+              }
+            },
+            "sampled_api": {
+              "count": 3065,
+              "p50_ns": 318544,
+              "p99_ns": 1593354,
+              "min_ns": 104426,
+              "max_ns": 3478308,
+              "mean_ns": 400390.369657
+            },
+            "rpc": {
+              "count": 3065,
+              "p50_ns": 302926,
+              "p99_ns": 1576861,
+              "min_ns": 90098,
+              "max_ns": 3463657,
+              "mean_ns": 384750.185971
+            },
+            "primary_rpc": {
+              "count": 3065,
+              "p50_ns": 302926,
+              "p99_ns": 1576861,
+              "min_ns": 90098,
+              "max_ns": 3463657,
+              "mean_ns": 384750.185971
+            },
+            "server_processing": {
+              "count": 3065,
+              "p50_ns": 59439,
+              "p99_ns": 466671,
+              "min_ns": 34114,
+              "max_ns": 2440304,
+              "mean_ns": 105610.126591
+            },
+            "server_execution": {
+              "count": 3065,
+              "p50_ns": 58046,
+              "p99_ns": 465484,
+              "min_ns": 33194,
+              "max_ns": 2439239,
+              "mean_ns": 104197.176183
+            },
+            "rpc_minus_server_processing": {
+              "count": 3065,
+              "p50_ns": 196516,
+              "p99_ns": 1259899,
+              "min_ns": 49484,
+              "max_ns": 3361504,
+              "mean_ns": 279140.05938
+            },
+            "processing_minus_execution": {
+              "count": 3065,
+              "p50_ns": 1089,
+              "p99_ns": 5176,
+              "min_ns": 765,
+              "max_ns": 15596,
+              "mean_ns": 1412.950408
+            },
+            "single_rpc_api_minus_rpc": {
+              "count": 3065,
+              "p50_ns": 15090,
+              "p99_ns": 23894,
+              "min_ns": 12737,
+              "max_ns": 39299,
+              "mean_ns": 15640.183687
+            }
+          }
+        },
+        "limits": [
+          "Empirical preselected sample quantiles are not full-population RPC P99 or formal RPC30 acceptance.",
+          "Full API count/histogram conservation is separate from sampled API/RPC rows.",
+          "The finite closed-loop workload tapers as callers finish and is not fixed offered load.",
+          "Server spans start/end inside generated adapters; RPC-minus-server is a mixed residual, not pure network.",
+          "Optional diagnostic metadata never filters primary RPCs; missing/invalid counts remain explicit.",
+          "All raw anomaly/error rows are retained; any primary error disables quantiles.",
+          "Off/on SDK API observer calibration does not prove each internal phase has <=3% perturbation."
+        ]
+      }
+    },
+    {
+      "index": 12,
+      "operation": "set",
+      "mode": "off",
+      "smoke": false,
+      "status": "SDK_DIAGNOSTIC_VALID",
+      "metric": {
+        "attempts": 1572864,
+        "success": 1572864,
+        "errors": 0,
+        "mismatches": 0,
+        "api_p50_upper_us": 321,
+        "api_p99_upper_us": 1482,
+        "observer_p99_upper_us": 1482,
+        "qps": 80143.373327,
+        "CPU_us_per_success": 134.169261,
+        "taper_ns": 148672552
+      },
+      "diagnosis": {
+        "diagnostic_valid": true,
+        "RPC30_accepted": false,
+        "RPC_available": false,
+        "independent_ledger_rows": 3592,
+        "limits": [
+          "Finite closed loop with taper; API diagnostics only; external owner/maps/routes verified separately"
+        ]
+      }
+    }
+  ],
+  "archive": {
+    "sha256": "cf4aaceaf1ff6c7e7696b37763bdd60c8d9444cdc33d9c8e08740f229e4622e0",
+    "bytes": 82638690,
+    "members": 1180,
+    "regular_files": 1179
+  },
+  "limits": [
+    "Observer3percentgate failed; internalRPCspanperturbation not qualified; no causal attribution or RPC30 acceptance.",
+    "Get control P99 drift28.26percent; Set first on/off P99+9.33percent CPU+3.54percent QPS-4.15percent; no rerun.",
+    "No bRPC counterpart, scheduled-arrival E2E, mixed/peak/fault-memory or default/OFF Bazel/CI acceptance in this diagnostic.",
+    "Only original SDK741 and Worker986 measured; no production optimization promoted.",
+    "Capture arrays+reserve<=128MiB; separately bounded histogram state/ledger add memory; not totalRSS or continuouspeak claim."
+  ]
+}
