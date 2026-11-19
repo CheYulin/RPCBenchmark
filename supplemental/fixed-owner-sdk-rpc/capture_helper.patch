@@ -1,0 +1,226 @@
+--- capture_helper.h
++++ capture_helper.h
+@@ -4,0 +5 @@
++#include "fixed_owner_plan.h"
+@@ -28,0 +30 @@
++    Session(const std::filesystem::path& output, FixedOwnerPlan plan, bool primingEnabled);
+--- capture_helper.cpp
++++ capture_helper.cpp
+@@ -20,0 +21,4 @@
++#include <array>
++#include <thread>
++#include <sys/syscall.h>
++#include <unistd.h>
+@@ -26,0 +31,3 @@
++static_assert(FixedOwnerPlan::MaxCallers == DS_CAPTURE_MAX_CALLERS);
++static_assert(FixedOwnerPlan::MaxRpcPerApi == MaxRpc && FixedOwnerPlan::ErrorRecords == ErrorRecords && FixedOwnerPlan::ErrorEnds == ErrorEnds);
++static_assert(FixedOwnerPlan::BudgetBytes == Budget && FixedOwnerPlan::MetadataReserveBytes == MetadataReserve);
+@@ -60,0 +68,118 @@
++
++namespace {
++struct FixedOwnerState {
++    enum Registration : std::uint32_t { Empty, Publishing, Ready, Released };
++    struct alignas(64) Owner {
++        std::atomic<std::uint32_t> registration{Empty};
++        std::thread::id thread;
++        std::uint32_t tid = 0;
++        std::array<std::atomic<std::uint64_t>, 2> ended{};
++        std::atomic<bool> active{false};
++        std::uint64_t phase = 0, begin = 0;
++    };
++    explicit FixedOwnerState(FixedOwnerPlan value, std::filesystem::path directory)
++        : plan(std::move(value)), output(std::move(directory)), owners(std::make_unique<Owner[]>(plan.Callers()))
++    {
++        if (!std::filesystem::is_directory(output) || std::filesystem::exists(output / "fixed-owner-plan.json"))
++            throw std::invalid_argument("fixed-owner output must be a fresh driver directory");
++        std::ofstream file(output / "fixed-owner-plan.json");
++        file << "{\"owner_stride\":" << plan.Callers() << ",\"warm_per_owner\":" << plan.Calls(1)
++             << ",\"measure_per_owner\":" << plan.Calls(2) << ",\"warm_planned\":" << plan.TotalCalls(1)
++             << ",\"measure_planned\":" << plan.TotalCalls(2) << ",\"rate\":" << plan.Rate()
++             << ",\"seed\":" << plan.Seed() << ",\"modulus\":" << plan.Modulus()
++             << ",\"max_selected_per_owner\":" << plan.MaxSelectedPerOwner()
++             << ",\"lent_array_bound_bytes\":" << plan.CaptureBytes()
++             << ",\"metadata_reserve_bytes\":" << plan.MetadataReserveBytes << "}\n";
++        file.close(); if (!file) throw std::runtime_error("fixed-owner plan write failed");
++    }
++    void Fail(int value = DS_CAPTURE_INVALID) noexcept { First(status, value); }
++    bool Register(std::size_t caller, std::uint32_t tid) noexcept
++    {
++        if (caller >= plan.Callers() || started.load() || !tid || tid != static_cast<std::uint32_t>(syscall(SYS_gettid))) {
++            Fail(DS_CAPTURE_OWNER); return false;
++        }
++        auto &owner = owners[caller]; std::uint32_t expected = Empty;
++        if (!owner.registration.compare_exchange_strong(expected, Publishing)) { Fail(DS_CAPTURE_OWNER); return false; }
++        owner.thread = std::this_thread::get_id(); owner.tid = tid;
++        owner.registration.store(Ready, std::memory_order_release); return true;
++    }
++    bool PrepareArm() noexcept
++    {
++        if (started.exchange(true) || status.load()) { Fail(); return false; }
++        for (std::size_t caller = 0; caller < plan.Callers(); ++caller) {
++            if (owners[caller].registration.load(std::memory_order_acquire) != Ready) { Fail(); return false; }
++            for (std::size_t other = 0; other < caller; ++other)
++                if (owners[other].tid == owners[caller].tid) { Fail(DS_CAPTURE_OWNER); return false; }
++        }
++        return true;
++    }
++    Owner *Current(std::size_t caller) noexcept
++    {
++        if (caller >= plan.Callers()) { Fail(DS_CAPTURE_OWNER); return nullptr; }
++        auto &owner = owners[caller];
++        if (owner.registration.load(std::memory_order_acquire) != Ready || owner.thread != std::this_thread::get_id()) {
++            Fail(DS_CAPTURE_OWNER); return nullptr;
++        }
++        return &owner;
++    }
++    bool Begin(std::size_t caller, std::uint64_t phase, std::uint64_t id,
++               std::uint64_t scheduled, std::uint64_t begin) noexcept
++    {
++        if (!plan.ValidateBegin(caller, phase, id) || !armed.load(std::memory_order_acquire) || !begin || scheduled > begin) {
++            Fail(); return false;
++        }
++        auto *owner = Current(caller); if (!owner) return false;
++        const auto warm = owner->ended[0].load(); const auto measured = owner->ended[1].load();
++        const auto next = phase == 1 ? warm : measured;
++        if (owner->active.load() || next >= plan.Calls(phase) || id / plan.Callers() != next
++            || (phase == 1 && measured) || (phase == 2 && warm != plan.Calls(1))) { Fail(); return false; }
++        owner->phase = phase; owner->begin = begin; owner->active.store(true, std::memory_order_release); return true;
++    }
++    bool End(std::size_t caller, std::uint64_t end, std::uint64_t validated, std::int32_t outcome) noexcept
++    {
++        auto *owner = Current(caller); if (!owner) return false;
++        if (!owner->active.load(std::memory_order_acquire)) { Fail(); return false; }
++        if (end < owner->begin || validated < end || outcome) Fail();
++        auto &count = owner->ended[owner->phase - 1]; count.store(count.load() + 1, std::memory_order_release);
++        owner->active.store(false, std::memory_order_release); return true;
++    }
++    bool Complete(bool released) const noexcept
++    {
++        for (std::size_t caller = 0; caller < plan.Callers(); ++caller) {
++            const auto &owner = owners[caller]; const auto registration = owner.registration.load(std::memory_order_acquire);
++            if ((released ? registration != Released : registration != Ready && registration != Released)
++                || owner.active.load(std::memory_order_acquire) || owner.ended[0].load() != plan.Calls(1)
++                || owner.ended[1].load() != plan.Calls(2)) return false;
++        }
++        return true;
++    }
++    void Drained(bool final) noexcept
++    {
++        if (final) { armed.store(false, std::memory_order_release); if (!Complete(false)) Fail(); sealed.store(true); return; }
++        for (std::size_t caller = 0; caller < plan.Callers(); ++caller) {
++            const auto &owner = owners[caller];
++            if (owner.active.load() || owner.ended[0].load() != plan.Calls(1) || owner.ended[1].load()) Fail();
++        }
++    }
++    bool CanRelease(std::size_t caller) noexcept
++    {
++        auto *owner = Current(caller); if (!owner) return false;
++        if (!sealed.load() || owner->active.load()) { Fail(); return false; } return true;
++    }
++    void Release(std::size_t caller) noexcept { owners[caller].registration.store(Released, std::memory_order_release); }
++    void Finish() { if (!Complete(true)) Fail(); }
++    void WriteFinal() const
++    {
++        std::ofstream file(output / "fixed-owner-final.json");
++        file << "{\"closed\":true,\"control_status\":" << status.load()
++             << ",\"all_ids_ended_and_owners_released\":" << (Complete(true) ? "true" : "false") << "}\n";
++        file.close(); if (!file) throw std::runtime_error("fixed-owner final write failed");
++    }
++    const FixedOwnerPlan plan;
++    const std::filesystem::path output;
++    std::unique_ptr<Owner[]> owners;
++    std::atomic<int> status{0};
++    std::atomic<bool> started{false}, armed{false}, sealed{false};
++};
++}
++
+@@ -61,0 +187 @@
++    std::unique_ptr<FixedOwnerState> fixed;
+@@ -84 +210 @@
+-         std::uint64_t warm, std::uint64_t measure, bool priming, const char* selectedMode)
++         std::uint64_t warm, std::uint64_t measure, bool priming, const char* selectedMode, const FixedOwnerPlan* ownerPlan = nullptr)
+@@ -88,0 +215,4 @@
++        if (ownerPlan) {
++            fixed = std::make_unique<FixedOwnerState>(*ownerPlan, directory);
++            if (std::strcmp(mode, "off") == 0) return;
++        }
+@@ -91,2 +221,2 @@
+-        const auto modulus = Setting("DS_BENCH_RPC_CAPTURE_MODULUS", 1024, 1, UINT32_MAX);
+-        const auto seed = Setting("DS_BENCH_RPC_CAPTURE_SEED", UINT64_C(0x4d595df4d0f33173), 0, UINT64_MAX);
++        const auto modulus = Setting("DS_BENCH_RPC_CAPTURE_MODULUS", ownerPlan ? ownerPlan->Modulus() : 1024, 1, UINT32_MAX);
++        const auto seed = Setting("DS_BENCH_RPC_CAPTURE_SEED", ownerPlan ? ownerPlan->Seed() : UINT64_C(0x4d595df4d0f33173), 0, UINT64_MAX);
+@@ -100,2 +230,3 @@
+-        const auto normalRecords = selected * MaxRpc;
+-        const auto recordCount = normalRecords + ErrorRecords, endCount = selected + ErrorEnds;
++        const auto perOwner = ownerPlan ? ownerPlan->MaxSelectedPerOwner() : selected;
++        const auto normalRecords = perOwner * MaxRpc;
++        const auto recordCount = normalRecords + ErrorRecords, endCount = perOwner + ErrorEnds;
+@@ -109 +240 @@
+-                  static_cast<std::uint32_t>(selected), ErrorEnds, MaxRpc,
++                  static_cast<std::uint32_t>(perOwner), ErrorEnds, MaxRpc,
+@@ -122 +253 @@
+-             << ",\"normal_ends_per_caller\":" << selected << ",\"error_ends_per_caller\":" << ErrorEnds
++             << ",\"normal_ends_per_caller\":" << perOwner << ",\"error_ends_per_caller\":" << ErrorEnds
+@@ -335 +466,2 @@
+-        if (!closed || !started || controlStatus.load()) return false;
++        if (!closed || !started || controlStatus.load() || (fixed && (fixed->status.load() || !fixed->Complete(true)))) return false;
++        if (std::strcmp(mode, "off") == 0) return true;
+@@ -362,0 +495,13 @@
++Session::Session(const std::filesystem::path& output, FixedOwnerPlan plan, bool primingEnabled)
++{
++    if (Setting("DS_BENCH_RPC_CAPTURE_MODULUS", plan.Modulus(), 1, UINT32_MAX) != plan.Modulus()
++        || Setting("DS_BENCH_RPC_CAPTURE_SEED", plan.Seed(), 0, UINT64_MAX) != plan.Seed())
++        throw std::invalid_argument("fixed-owner selector environment mismatch");
++    const char *mode = std::getenv("DS_BENCH_RPC_CAPTURE_MODE");
++    if (!mode) mode = "off";
++    const char *selected = nullptr;
++    for (const char *value : {"off", "stock", "disabled", "enabled"})
++        if (std::strcmp(mode, value) == 0) selected = value;
++    if (!selected) throw std::invalid_argument("DS_BENCH_RPC_CAPTURE_MODE must be off|stock|disabled|enabled");
++    impl_ = std::make_unique<Impl>(output, plan.Callers(), plan.TotalCalls(1), plan.TotalCalls(2), primingEnabled, selected, &plan);
++}
+@@ -364 +509 @@
+-bool Session::Active() const noexcept { return impl_ != nullptr; }
++bool Session::Active() const noexcept { return impl_ && std::strcmp(impl_->mode, "off") != 0; }
+@@ -367,0 +513 @@
++    if (impl_ && impl_->fixed && !impl_->fixed->Register(caller, tid)) { First(impl_->controlStatus, impl_->fixed->status.load()); return false; }
+@@ -373,0 +520 @@
++    if (impl_->fixed && status != DS_CAPTURE_OK) { impl_->fixed->Fail(status); First(impl_->controlStatus, status); }
+@@ -380 +527,2 @@
+-    if (!impl_->api) return true;
++    if (impl_->fixed && !impl_->fixed->PrepareArm()) { First(impl_->controlStatus, impl_->fixed->status.load()); return false; }
++    if (!impl_->api) { if (impl_->fixed) impl_->fixed->armed.store(true, std::memory_order_release); return true; }
+@@ -384,0 +533 @@
++    if (impl_->fixed) impl_->fixed->armed.store(impl_->armed, std::memory_order_release);
+@@ -389,0 +539 @@
++    if (impl_ && impl_->fixed && !impl_->fixed->Begin(caller, phase, arrival, scheduled, begin)) { First(impl_->controlStatus, impl_->fixed->status.load()); return; }
+@@ -399,0 +550,4 @@
++    if (impl_ && impl_->fixed) {
++        const bool forward = impl_->fixed->End(caller, end, validated, outcome);
++        First(impl_->controlStatus, impl_->fixed->status.load()); if (!forward) return;
++    }
+@@ -409,0 +564 @@
++    if (impl_ && impl_->fixed) { impl_->fixed->Drained(final); First(impl_->controlStatus, impl_->fixed->status.load()); }
+@@ -415,0 +571,6 @@
++    if (impl_ && impl_->fixed) {
++        if (!quiescent) impl_->RetainAndExit("fixed-owner-unsafe-stop-partial");
++        if (!impl_->fixed->Complete(false)) impl_->fixed->Fail();
++        impl_->fixed->armed.store(false); impl_->fixed->sealed.store(true);
++        First(impl_->controlStatus, impl_->fixed->status.load());
++    }
+@@ -423 +584,2 @@
+-    if (!impl_ || !impl_->api || !impl_->slots[caller].handle) return;
++    if (impl_ && impl_->fixed && !impl_->fixed->CanRelease(caller)) { First(impl_->controlStatus, impl_->fixed->status.load()); return; }
++    if (!impl_ || !impl_->api || !impl_->slots[caller].handle) { if (impl_ && impl_->fixed) impl_->fixed->Release(caller); return; }
+@@ -426 +588,2 @@
+-    if (status == DS_CAPTURE_OK) impl_->slots[caller].handle = nullptr;
++    if (status == DS_CAPTURE_OK) { impl_->slots[caller].handle = nullptr; if (impl_->fixed) impl_->fixed->Release(caller); }
++    else if (impl_->fixed) { impl_->fixed->Fail(status); First(impl_->controlStatus, status); }
+@@ -431,0 +595,4 @@
++    if (impl_->fixed) {
++        if (impl_->closed) return impl_->Good();
++        impl_->fixed->Finish(); First(impl_->controlStatus, impl_->fixed->status.load());
++    }
+@@ -437,0 +605,2 @@
++    if (impl_->fixed) impl_->fixed->WriteFinal();
++    if (std::strcmp(impl_->mode, "off") == 0) return impl_->Good();

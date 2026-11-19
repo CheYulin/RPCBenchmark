@@ -1,0 +1,19 @@
+{
+  "schema": "fixed-owner-unit-source-bindings-v1",
+  "scope": "Five unit groups; fake provider and public-header anchor are unit-test-only, never production runtime or SDK functionality evidence.",
+  "source_sha256": {
+    "tests/unit/arrival_loop_test.cpp": "d10a1f0b87ea42dc0d01b2829f3611c6633826b5d28c7fa4ca492c10ec8ad29e",
+    "tests/unit/plan_test.cpp": "d1dbf0f64c0a0751c770289a33aacff07564a88384e3fe9db10c686ab430ebd0",
+    "tests/unit/end_boundary_test.cpp": "e33dd85b0d7ccd51ed053074e1d04605c70063a755e391ea0969ee9f385344ef",
+    "tests/unit/session_test.cpp": "a7ed5585b4e70a62d5a98a78a2c7c67f57c3991f955cebcde191e589ce0288e5",
+    "tests/unit/mode_snapshot_test.cpp": "8f36398e0377b9e7e311c0b06f66a4d6371648edd76c94362aa10e696ad91166",
+    "tests/unit/provider/capture.cpp": "928d655464f043c27b132427346b3f88c286ffbf6922627d0b066eefede7acea",
+    "tests/unit/provider/capture_abi.h": "d8a60b80a6cfbe4b2055a0ac8c1848a25ead7057556a73f3489bd4c378ca1a2c",
+    "tests/unit/provider/capture_observe.h": "a9b2208e937dcea650443755759744eecbd355e0f7cb8b668209fe3a8cb0fc3a",
+    "tests/unit/provider/fake_sdk.cpp": "149c54e91f759f0dbd87bce35050e6a7a64268c521281b6e0504485e64eb5ec0",
+    "tests/unit/provider/core_bridge.cpp": "a3faa02b070984961434d184dec7b2364ffd5719bb75c08076b2e9d673000404",
+    "tests/unit/provider/exports-anchor.map": "875409987d2fbf02ce355266581f019a2f456bd2a7e3f5d375702c59d9c1cb5f",
+    "tests/unit/provider/anchor.cpp": "49abe4bc937b303aa971745d79aa853adc18769f9946097d821235a2969c241e"
+  },
+  "production_or_network_runtime": false
+}

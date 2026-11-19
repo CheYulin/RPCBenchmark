@@ -1,0 +1,26 @@
+{
+  "base_helpers": {
+    "capture_helper.h": "7ebb1c47d967af8ae250fea081f1469e9573c1badf98cf76691dc4f71303b35a",
+    "capture_helper.cpp": "17d2eb3838ae9072fb14a8efc415fdd1f2603abf70642a6dabb6c565dccecd63",
+    "capture_abi.h": "d8a60b80a6cfbe4b2055a0ac8c1848a25ead7057556a73f3489bd4c378ca1a2c"
+  },
+  "patched_helpers": {
+    "capture_helper.h": "4c6645ef682e98990636247854cc50929353ffb86a4b990bd619613388d346d8",
+    "capture_helper.cpp": "ff3af0bb8fc8c7c2e05222ec490e74b3922241fb61e01205f70f5da24377a51d"
+  },
+  "preserved_source_sha256": {
+    "paced_callers_sdk.cpp": "09d995be2b38e1b0c6a09194d1abd5b0c0a0f7eab178e99f276f914e1414f78f",
+    "fixed_owner_plan.h": "56c6cd83d3c840976da517977d79979204044d639bdfa479059baf12340eae2d",
+    "fixed_owner_plan.cpp": "64ef183f73dc7d79e096b66a28be5bc568c1ae2a441083def4a521a51df71962",
+    "arrival_loop.h": "9ab8b4fcb4be173bf46556ff4f513735d3e500365de19e02a8af783dd755a3dd",
+    "closed_loop_plan.h": "14f40725eabf048816b6b92aa3b6ac604aab3d274588c77acee2f496978dc22d",
+    "validate_fixed_arrival.py": "323275cac5978684cc88d29853c3f2154c96d35ec1f02ef89946c36b30a0ff04",
+    "test_validate_fixed_arrival.py": "7ff52e9fcfc8225ba7001dd610cde0e89acc6909213a62040535cbb1759fcf15",
+    "validate_fixed_case.py": "143c735c10fdc5720fe632079727ebbd02f6738dbe730587d8a30e9d13e18d6c",
+    "fixed_case_pod.py": "2741f25301bb7820dbf701dfb61669715a264ecbb838b0109ab3eaab71350e92",
+    "fixed_case_fixture.py": "c10f712ab82c584e728318c1a280b5b775a6a63bb00648d4566ee93e1facd6e1",
+    "test_validate_fixed_case.py": "cf95192576a0c7b305b3be2270c12555f90a2fff76b81b4faddb497479d8912a",
+    "test_fixed_case_cli.py": "b6e528da5edf18e973847eef30d544ae6a8b73da30c5a56995ad996c344cfd95"
+  },
+  "patch_sha256": "7a8d510d063c796b07a18d41505e1f09bf32a23d6e02885c610d1ce95f000917"
+}
