@@ -1,0 +1,41 @@
+{
+  "schema": "coro-core-component-design-v1",
+  "scope": "Minimal optional Linux echo component experiments; no production RPC policy/flag change.",
+  "base_DataSystem_source_sha256": "23bb005761a9012c994a532f04fc2c7c60b446737b003c86ce63999936437566",
+  "required_core_header_sha256": "91d46287b36a964bf88aa42ef42a454ad36507a9cc8bac11f15f399dac653210",
+  "source_probe_sha256": "a306ee69d08db3a0d86ffdda6485ff16d765808bad90cae1a10217fc0e123dd8",
+  "server_only_entry_sha256": "261da19853436e114fe84f7c87d29b7b8205da4788d333f0cbd3d4c3ec9b78c3",
+  "shared_owner": {
+    "hypothesis": "A lowest-free shared lane can migrate its native caller-pumped IO context across caller threads. Source supports the possibility; measurement must determine its importance.",
+    "profile": {
+      "rate": 500,
+      "owners": 32,
+      "warm_calls_per_owner": 128,
+      "measure_calls_per_owner": 256,
+      "attachment_bytes": 4096,
+      "phase_lead_ns": 250000000,
+      "dispatch_and_observer_strict_limit_ns": 64000000,
+      "soft_late_gate": false
+    },
+    "resources": "Eight distinct physical NUMA1 cores for client and server, metadata separate; SCHED_OTHER/nice0 roles, metadata nice10; private loopback network/mount namespace.",
+    "confound": "One versus32 Client wrappers and cleanup threads;32socketFD prime snapshot is not continuous connection-activity proof."
+  },
+  "paired_dispatch": {
+    "hypothesis": "Net effect of avoiding Asio-to-bthread and bthread-to-Asio handoffs for an in-memory echo only.",
+    "base": "Pinned source plus identical relaxed atomic declaration and extern-C count getter; all dispatch remains production bthread.",
+    "inline": "Only exact diag.echo after successful Admit and attachment release uses Respond(Run(request)), Finish, return plus counterincrement.",
+    "diag_prime_and_other_methods": "Unchanged bthread path in both variants; cooperative prime may wait and must never be inlined.",
+    "ownership": "One admitted job is finished once on normal echo completion; unchanged Respond owns reply attachments; prime/port captures outlive Release then Server.Stop.",
+    "server_CLI": "serve 127.0.0.1 READY_FILE only, no call mode.",
+    "counter": "Counts branch entries, not successes; root controller validates base0/inline12288 after Stop plus independent full client byte/error/cohort checks.",
+    "nonblocking_only": "The registered diag.echo handler only moves memory. Never use this private path for Worker or potentially blocking business logic.",
+    "interpretation": "Net component screen, not a directional stage decomposition or guaranteed mathematical lower bound; atomic and code-layout effects remain."
+  },
+  "reuse": "One existing fixed-owner-sdk-rpc staging closure, common source/output directory, exact plan/header/ABI identities. Existing builders and default targets remain unchanged.",
+  "qualification_limits": [
+    "Public source packaging/staging is distinct from actual private ELF runtime qualification.",
+    "Shared/perowner evidence does not justify sticky production policy; paired results remain pending here.",
+    "No SDK Get/Set, RPC30, feature-OFF/Bazel/package/full-CI or production deployment acceptance.",
+    "Historical failed protocols remain rejected; no retries or relabeling in this checkpoint."
+  ]
+}

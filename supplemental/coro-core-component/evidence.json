@@ -1,0 +1,175 @@
+{
+  "schema": "coro-core-component-evidence-v1",
+  "scope": "Component memory echo, not SDK Get/Set, bRPC comparison or RPC30 acceptance.",
+  "shared_owner": {
+    "status": "COMPLETE_DIAGNOSTIC_ONLY_TWO_FULLRAW_READERS",
+    "archive_sha256": "1ea4d37da2e968b71577be0b8deefcd9122a35eab745696589f6120143dcd2cf",
+    "archive_bytes": 62889411,
+    "regular_members": 173,
+    "indexed_members": 172,
+    "order": [
+      "shared",
+      "per-owner",
+      "per-owner",
+      "shared"
+    ],
+    "all_rows": 49152,
+    "warm_rows": 16384,
+    "measure_rows": 32768,
+    "prime_calls_separate": 128,
+    "api_or_bytes_or_debt_errors": 0,
+    "normal_process_closures": 8,
+    "role_boundary_proofs": 16,
+    "SDK_map_proofs": 8,
+    "source_CPP_sha256": "a306ee69d08db3a0d86ffdda6485ff16d765808bad90cae1a10217fc0e123dd8",
+    "actual_private_ELF_sha256": "ec6127740959fec148c4cb51c4c46cacb7199ef21cc82705aab4e60148483ac1",
+    "SDK_sha256": "56d6a4dceb98a62128900147e0d57ade5fa3105551a603117340ce6b1cc31791",
+    "actual_libbrpc_sha256": "a13d0c43a022805a08151989adae6610806d09ff4290a78e4309bcf9815f94ca",
+    "pinned_inputs": 120,
+    "build_inputs": 91,
+    "inputs_prepost_exact": true,
+    "rows": [
+      {
+        "index": 1,
+        "mode": "shared",
+        "measure_core_p50_ns": 390012,
+        "measure_core_p99_ns": 440803,
+        "measure_e2e_p99_ns": 594352,
+        "measure_dispatch_p99_ns": 186762,
+        "measure_max_dispatch_ns": 23044930,
+        "measure_soft_late_count": 21,
+        "initial_prime_topology": {
+          "task_count": 36,
+          "fd_count": 131,
+          "socket_fds": 32,
+          "eventpoll_fds": 32,
+          "timerfd_fds": 32,
+          "eventfd_fds": 32
+        },
+        "after_client_destructor_topology": {
+          "task_count": 3,
+          "fd_count": 3,
+          "socket_fds": 0,
+          "eventpoll_fds": 0,
+          "timerfd_fds": 0,
+          "eventfd_fds": 0
+        }
+      },
+      {
+        "index": 2,
+        "mode": "per-owner",
+        "measure_core_p50_ns": 392546,
+        "measure_core_p99_ns": 427312,
+        "measure_e2e_p99_ns": 592351,
+        "measure_dispatch_p99_ns": 187286,
+        "measure_max_dispatch_ns": 194652,
+        "measure_soft_late_count": 0,
+        "initial_prime_topology": {
+          "task_count": 67,
+          "fd_count": 131,
+          "socket_fds": 32,
+          "eventpoll_fds": 32,
+          "timerfd_fds": 32,
+          "eventfd_fds": 32
+        },
+        "after_client_destructor_topology": {
+          "task_count": 3,
+          "fd_count": 3,
+          "socket_fds": 0,
+          "eventpoll_fds": 0,
+          "timerfd_fds": 0,
+          "eventfd_fds": 0
+        }
+      },
+      {
+        "index": 3,
+        "mode": "per-owner",
+        "measure_core_p50_ns": 390302,
+        "measure_core_p99_ns": 477943,
+        "measure_e2e_p99_ns": 641212,
+        "measure_dispatch_p99_ns": 189386,
+        "measure_max_dispatch_ns": 27290716,
+        "measure_soft_late_count": 17,
+        "initial_prime_topology": {
+          "task_count": 67,
+          "fd_count": 131,
+          "socket_fds": 32,
+          "eventpoll_fds": 32,
+          "timerfd_fds": 32,
+          "eventfd_fds": 32
+        },
+        "after_client_destructor_topology": {
+          "task_count": 3,
+          "fd_count": 3,
+          "socket_fds": 0,
+          "eventpoll_fds": 0,
+          "timerfd_fds": 0,
+          "eventfd_fds": 0
+        }
+      },
+      {
+        "index": 4,
+        "mode": "shared",
+        "measure_core_p50_ns": 375415,
+        "measure_core_p99_ns": 483558,
+        "measure_e2e_p99_ns": 659097,
+        "measure_dispatch_p99_ns": 189850,
+        "measure_max_dispatch_ns": 28665572,
+        "measure_soft_late_count": 31,
+        "initial_prime_topology": {
+          "task_count": 36,
+          "fd_count": 131,
+          "socket_fds": 32,
+          "eventpoll_fds": 32,
+          "timerfd_fds": 32,
+          "eventfd_fds": 32
+        },
+        "after_client_destructor_topology": {
+          "task_count": 3,
+          "fd_count": 3,
+          "socket_fds": 0,
+          "eventpoll_fds": 0,
+          "timerfd_fds": 0,
+          "eventfd_fds": 0
+        }
+      }
+    ],
+    "comparison": {
+      "measure_core_p99_median_ratio_per_owner_over_shared": 0.9793305862103658,
+      "measure_core_p50_median_ratio_per_owner_over_shared": 1.0227598451583233,
+      "directional_measure_core_p99_ratios": [
+        0.9693944914168007,
+        0.988388156126049
+      ],
+      "shared_p99_repeat_max_over_min_minus_1": 0.09699344151469025,
+      "per_owner_p99_repeat_max_over_min_minus_1": 0.11848719436851751
+    },
+    "interpretation": "At this R500 loopback memory-echo profile, per-owner clients do not show a material/repeatable benefit supporting a production sticky-lane change; P99 median about2.07% lower while P50 median about2.28% higher, below same-mode P99 repeat variation. This weakens the shared-client/lowest-free-lane-main-bottleneck hypothesis only at this profile.",
+    "limits": [
+      "Not SDKGetSet, bRPC comparison or RPC30 acceptance. All soft lateness remains included; not qualification under historical strict/bounded profiles.",
+      "One versus32Client wrappers/cleanup threads and connection use are confounded. Initial prime has32socketFDs both, but no continuous measure connection-count proof.",
+      "Shared may mainly reuse low lanes at2ms global arrivals versus~0.4ms service; high-load CAS/contention is not ruled out. No sticky affinity causal claim.",
+      "CPU ticks have10ms resolution and include phase lead/background/cleanup; report whole-process boundary cost only. Role proofs are boundary snapshots, not continuous coverage."
+    ]
+  },
+  "paired_dispatch": {
+    "status": "NO_RUNTIME_RESULT_INCLUDED_IN_THIS_CHECKPOINT",
+    "source_pair_only_branch_diff": true,
+    "same_server_entry_and_build_flags_required": true,
+    "base_counter_expected": 0,
+    "inline_counter_expected": 12288,
+    "counter_read_after_Stop": true,
+    "unchanged_client_required": true,
+    "results": null
+  },
+  "public_reproduction": {
+    "staging_helper_uses_existing_fixed_owner_builder_once": true,
+    "copied_full_core_sources_in_repository": false,
+    "public_rebuilt_ELF_runtime_qualified": false,
+    "private_ELF_qualification_transfers_to_public_rebuild": false
+  },
+  "historical_calibration_failures_reclassified": false,
+  "SDK_Get_Set": false,
+  "RPC30_accepted": false,
+  "full_goal_achieved": false
+}

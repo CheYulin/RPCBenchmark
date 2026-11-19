@@ -1,0 +1,18 @@
+{
+  "module_source_sha256": {
+    "README.md": "e7c812e07ff4fd65eda281046aa3421e98bc720e126d23fc2f6b7eb70f959301",
+    "core_shared_owner_probe.cpp": "a306ee69d08db3a0d86ffdda6485ff16d765808bad90cae1a10217fc0e123dd8",
+    "design.json": "898f17484f7ff6bcdbdf639155af6bf9fcc07ad15cab380664c5a42cb7c8cbe6",
+    "echo_server_only.cpp": "261da19853436e114fe84f7c87d29b7b8205da4788d333f0cbd3d4c3ec9b78c3",
+    "evidence.json": "5b985f4e64947c75d15a6406e1f60b492d667607b53f472735a20c55f7d75f91",
+    "generate_core_variants.py": "5aaca650f75653b5561dfdef2d3dff2ee6a09771f8598f78bd355fc22195a5c9",
+    "stage_sources.py": "d267542bbf1d12bb9ae1bb188f0881b3a976a1bcb7207149626609d029f4acc0",
+    "test_generate_core_variants.py": "35b13803d61762ad39043b704d34266bb07cf88bc1b2acf9f0f0cf1628d146d1"
+  },
+  "external_fixed_owner_builder_sha256": "22b18f5fb595d45dafb89071b77e63ec773c44500b67ea9718fe3acbfa714e56",
+  "external_original_core_sha256": "23bb005761a9012c994a532f04fc2c7c60b446737b003c86ce63999936437566",
+  "generated_base_core_sha256": "0ecf646a7256826ef66cf991b19fa99d7f7b9d64b2bb53f1f1d3739065052401",
+  "generated_inline_core_sha256": "f73c0b18fefd6f1836bd2afec4a22a11a0e74df1f3d3d4b4087fd2d798caa024",
+  "SDK_Get_Set": false,
+  "RPC30_accepted": false
+}
