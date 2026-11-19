@@ -1,0 +1,149 @@
+--- base-private-core.cpp
++++ parent-adapter-core.cpp
+@@ -15,6 +15,7 @@
+  */
+ 
+ #include "datasystem/common/rpc/coro_unary.h"
++#include "parent_bthread_dispatcher.h"
+ 
+ #include <algorithm>
+ #include <any>
+@@ -264,24 +265,35 @@
+     }
+ }
+ 
+-class Dispatcher {
++class Dispatcher : private diagnostic::ParentBthreadDispatcher::Owner {
++    using ParentDispatcher = diagnostic::ParentBthreadDispatcher;
++
+ public:
+-    explicit Dispatcher(Handler handler) : handler_(std::move(handler))
++    explicit Dispatcher(Handler handler) : handler_(std::move(handler)), parents_(*this)
+     {
+     }
+ 
+     ~Dispatcher() = default;
+ 
+-    void Open()
+-    {
++    StatusCode Open()
++    {
++        const auto code = parents_.Start();
++        if (code != K_OK) {
++            return code;
++        }
+         std::lock_guard lock(mutex_);
+         accepting_ = true;
++        return K_OK;
+     }
+ 
+     void CloseAndWait()
+     {
++        {
++            std::lock_guard lock(mutex_);
++            accepting_ = false;
++        }
++        parents_.Stop();
+         std::unique_lock lock(mutex_);
+-        accepting_ = false;
+         drained_.wait(lock, [this] { return jobs_ == 0; });
+     }
+ 
+@@ -310,13 +322,12 @@
+             if (!info->get_request_attachment().empty()) {
+                 request.attachment = info->release_request_attachment();
+             }
+-            if (StartBackgroundTask(nullptr, [this, context, request = std::move(request)]() mutable {
+-                Respond(std::move(context), Run(std::move(request)));
+-                Finish();
+-            }) == 0) {
++            code = parents_.TrySubmit([this, &context, &request] {
++                return std::make_unique<DispatchJob>(*this, context, std::move(request));
++            });
++            if (code == K_OK) {
+                 return;
+             }
+-            code = K_RPC_UNAVAILABLE;
+         } catch (const std::bad_alloc &) {
+             code = K_OUT_OF_MEMORY;
+         }
+@@ -325,6 +336,35 @@
+     }
+ 
+ private:
++    class DispatchJob final : public ParentDispatcher::Job {
++    public:
++        DispatchJob(Dispatcher &dispatcher, ReplyContext context, Request request)
++            : dispatcher_(dispatcher), context_(std::move(context)), request_(std::move(request))
++        {
++        }
++
++        void Run() override
++        {
++            Respond(std::move(context_), dispatcher_.Run(std::move(request_)));
++        }
++
++        void ChildStartFailed(StatusCode code) noexcept override
++        {
++            Respond(std::move(context_), Failure(code));
++        }
++
++        void RunFailed(StatusCode code) noexcept override
++        {
++            Respond(std::move(context_), Failure(code));
++        }
++
++    private:
++        // The parent destroys this transport carrier after child TLS teardown; keep business guards in Run.
++        Dispatcher &dispatcher_;
++        ReplyContext context_;
++        Request request_;
++    };
++
+     StatusCode Admit()
+     {
+         std::lock_guard lock(mutex_);
+@@ -379,6 +419,11 @@
+         }
+     }
+ 
++    void JobRetired() noexcept override
++    {
++        Finish();
++    }
++
+     void Finish()
+     {
+         std::lock_guard lock(mutex_);
+@@ -392,6 +437,7 @@
+     std::condition_variable drained_;
+     size_t jobs_ = 0;
+     bool accepting_ = false;
++    ParentDispatcher parents_;
+ };
+ 
+ struct CallState {
+@@ -950,11 +996,19 @@
+             },
+             [this] { connections_.fetch_sub(1, std::memory_order_relaxed); });
+ 
+-        dispatcher_.Open();
+-        auto future = server->async_start();
+-        if (future.hasResult()) {
++        try {
++            const auto code = dispatcher_.Open();
++            if (code != K_OK) {
++                return { code, "Could not start coro_rpc dispatcher" };
++            }
++            auto future = server->async_start();
++            if (future.hasResult()) {
++                dispatcher_.CloseAndWait();
++                return { K_RPC_UNAVAILABLE, "Could not start coro_rpc listener" };
++            }
++        } catch (...) {
+             dispatcher_.CloseAndWait();
+-            return { K_RPC_UNAVAILABLE, "Could not start coro_rpc listener" };
++            throw;
+         }
+         server_ = std::move(server);
+         return Status::OK();

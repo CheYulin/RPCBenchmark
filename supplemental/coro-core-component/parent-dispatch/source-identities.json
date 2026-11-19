@@ -1,0 +1,135 @@
+{
+  "schema": "coro-core-parent-dispatch-retained-experiment-v1",
+  "source_sha256": {
+    "parent_bthread_dispatcher.cpp": "54225f966cb93f31630a540f271fe90bd81d57e3bd271728f74489723093e312",
+    "parent_bthread_dispatcher.h": "9b0ba7ff04f9f6d7c80e6d48e89b0b2a580637eedc15f440d6386ffe66599622",
+    "parent_bthread_dispatcher_test.cpp": "077de531fd9df05b6bbc29ab8739f989c2bea1bedf84c9832f431a5b8ccf9522",
+    "base-to-parent-adapter.patch": "6aa215e65e5edb6f0957cc6ad88525f760aa614222d217b14c0fdd82a5a9ec48",
+    "core_parent_probe.cpp": "8a2c72f6caf6ac67f783e585a8d6cb8681336a27d7eb9e62966e7527bae26706"
+  },
+  "original_DataSystem_core_sha256": "23bb005761a9012c994a532f04fc2c7c60b446737b003c86ce63999936437566",
+  "external_DataSystem_header_sha256": "91d46287b36a964bf88aa42ef42a454ad36507a9cc8bac11f15f399dac653210",
+  "generated_base_core_sha256": "0ecf646a7256826ef66cf991b19fa99d7f7b9d64b2bb53f1f1d3739065052401",
+  "patched_parent_core_sha256": "191a4ff4aca77407137458951613bbb5f1166aa783fa3ffedb766fc6beaa8124",
+  "existing_component_stage_sha256": "0e43bb3491b97bb3bae94fb35b6fcff6353c3fefe8e28cf84f133dc62f078fc3",
+  "existing_component_generator_sha256": "5aaca650f75653b5561dfdef2d3dff2ee6a09771f8598f78bd355fc22195a5c9",
+  "existing_fixed_owner_builder_sha256": "22b18f5fb595d45dafb89071b77e63ec773c44500b67ea9718fe3acbfa714e56",
+  "private_tested_images": {
+    "SDK_sha256": "56d6a4dceb98a62128900147e0d57ade5fa3105551a603117340ce6b1cc31791",
+    "brpc_sha256": "a13d0c43a022805a08151989adae6610806d09ff4290a78e4309bcf9815f94ca",
+    "base_server_sha256": "1c9b90e70308e86a1600ec032dea01e2e408eca9969a7a06fb4d70b1f5f7a0a6",
+    "parent_server_sha256": "00501653967de828da084923573cdd93b9f574534cd6eeff69e041e0380921a6",
+    "client_sha256": "f0484bc01ef7a77adeceafc214d003fe5465ed6610ed624096ee45e5a83753be"
+  },
+  "unit_evidence": {
+    "archive_sha256": "2b63d15d99eb9e3fd514feb63b628b0a445620026f5d6ab094c0929067a18cc3",
+    "terminal_sha256": "fd1ce55517475dcdd253291b5a4cb292b356466534e4da2f4715edb14e5c318c",
+    "semantic_RED_cases": 11,
+    "GREEN_cases": 11,
+    "production_runtime_qualified": false
+  },
+  "build_evidence": {
+    "archive_sha256": "dc9f3c78c1c4ab7d011268a095f736399ddb1516f94c381f59c2e3985df462dd",
+    "receipt_sha256": "e1d8a166cabfaee7d95ea3d052e33fbde87c77ef7179ff0a2bb06173c5831365",
+    "commands": 14,
+    "CLI_configuration_checks": 9,
+    "inputs_after": 1072,
+    "service_started": false
+  },
+  "performance_evidence": {
+    "status": "REJECT_PARENT_PROMOTION",
+    "archive_sha256": "4ddbd5fc9b9fa659cf949c7a80b9c829d3e4d2f24d1f5cb0fcbff4c97d1309d5",
+    "archive_bytes": 135049735,
+    "regular_members": 204,
+    "indexed_members": 203,
+    "independent_full_raw_review_sha256": {
+      "stream_reader": "2b0944ab75821a7bef7b439d9e22de966b061521d49c9b5e3b54e23c9319a172",
+      "root_second_reader": "d2a279a271f87cfe91755cab69443ec93009def08d47fb814e062098b31d7d70"
+    },
+    "all_calls_verified": 1179648,
+    "errors_bytes_mismatches_exceptions_cancelled": 0,
+    "measured_windows": [
+      {
+        "index": 1,
+        "arm": "base",
+        "P50_ns": 144432,
+        "P99_ns": 176902,
+        "QPS": 217300.7032213134,
+        "server_ticks": 574,
+        "client_ticks": 517
+      },
+      {
+        "index": 2,
+        "arm": "parent",
+        "P50_ns": 258090,
+        "P99_ns": 532725,
+        "QPS": 117526.82050777311,
+        "server_ticks": 1382,
+        "client_ticks": 531
+      },
+      {
+        "index": 3,
+        "arm": "parent",
+        "P50_ns": 260516,
+        "P99_ns": 524067,
+        "QPS": 116788.71004594961,
+        "server_ticks": 1391,
+        "client_ticks": 545
+      },
+      {
+        "index": 4,
+        "arm": "base",
+        "P50_ns": 141388,
+        "P99_ns": 173999,
+        "QPS": 221617.5724108982,
+        "server_ticks": 568,
+        "client_ticks": 511
+      }
+    ],
+    "parent_over_base_arm_median_ratios": {
+      "P50_ns": 1.8144496536281576,
+      "P99_ns": 3.011652859353493,
+      "QPS": 0.533847742421338,
+      "server_ticks": 2.4281961471103326,
+      "client_ticks": 1.046692607003891
+    },
+    "client_complete_lifetime_maxrss_bytes": [
+      263073792,
+      261922816,
+      263151616,
+      263090176
+    ],
+    "normal_owned_process_closures": 8,
+    "boundary_role_proofs": 16,
+    "pins_prepost_exact": 1107,
+    "build_inputs": 1072,
+    "interpretation": "Reject parent candidate in the declared closed32 echo diagnostic. Server CPU is component server process CPU, not production Worker CPU. Complete-lifetime client RSS includes ledger formatting and is not a measured ROI memory benefit.",
+    "limitations": [
+      "Closed-loop concurrency32 has different actual QPS between arms; no same-offered-load inference.",
+      "No actual SDK Get/Set or new bRPC backend comparison.",
+      "No production runtime qualification or RPC30 acceptance."
+    ]
+  },
+  "profile": {
+    "name": "closed-loop32-parent-screen",
+    "callers": 32,
+    "warm_calls_per_owner": 1024,
+    "measure_calls_per_owner": 8192,
+    "attachment_bytes": 4096,
+    "offered_rate": null,
+    "order": [
+      "base",
+      "parent",
+      "parent",
+      "base"
+    ],
+    "client_CPUs": 8,
+    "server_CPUs": 8,
+    "client_server_nice": 0
+  },
+  "production_promoted": false,
+  "production_patch_applied": false,
+  "public_rebuilt_ELF_runtime_qualified": false,
+  "SDK_Get_Set": false,
+  "RPC30_accepted": false
+}
