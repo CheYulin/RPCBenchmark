@@ -1,5 +1,9 @@
 # Fixed-owner SDK RPC diagnostic
 
+The default build retains the strict max-1-ms contract. The separate opt-in
+[`bounded-v1` profile](README-bounded.md) uses different sources and binaries;
+its functional evidence and admission rules cannot qualify the strict profile.
+
 ## Profile and scheduling
 
 This optional module exercises real DataSystem Get or Set APIs with 32 fixed caller

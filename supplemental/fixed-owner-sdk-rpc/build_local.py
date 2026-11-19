@@ -55,9 +55,12 @@ def directory(value: Path, label: str) -> Path:
     return path
 
 
-def source_inputs(helper_base: Path | None = None) -> tuple[dict[str, bytes], bytes, str]:
+def source_inputs(helper_base: Path | None = None, *, admission_profile="strict") -> tuple[dict[str, bytes], bytes, str]:
     base = directory(helper_base if helper_base is not None else HELPERS, "capture helper base")
-    sources = {name: (MODULE / name).read_bytes() for name in LOCAL_SOURCES}
+    require(admission_profile in ("strict", "bounded-v1"), "unknown admission profile")
+    local = LOCAL_SOURCES if admission_profile == "strict" else (
+        "bounded_callers_sdk.cpp", "bounded_admission.h", *LOCAL_SOURCES[1:])
+    sources = {name: (MODULE / name).read_bytes() for name in local}
     for name, expected in HELPER_HASHES.items():
         data = (base / name).read_bytes()
         require(digest(data) == expected, "capture helper source mismatch: " + name)
@@ -69,9 +72,9 @@ def source_inputs(helper_base: Path | None = None) -> tuple[dict[str, bytes], by
     return sources, patch, str(Path(executable).resolve(strict=True))
 
 
-def stage_sources(output: Path, helper_base: Path | None = None) -> dict:
+def stage_sources(output: Path, helper_base: Path | None = None, *, admission_profile="strict") -> dict:
     """Stage only hashed base sources and apply the isolated typed-owner patch."""
-    sources, patch, executable = source_inputs(helper_base)
+    sources, patch, executable = source_inputs(helper_base, admission_profile=admission_profile)
     require(output.is_dir(), "staging output must be an existing directory")
     require(not any(output.iterdir()), "staging output must be empty; no files overwritten")
     for name, data in sources.items():
@@ -99,6 +102,8 @@ def parser() -> argparse.ArgumentParser:
                         help="additional link and runtime library directory; repeatable")
     result.add_argument("--helper-base", type=Path, default=HELPERS,
                         help="unmodified ds-latency30 helper directory; exact source hashes are required")
+    result.add_argument("--admission-profile", choices=("strict", "bounded-v1"), default="strict",
+                        help="strict keeps max1ms; bounded-v1 builds distinct opt-in sources/binaries")
     return result
 
 
@@ -118,7 +123,8 @@ def build(args: argparse.Namespace) -> int:
         path = sdk_include / name
         require(path.is_file(), "required SDK public header is missing: " + name)
         headers[name] = file_digest(path)
-    sources, patch, _ = source_inputs(args.helper_base)
+    profile = getattr(args, "admission_profile", "strict")
+    sources, patch, _ = source_inputs(args.helper_base, admission_profile=profile)
     compiler = shutil.which(os.path.expanduser(args.compiler))
     require(compiler is not None, "C++ compiler executable is unavailable")
     compiler = str(Path(compiler).resolve(strict=True))
@@ -128,7 +134,7 @@ def build(args: argparse.Namespace) -> int:
     require(output.parent.is_dir(), "output parent must already exist")
     sdk_hash = file_digest(sdk)
     output.mkdir()
-    staged = stage_sources(output, args.helper_base)
+    staged = stage_sources(output, args.helper_base, admission_profile=profile)
     require(staged["patch_sha256"] == digest(patch), "patch changed during staging")
     for name, data in sources.items():
         expected = PATCHED_HASHES.get(name, digest(data))
@@ -136,6 +142,7 @@ def build(args: argparse.Namespace) -> int:
     report = {
         "success": False,
         "scope": "fixed_owner_real_sdk_driver_build_only_not_runtime_or_performance_qualification",
+        "admission_profile": profile,
         "sdk_dso": str(sdk), "sdk_sha256": sdk_hash, "sdk_include": str(sdk_include),
         "sdk_public_header_sha256": headers, **staged,
         "builder_sha256": file_digest(MODULE / "build_local.py"),
@@ -159,9 +166,11 @@ def build(args: argparse.Namespace) -> int:
     for path in library_dirs:
         links += ["-L", str(path), "-Wl,-rpath," + str(path), "-Wl,-rpath-link," + str(path)]
     save()
-    for label, binary, definitions in [("formal", "fixed-owner-sdk", []),
-                                       ("smoke", "fixed-owner-sdk-smoke", ["-DDS_FIXED_OWNER_SMOKE"])]:
-        command = common + definitions + ["paced_callers_sdk.cpp", "fixed_owner_plan.cpp",
+    driver = "paced_callers_sdk.cpp" if profile == "strict" else "bounded_callers_sdk.cpp"
+    binary_prefix = "fixed-owner-sdk" if profile == "strict" else "bounded-owner-sdk"
+    for label, binary, definitions in [("formal", binary_prefix, []),
+                                       ("smoke", binary_prefix+"-smoke", ["-DDS_FIXED_OWNER_SMOKE"])]:
+        command = common + definitions + [driver, "fixed_owner_plan.cpp",
                                          "capture_helper.cpp", str(sdk), "-o", binary, "-ldl"] + links
         row = {"label": label, "argv": command, "cwd": str(output), "returncode": None}
         report["commands"].append(row)
@@ -180,7 +189,7 @@ def build(args: argparse.Namespace) -> int:
                     "SDK public headers changed while building")
             require(all(file_digest(output / name) == expected for name, expected in staged["source_sha256"].items()),
                     "staged sources changed while building")
-            current_sources, current_patch, _ = source_inputs(args.helper_base)
+            current_sources, current_patch, _ = source_inputs(args.helper_base, admission_profile=profile)
             require(current_sources == sources and current_patch == patch, "original source inputs changed while building")
         except (OSError, ValueError) as error:
             row["error_type"] = type(error).__name__

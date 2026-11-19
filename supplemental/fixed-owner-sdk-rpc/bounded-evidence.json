@@ -1,0 +1,60 @@
+{
+  "schema": "bounded-admission-checkpoint-evidence-v1",
+  "DataSystem_head": "b81a93a18336589dd1c7761fa5cd9f2fb13f0641",
+  "SDK_sha256": "56d6a4dceb98a62128900147e0d57ade5fa3105551a603117340ce6b1cc31791",
+  "Worker_sha256": "6302bc84d50c3ee0020207f3f9c175397c3faa477f86d42aaf67322eddf8b162",
+  "private_build": {
+    "archive_sha256": "4567649bf36a42ce9efaea0873cab756ce5a7836de6ca34b97fd77317d1d5d5e",
+    "recorded_inputs": 76,
+    "formal_ELF_sha256": "6dc9b2befb099cdf9c797ddd117f71ea7ae4cae546edc3d50051c0d0b0063cc8",
+    "smoke_ELF_sha256": "5ae4440d540015204f6e080f3a2da068968ee1b55f167431818f94538ed6d011"
+  },
+  "private_unit": {
+    "archive_sha256": "07eeec94c716d54fdca1ca8cc021a8ef269aa1daca873bbe39edd012a4c6342f",
+    "CXX_policy_cases": 8,
+    "legacy_arrival_cases": 8,
+    "Python_numeric_tests": 20,
+    "Python_READY_tests": 5,
+    "scope": "recorded private TDD and actual Linux C++ units; portable Python test fixtures differ as identified"
+  },
+  "new_protocol_functional": {
+    "archive_sha256": "26aefd7d716a08dd14334237960c1b521b6a9cc1b524110675f32d9f954d08d5",
+    "archive_bytes": 58944110,
+    "regular": 867,
+    "verified_payloads": 866,
+    "source_guards": 3375,
+    "build_inputs": 76,
+    "API": 1536,
+    "RPC": 1536,
+    "End": 1536,
+    "methods": {
+      "1": 768,
+      "4": 768
+    },
+    "Get_validated_bytes": 3145728,
+    "readback_keys": 256,
+    "readback_errors": 0,
+    "softlate": 0,
+    "debt": 0,
+    "role_proofs": 20,
+    "normal_role_closures": 12
+  },
+  "functional_second_reader_receipt_sha256": "f120793e0111a326544c11b9bc89d04a7056b03d4dba6ae4d066cf107481fdfb",
+  "functional_case_count": 4,
+  "functional_modes": [
+    "enabled"
+  ],
+  "functional_only": true,
+  "portable_build_link_or_ELF_runtime_qualified": false,
+  "formal_calibration_windows_in_this_checkpoint": 0,
+  "observer_calibration_accepted": false,
+  "same_offered_backend_benefit_established": false,
+  "RPC30_accepted": false,
+  "full_goal_achieved": false,
+  "limits": [
+    "New portable builds must be qualified using their own source/library/ELF identities and full raw outputs.",
+    "No smoke quantiles or QPS are used as performance results.",
+    "Old strict failures are immutable, not reclassified by this different protocol.",
+    "Not complete DataSystem CI, feature-ON/OFF, Bazel or packaging qualification."
+  ]
+}

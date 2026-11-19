@@ -1,0 +1,57 @@
+{
+  "schema": 1,
+  "status": "DISTINCT_OPT_IN_PROTOCOL_DESIGN_NOT_PERFORMANCE_ACCEPTANCE",
+  "name": "fixed-owner-bounded-admission-v1",
+  "problem": "A single native caller dispatch late by2.344741ms aborts the old max1ms protocol after793/32768 measure calls. That old REJECT is immutable. The user target is full-cohort RPC P99 benefit, not a maximum native-thread scheduling guarantee. New explicitly distinct workload tolerates a finite predeclared tail of pacing noise while retaining every planned arrival and scheduled E2E.",
+  "unchanged": {
+    "actual_DataSystem": "SDK56d6/Worker6302 b81/ad67/core23bb; no source change",
+    "resources": "symmetric SDK/Worker: eight distinct physical NUMA cores each, SCHED_OTHER/0, absolute nice0; metadata and etcd nice10; deployment external",
+    "profile": "R500/32owners/4KiB/64keys/warm128measure1024/lead250ms/mod1seed17",
+    "schedule": "exact same phase epoch/floor(id1e9/R), owner=id%32; no reset, queue, hidden drops, retries or reassignment",
+    "capture": "ABI2 sameborrowedownership/getter/sourceproof; exact allID ledger beforedrain/shutdown; all RPC and API errors/mismatch fail",
+    "numeric": "same.70 primaryRPCP99ANDall-RPCsum, P50/API/E2E/CPUmax1.03/QPSmin.97/bRPCdrift3%; observeronoffall3%stillrequired; no fullgoal accepted by helper"
+  },
+  "new_admission_contract": {
+    "owner_period_ns": 64000000,
+    "hard_dispatch_lateness_ns_max_inclusive": 63999999,
+    "hard_boundary_reason": "strictly before nextown scheduled arrival; scheduling interval is32/500seconds",
+    "debt": "Each actual observer_end strictly before next own scheduled arrival (equivalently current scheduled+64ms). If violated immediately abort later arrivals, retain returned row and full cancelled ledger. This stops realcatchup, independent from preAPI lateness. Last perowner call obeys same64ms envelope even without next planned call.",
+    "soft_late_threshold_ns_exclusive": 1000000,
+    "soft_late_budget_fraction": 0.001,
+    "phase_count_rule": "at mostfloor(N/1000) dispatches>1ms, warmandmeasure independently; formal warm<=4, measure<=32. Do not abort phase upon first softlate: finish whole phase and retain full cohort, evaluate at phase barrier before advancing. Functional smoke can report but has no performance eligibility.",
+    "API_and_payload": "all original planned calls must complete successfully for numeric eligibility; noerror deletion or timedout sampledrop",
+    "audit_fields": [
+      "actual lateness fullCDF/maximum/count>1ms byphase",
+      "fixed schedule-toAPIend E2E for everyID",
+      "actual admitted counts for every aligned1ms/10ms/100ms bucket with schedule-relative offset and actual epoch preserved",
+      "maximum sliding1ms/10ms/100ms burst and plan counterpart, exact algorithm/version",
+      "perowner observer_end-to-nextschedule margin inclminimum/debtviolations",
+      "no original1ms qualified label or mixedold/new profile equality"
+    ],
+    "scope_limit": "This is boundedpacingnoise under exact nominal offeredload, not noisefree actualarrival spacing. Late bursts can affect otherRPCs; latefraction alone is no mathematical bound on RPC contamination or causal fairness."
+  },
+  "extra_rank_sensitivity": {
+    "required_for_RPC30_acceptance": true,
+    "ratio": "coro nearest-rankP99.1 / bRPCnearest-rankP98.9 <=.70 for primaryRPC and all-RPCsum in forward/reverse/armmedians",
+    "original_P99_gate_remains": true,
+    "interpretation": "additional preregistered sensitivitycheck, not proven contamination correction; queue effects can extend beyond latearrival cohort",
+    "do_not_subtract_quantiles": true
+  },
+  "profile_identity": "Add explicit new admission protocol version, hardlimit/softbudget/no-debtpolicy to validated profile so old1ms results cannot mix with newquartets. Keep original validation/gates sources immutable; distinct driver/source/ELF paths and coldfunctionalqualification required.",
+  "implementation_scope": [
+    "benchmarkdriver LatenessLimit constant+immediate no-debt and phasebarrier softbudget quality; no change productionRPC",
+    "newvalidator wrapper/explicitprofile parameter with oldstrictdefault preserved and exactboundedquality checks",
+    "Reuse existingcaptureABI, build/link/source/cleanup harness; no new BPF or microframework",
+    "purecase tests boundaries/debt/fraction, validmixedprofile rejection, fullledgerabort and sourcepins"
+  ],
+  "tests": [
+    "fakeclock1ms softlate doesnotabort butreturnscompletephase; at63999999nsallowed,64000000nsreject; no catch-up on debt",
+    "warm4/4096 andmeasure32/32768 allowed,5/33reject; phasebarrierstopstillretainsfullcompletedphase",
+    "equal-boundary observer_end at nextschedule invalid; one nanosecond before valid",
+    "no API error/dropped/timedout/cancelled/cohortmix accepted; oldstrictAPIdefaultunchanged",
+    "exact p98.9/p99.1 nearest-rank and dualmetric forward/reverse/medians failclosed; sensitivitynotcausalproof",
+    "actualcoldSDKsource/maps/roles/readbacks/shutdown and completearchive as before"
+  ],
+  "rollback": "Only benchmarkseparateworktree/newjob; userprimarydirtycheckout untouched; bRPC default and DataSystemb81 source unchanged. No rollout/persistedstate/recoverychange.",
+  "original_private_design_sha256": "8cc771ff77b4d84080570670ab3c2826e7392cc16d440588caafa406d104c4cd"
+}
