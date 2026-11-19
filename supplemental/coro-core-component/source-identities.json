@@ -1,12 +1,14 @@
 {
   "module_source_sha256": {
-    "README.md": "e7c812e07ff4fd65eda281046aa3421e98bc720e126d23fc2f6b7eb70f959301",
+    "README.md": "857dd35b1d2cd774cdf23cab870790fb0eef1a900407632a93235f3a4da47f30",
+    "core_closed_probe.cpp": "1e8b45ca7b90e7cfee1cd33267f7a63f3581717fb798c4fdae878c2a9dc8cf11",
     "core_shared_owner_probe.cpp": "a306ee69d08db3a0d86ffdda6485ff16d765808bad90cae1a10217fc0e123dd8",
-    "design.json": "898f17484f7ff6bcdbdf639155af6bf9fcc07ad15cab380664c5a42cb7c8cbe6",
+    "design.json": "ec5294bba0c48e7aff631b252dbf0943c0a7440aadf6bc5c8139db1ad9417d68",
     "echo_server_only.cpp": "261da19853436e114fe84f7c87d29b7b8205da4788d333f0cbd3d4c3ec9b78c3",
-    "evidence.json": "5b985f4e64947c75d15a6406e1f60b492d667607b53f472735a20c55f7d75f91",
+    "evidence.json": "873d049c5a6fe6bb9a9d91a929dafbf2fad4f85dfd610c81e2fc7cdb9c8b03ca",
     "generate_core_variants.py": "5aaca650f75653b5561dfdef2d3dff2ee6a09771f8598f78bd355fc22195a5c9",
-    "stage_sources.py": "d267542bbf1d12bb9ae1bb188f0881b3a976a1bcb7207149626609d029f4acc0",
+    "manual_cli_config.py": "0fa958b3ae6e0468d4238d9ee7f5a00ac4183121b8e7c979a3a83b59bf0a5efc",
+    "stage_sources.py": "0e43bb3491b97bb3bae94fb35b6fcff6353c3fefe8e28cf84f133dc62f078fc3",
     "test_generate_core_variants.py": "35b13803d61762ad39043b704d34266bb07cf88bc1b2acf9f0f0cf1628d146d1"
   },
   "external_fixed_owner_builder_sha256": "22b18f5fb595d45dafb89071b77e63ec773c44500b67ea9718fe3acbfa714e56",
@@ -14,5 +16,8 @@
   "generated_base_core_sha256": "0ecf646a7256826ef66cf991b19fa99d7f7b9d64b2bb53f1f1d3739065052401",
   "generated_inline_core_sha256": "f73c0b18fefd6f1836bd2afec4a22a11a0e74df1f3d3d4b4087fd2d798caa024",
   "SDK_Get_Set": false,
-  "RPC30_accepted": false
+  "RPC30_accepted": false,
+  "external_core_header_sha256": "91d46287b36a964bf88aa42ef42a454ad36507a9cc8bac11f15f399dac653210",
+  "closed_client_CPP_sha256": "1e8b45ca7b90e7cfee1cd33267f7a63f3581717fb798c4fdae878c2a9dc8cf11",
+  "manual_CLI_source_sha256": "0fa958b3ae6e0468d4238d9ee7f5a00ac4183121b8e7c979a3a83b59bf0a5efc"
 }

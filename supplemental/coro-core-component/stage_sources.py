@@ -16,6 +16,7 @@ BUILDER_SHA256 = '22b18f5fb595d45dafb89071b77e63ec773c44500b67ea9718fe3acbfa714e
 SOURCES = {
     'core_shared_owner_probe.cpp': 'a306ee69d08db3a0d86ffdda6485ff16d765808bad90cae1a10217fc0e123dd8',
     'echo_server_only.cpp': '261da19853436e114fe84f7c87d29b7b8205da4788d333f0cbd3d4c3ec9b78c3',
+    'core_closed_probe.cpp': '1e8b45ca7b90e7cfee1cd33267f7a63f3581717fb798c4fdae878c2a9dc8cf11',
 }
 
 

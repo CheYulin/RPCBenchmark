@@ -1,5 +1,5 @@
 {
-  "schema": "coro-core-component-design-v1",
+  "schema": "coro-core-component-design-v2",
   "scope": "Minimal optional Linux echo component experiments; no production RPC policy/flag change.",
   "base_DataSystem_source_sha256": "23bb005761a9012c994a532f04fc2c7c60b446737b003c86ce63999936437566",
   "required_core_header_sha256": "91d46287b36a964bf88aa42ef42a454ad36507a9cc8bac11f15f399dac653210",
@@ -34,8 +34,28 @@
   "reuse": "One existing fixed-owner-sdk-rpc staging closure, common source/output directory, exact plan/header/ABI identities. Existing builders and default targets remain unchanged.",
   "qualification_limits": [
     "Public source packaging/staging is distinct from actual private ELF runtime qualification.",
-    "Shared/perowner evidence does not justify sticky production policy; paired results remain pending here.",
+    "Shared/per-owner evidence does not justify sticky production policy. Fixed-R500 first base failed; closed-loop32 is a separate finite-concurrency question with different actual QPS.",
     "No SDK Get/Set, RPC30, feature-OFF/Bazel/package/full-CI or production deployment acceptance.",
     "Historical failed protocols remain rejected; no retries or relabeling in this checkpoint."
-  ]
+  ],
+  "closed_loop32": {
+    "source_sha256": "1e8b45ca7b90e7cfee1cd33267f7a63f3581717fb798c4fdae878c2a9dc8cf11",
+    "client_CLI": "call-closed HOST PORT shared 32 NEW_OUTPUT_DIR",
+    "profile": "closed-loop32",
+    "maximum_outstanding_calls": 32,
+    "warm_calls_per_owner": 128,
+    "measure_calls_per_owner": 256,
+    "attachment_bytes": 4096,
+    "offered_rate_per_second": null,
+    "scheduled_ns": null,
+    "dispatch_checked_ns": null,
+    "release": "Per-phase GO releases 32 native owners; each starts its next call after the previous observer returns. No pacing, offered arrivals, debt or soft-late gate.",
+    "deadlines": "Prime5s; each actual core echo request1s. API/byte errors or exceptions abort and retain all unstarted/cancelled IDs.",
+    "metrics": "Complete finite cohorts only; exact nearest-rank core-call P50/P99 and actual first-core-begin through last-observer elapsed/QPS. Never compute scheduled E2E.",
+    "ownership": "Same shared production Client and row-per-owner ownership; native owners join before client destruction and final evidence. No FixedOwnerPlan object is linked into this client.",
+    "same_paired_servers": true,
+    "historical_R500_failure_reclassified": false,
+    "SDK_Get_Set": false,
+    "RPC30_accepted": false
+  }
 }

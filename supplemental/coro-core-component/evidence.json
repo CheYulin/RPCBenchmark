@@ -1,5 +1,5 @@
 {
-  "schema": "coro-core-component-evidence-v1",
+  "schema": "coro-core-component-evidence-v2",
   "scope": "Component memory echo, not SDK Get/Set, bRPC comparison or RPC30 acceptance.",
   "shared_owner": {
     "status": "COMPLETE_DIAGNOSTIC_ONLY_TWO_FULLRAW_READERS",
@@ -150,9 +150,32 @@
       "One versus32Client wrappers/cleanup threads and connection use are confounded. Initial prime has32socketFDs both, but no continuous measure connection-count proof.",
       "Shared may mainly reuse low lanes at2ms global arrivals versus~0.4ms service; high-load CAS/contention is not ruled out. No sticky affinity causal claim.",
       "CPU ticks have10ms resolution and include phase lead/background/cleanup; report whole-process boundary cost only. Role proofs are boundary snapshots, not continuous coverage."
-    ]
+    ],
+    "fullraw_reader_bindings": {
+      "archive_sha256": "1ea4d37da2e968b71577be0b8deefcd9122a35eab745696589f6120143dcd2cf",
+      "archive_bytes": 62889411,
+      "regular_members": 173,
+      "indexed_members": 172,
+      "two_fullraw_readers": true,
+      "first_reader_sha256": "9763a400f529e1eb56c30442a4027847c86adfc1a08b25874970cbdb00cdd9cb",
+      "root_second_reader_sha256": "b880a6236c9f389b2ecf3c69095ee1e95a58192d17da39ac1b5b9a6538bc45f7"
+    },
+    "independent_raw_analysis_sha256": "3fe746e9f4fdba7b7d91f884418dc15934fb207f518a42536ce5898e46f2d4f6"
   },
-  "paired_dispatch": {
+  "public_reproduction": {
+    "staging_helper_uses_existing_fixed_owner_builder_once": true,
+    "copied_full_core_sources_in_repository": false,
+    "public_rebuilt_ELF_runtime_qualified": false,
+    "private_ELF_qualification_transfers_to_public_rebuild": false,
+    "closed_client_does_not_link_fixed_owner_plan": true,
+    "manual_CLI_tests_require_explicit_real_Linux_ELF_env": true,
+    "manual_CLI_script_not_automatically_discovered": true
+  },
+  "historical_calibration_failures_reclassified": false,
+  "SDK_Get_Set": false,
+  "RPC30_accepted": false,
+  "full_goal_achieved": false,
+  "paired_dispatch_source_checkpoint_history": {
     "status": "NO_RUNTIME_RESULT_INCLUDED_IN_THIS_CHECKPOINT",
     "source_pair_only_branch_diff": true,
     "same_server_entry_and_build_flags_required": true,
@@ -162,14 +185,188 @@
     "unchanged_client_required": true,
     "results": null
   },
-  "public_reproduction": {
-    "staging_helper_uses_existing_fixed_owner_builder_once": true,
-    "copied_full_core_sources_in_repository": false,
-    "public_rebuilt_ELF_runtime_qualified": false,
-    "private_ELF_qualification_transfers_to_public_rebuild": false
+  "paired_dispatch": {
+    "status": "FIXED_R500_REJECTED_BASE_ONLY_TWO_FULLRAW_READERS",
+    "fullraw": {
+      "archive_sha256": "f1d734c7445cf0a714d773cf97e53bf637130500a3eea203649a8061a4679023",
+      "archive_bytes": 70503964,
+      "regular_members": 100,
+      "indexed_members": 99,
+      "two_fullraw_readers": true,
+      "first_reader_sha256": "1fe8d3097e0df39033c76b6a919c112bddfc8451394b83bab1191f93d9903e14",
+      "root_second_reader_sha256": "4232739979a32a1a655df308ec84ff1c6730810ab312248a7f44cbae72cb5189"
+    },
+    "all_planned_rows": 12288,
+    "cases_started": 1,
+    "inline_windows_run": 0,
+    "first_arm": "base",
+    "source_CPP_sha256": "a306ee69d08db3a0d86ffdda6485ff16d765808bad90cae1a10217fc0e123dd8",
+    "actual_private_client_ELF_sha256": "ec6127740959fec148c4cb51c4c46cacb7199ef21cc82705aab4e60148483ac1",
+    "phases": [
+      {
+        "phase_id": 1,
+        "planned": 4096,
+        "returned_success": 4096,
+        "cancelled": 0,
+        "api_errors": 0,
+        "byte_errors": 0,
+        "debt_violations": 0,
+        "soft_late_count": 0,
+        "max_dispatch_lateness_ns": 195088,
+        "complete": true,
+        "partial_phase_quantiles_published": false
+      },
+      {
+        "phase_id": 2,
+        "planned": 8192,
+        "returned_success": 7204,
+        "cancelled": 988,
+        "api_errors": 0,
+        "byte_errors": 0,
+        "debt_violations": 1,
+        "soft_late_count": 28,
+        "max_dispatch_lateness_ns": 23972940,
+        "complete": false,
+        "partial_phase_quantiles_published": false
+      }
+    ],
+    "debt_row_temporal_observations": {
+      "dispatch_checked_lateness_ns": 23972940,
+      "preparation_after_check_ns": 13880,
+      "actual_core_call_ns": 48996414,
+      "scheduled_to_observer_ns": 72984208,
+      "same_owner_previous_return_gap_before_schedule_ns": 63511080
+    },
+    "normal_process_closures": 2,
+    "normal_stop": true,
+    "prime_entered": 32,
+    "inline_echo_count": 0,
+    "partial_measure_quantiles_or_QPS_published": false,
+    "original_rejection_unchanged": true,
+    "causal_attribution": false,
+    "independent_raw_analysis_sha256": "f4298ae65afbbf783a0f9b750b78a063352b3233f54509cdf6e85b015768c06a"
   },
-  "historical_calibration_failures_reclassified": false,
-  "SDK_Get_Set": false,
-  "RPC30_accepted": false,
-  "full_goal_achieved": false
+  "closed_loop32": {
+    "status": "ALL_49152_RAW_ROWS_AND_COUNTERS_RECOMPUTED_PASS",
+    "fullraw": {
+      "archive_sha256": "fd88bc5217c27c26d7d64550d71bb13259f38c6b6e98857482b6a62e386450ba",
+      "archive_bytes": 66996878,
+      "regular_members": 132,
+      "indexed_members": 131,
+      "two_fullraw_readers": true,
+      "first_reader_sha256": "49c910e92f47bbe7657345505d116339e7e01652ba52a2a0214d96eb2a12a769",
+      "root_second_reader_sha256": "0af7b93d2b2a88f66e46552183ca96b28d6aee593120f0c32a91eb5ebc92e26e"
+    },
+    "profile": "closed-loop32",
+    "offered_rate_per_second": null,
+    "arrival_schedule_present": false,
+    "scheduled_ns": null,
+    "dispatch_checked_ns": null,
+    "maximum_outstanding_calls": 32,
+    "order": [
+      "base",
+      "inline",
+      "inline",
+      "base"
+    ],
+    "all_rows": 49152,
+    "warm_rows": 16384,
+    "measure_rows": 32768,
+    "prime_calls_separate": 128,
+    "per_window": {
+      "warm_calls": 4096,
+      "measure_calls": 8192,
+      "all_success": true,
+      "API_or_byte_errors": 0,
+      "cancelled": 0,
+      "exceptions": 0
+    },
+    "server_counters": [
+      0,
+      12288,
+      12288,
+      0
+    ],
+    "normal_process_closures": 8,
+    "role_boundary_proofs": 16,
+    "SDK_map_proofs": 8,
+    "source_CPP_sha256": "1e8b45ca7b90e7cfee1cd33267f7a63f3581717fb798c4fdae878c2a9dc8cf11",
+    "actual_private_ELF_sha256": "c42573510185a506d789344810ee44e5ae105a7ddbfbb49fcc8f8eade5c9037b",
+    "actual_private_ELF_bytes": 127824,
+    "build_inputs": 1046,
+    "pinned_inputs": 1074,
+    "inputs_prepost_exact": true,
+    "SDK_sha256": "56d6a4dceb98a62128900147e0d57ade5fa3105551a603117340ce6b1cc31791",
+    "same_base_inline_server_ELFs_reused": true,
+    "server_images": {
+      "base": {
+        "sha256": "1c9b90e70308e86a1600ec032dea01e2e408eca9969a7a06fb4d70b1f5f7a0a6",
+        "bytes": 8080656
+      },
+      "inline": {
+        "sha256": "8126ca187fa076a098592fbbc0f27657173d5efcb38cda52ba4bb33377713f87",
+        "bytes": 8081984
+      }
+    },
+    "actual_CXX_build_receipt_sha256": "d6486f7d7b1d2173433e6e8039966c49147b29f6738a4e4cdfebeb47a9a6e42f",
+    "actual_private_CLI_tests": {
+      "methods": 9,
+      "status": "PASS",
+      "seconds": 0.599,
+      "test_source_sha256": "0fa958b3ae6e0468d4238d9ee7f5a00ac4183121b8e7c979a3a83b59bf0a5efc",
+      "actual_result_sha256": "33705fe7feffe90e4caa1442f48a8d8acdcc9814c12be9ca50b9d2b3f67954b0",
+      "actual_stderr_sha256": "a545d8a66898f7d24d696a94cb69a4a3c12af23f610b11d065fe9c77e54eac66",
+      "no_cohorts_run": true,
+      "renamed_public_manual_script": "manual_cli_config.py"
+    },
+    "rows": [
+      {
+        "index": 1,
+        "arm": "base",
+        "measure_core_p50_ns": 146535,
+        "measure_core_p99_ns": 193132,
+        "measure_elapsed_ns": 38670547,
+        "measure_actual_cohort_QPS": 211840.81000974722
+      },
+      {
+        "index": 2,
+        "arm": "inline",
+        "measure_core_p50_ns": 110335,
+        "measure_core_p99_ns": 147142,
+        "measure_elapsed_ns": 29385669,
+        "measure_actual_cohort_QPS": 278775.3445395441
+      },
+      {
+        "index": 3,
+        "arm": "inline",
+        "measure_core_p50_ns": 115845,
+        "measure_core_p99_ns": 150379,
+        "measure_elapsed_ns": 30748752,
+        "measure_actual_cohort_QPS": 266417.31670930906
+      },
+      {
+        "index": 4,
+        "arm": "base",
+        "measure_core_p50_ns": 150099,
+        "measure_core_p99_ns": 210908,
+        "measure_elapsed_ns": 39951503,
+        "measure_actual_cohort_QPS": 205048.6060561977
+      }
+    ],
+    "comparison": {
+      "measure_core_p99_median_ratio_inline_over_base": 0.7363652113652114,
+      "measure_core_p50_median_ratio_inline_over_base": 0.7624884537847988,
+      "measure_actual_cohort_qps_median_ratio_inline_over_base": 1.3077632586446206
+    },
+    "independent_raw_analysis_sha256": "531707f27c937ad9d82fd319b86104c535bb9c305b4c28f6d0ca680600027a67",
+    "limits": [
+      "Closed-loop offered rate is undefined and differs across arms; finite phase startup/drain and queueing are included, so this is not same-offered-load acceptance.",
+      "Measure cohorts are only~29-40ms long; two pairs are a mechanism signal, not a robust sustained-throughput or causal generalization. Warm phases differ and are retained.",
+      "Wholeprocess CPU ticks have10ms resolution across short windows; CPU values are boundary diagnostics, not precise per-RPC attribution.",
+      "32native owners are a maximum outstanding limit; actual inflight peak/time-weighted mean computed and drain retained.",
+      "Private server branch/atomic/code layout differences remain. Original fixedR500 failure stays rejected, no gate waiver."
+    ],
+    "SDK_Get_Set": false,
+    "RPC30_accepted": false
+  }
 }
