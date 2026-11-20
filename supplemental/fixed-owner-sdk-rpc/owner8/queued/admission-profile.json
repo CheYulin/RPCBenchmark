@@ -1,0 +1,11 @@
+{
+  "protocol": "fixed-owner8-queued-arrival-v1",
+  "owner_period_ns": 16000000,
+  "pacing_policy": "early_wake_then_spin_v1",
+  "early_wake_ns": 1000000,
+  "queue_policy": "per_owner_fifo_one_inflight",
+  "late_policy": "record_and_execute",
+  "debt_policy": "record_and_continue",
+  "soft_late_threshold_ns_exclusive": 1000000,
+  "schedule_policy": "fixed_phase_epoch_offsets_no_rebase"
+}

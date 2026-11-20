@@ -1,0 +1,38 @@
+{
+  "schema": "optional-owner8-queued-source-checkpoint-v1",
+  "status": "PENDING_FUNCTIONAL_AND_COMPLETE_EVIDENCE",
+  "protocol": "fixed-owner8-queued-arrival-v1",
+  "source_only_publication": true,
+  "profile": {
+    "owners": 8,
+    "planned_rate_per_second": 500,
+    "payload_bytes": 4096,
+    "formal_warm_per_owner": 512,
+    "formal_measure_per_owner": 4096,
+    "smoke_warm_per_owner": 16,
+    "smoke_measure_per_owner": 32,
+    "key_trace": "Frozen global ID: Get(id/32+id%32)%64; Set id%32;64final key checks"
+  },
+  "queue_semantics": {
+    "per_owner_FIFO": true,
+    "one_inflight": true,
+    "epoch_rebase": false,
+    "late_and_debt_filtered": false,
+    "API_error_byte_mismatch_exception_invalid_clock_fail": true,
+    "same_planned_trace_is_not_same_instantaneous_send": true
+  },
+  "source_staging": "One existing owner8 staging call; one shared common closure; no copied common helpers in this payload",
+  "test_data": "Generated synthetic populations and fake containers only; CXX late fixture17000000ns; no actual trace or ledger samples",
+  "performance_eligible": false,
+  "observer_calibration_qualified": false,
+  "SDK_functional_status": "PENDING",
+  "RPC30_accepted": false,
+  "public_ELF_inherits_private_runtime_qualification": false,
+  "production_changed": false,
+  "old_strict_source_changed": false,
+  "limits": [
+    "Pacing CPU is included in SDK CPU;0.5core is a theoretical estimate only",
+    "Complete-cohort CDFs and retained numerical gates do not establish equal realized sends or a causal backend effect",
+    "No private launcher, host masks or runtime configuration/evidence are included"
+  ]
+}

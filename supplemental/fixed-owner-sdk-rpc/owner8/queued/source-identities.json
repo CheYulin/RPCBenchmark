@@ -1,0 +1,42 @@
+{
+  "profile": "fixed-owner8-queued-arrival-v1",
+  "queued_sources": {
+    "owner8_queued_callers_sdk.cpp": "6a2cab7f48f5c3846c26aaa16102f622a510e6309e4a5138be3a5f4e79ee8161",
+    "owner8_queued_admission.h": "60bb692fdaa60a740fb437440dbc12121673b48403027b1936fe4b7a223a6145",
+    "owner8_queued_admission_test.cpp": "32a9f2882d7c5a3738fe0773808001782afc3c6c9396a092f8c3a56d17ab2357"
+  },
+  "parent_inputs": {
+    "../build_owner8.py": "649280522c3219ca0eeb8859f60af9ad05cfb11e8967f41275ea76c9960ce3f9",
+    "../source-identities.json": "984cc690d4c2ce6afd6045a49358d28c2dc83b8fa7bc6af45f3a0ad252a90c8f",
+    "../owner8_profile.h": "ac570078bc76e0f14cc1983b67172e3db8303844d1200dd0793c09c587bce206"
+  },
+  "staged_common_sources": {
+    "arrival_loop.h": "9ab8b4fcb4be173bf46556ff4f513735d3e500365de19e02a8af783dd755a3dd",
+    "closed_loop_plan.h": "14f40725eabf048816b6b92aa3b6ac604aab3d274588c77acee2f496978dc22d",
+    "fixed_owner_plan.h": "56c6cd83d3c840976da517977d79979204044d639bdfa479059baf12340eae2d",
+    "fixed_owner_plan.cpp": "64ef183f73dc7d79e096b66a28be5bc568c1ae2a441083def4a521a51df71962",
+    "capture_helper.h": "4c6645ef682e98990636247854cc50929353ffb86a4b990bd619613388d346d8",
+    "capture_helper.cpp": "ff3af0bb8fc8c7c2e05222ec490e74b3922241fb61e01205f70f5da24377a51d",
+    "capture_abi.h": "d8a60b80a6cfbe4b2055a0ac8c1848a25ead7057556a73f3489bd4c378ca1a2c",
+    "owner8_profile.h": "ac570078bc76e0f14cc1983b67172e3db8303844d1200dd0793c09c587bce206"
+  },
+  "semantic_RED_sources": {
+    "owner8_queued_admission.h": "151bad1f9da772836288d2d7120d369f806881c825ac76968c6a6722d1d826f3",
+    "owner8_queued_admission_test.cpp": "32a9f2882d7c5a3738fe0773808001782afc3c6c9396a092f8c3a56d17ab2357"
+  },
+  "Python_sources": {
+    "validate_owner8_queued_geometry.py": "0e5cbd3673015792234e381718d88cd48361ab2da636609a94c8976eed1859ab",
+    "validate_owner8_queued_arrival.py": "6428334558943d1cd0ef5c05e07f40b5561724b73a5ce7a46864c8fa9dc1c629",
+    "validate_owner8_queued_case.py": "b5b0500006ed08aaaf4b19057eaf39fc4c7f502466db029bc338e2706b338dca",
+    "queued_fixtures.py": "cd41a61314db4bea61d091c11587e7c17afe24805ff274b98b9d3b312084a4d8",
+    "queued_case_fixture.py": "99782f47ab9fcbda34dca2ea75e672c29912ce815151d0fbfcd170321e13ae81",
+    "test_owner8_queued_validation.py": "08517c7c164089aaeb73a7174e9c34b5128f2f559b69939736c10bdb02f43aca"
+  },
+  "shared_Python_inputs": {
+    "../../fixed_case_pod.py": "2741f25301bb7820dbf701dfb61669715a264ecbb838b0109ab3eaab71350e92"
+  },
+  "private_compiled_driver_source_sha256": "6a2cab7f48f5c3846c26aaa16102f622a510e6309e4a5138be3a5f4e79ee8161",
+  "public_CXX_unit_fixture_change": "Two integer literals use a synthetic 17000000ns wake delay; no actual event or ledger sample is published",
+  "public_fixture_is_private_runtime_qualification": false,
+  "public_builder_runtime_qualified": false
+}
