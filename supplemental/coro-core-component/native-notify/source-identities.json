@@ -1,0 +1,53 @@
+{
+  "schema": "native-notify-helper-retained-unit-v1",
+  "source_sha256": {
+    "native_bthread_notify_batch.h": "6e61c75fc413f911d75785cbf32feb7ea672fab711d11add86cb3001a202ae7d",
+    "native_bthread_notify_batch.cpp": "670eb9e4acb5b03e8b5a27e70113ff212e45cbaec7aa23a00f36c58b3dbee9d1",
+    "native_bthread_notify_batch_red.cpp": "f6f21f041b4a82b06445ac6ef6f3613667a26de715bbe98b8a012742ff45d5ab",
+    "native_bthread_notify_batch_test.cpp": "3a8acbffdf431d1cd36b2b31171a9da408bd41461321a31388495b74201b5e1e",
+    "TDD-plan.json": "5ab316f41ee517582c6555cb27778d7839ba4c77e8e3972f54b6a01a263c6875"
+  },
+  "actual_private_unit": {
+    "archive_sha256": "8fcc4b98a096b5c266441ae032f798ee56f868635b8d4ab94c2c8006c5936b70",
+    "archive_bytes": 785398,
+    "regular_members": 130,
+    "indexed_payloads": 129,
+    "root_independent_reader_sha256": "df84ca7efff447075309493b7b12eba5e1e5fa44f8631779b6a545f2afff1c1b",
+    "terminal_sha256": "d690d56fe2411a6679a19771e8669f4e3a46975e13432d4cc7754d0178464aa7",
+    "red_expected_exits": [
+      0,
+      0,
+      1,
+      0,
+      1,
+      1,
+      0,
+      1
+    ],
+    "green_expected_exits": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "commands": 29,
+    "commands_and_stage_births_closed": 30,
+    "precompile_unique_dependencies": 693,
+    "input_pins_after": 1066,
+    "actual_brpc_sha256": "a13d0c43a022805a08151989adae6610806d09ff4290a78e4309bcf9815f94ca",
+    "green_binary_sha256": "e9f9d4a9c3be65ca33454d6ba62f35d3f65edf9e9c2211a099e45ae8f2e39166"
+  },
+  "retained_initial_preprocessor_failure": {
+    "archive_sha256": "1c53ea6a173463fa619002ba925c0590eab2efaab022b44bed03c7f4aae9bd7b",
+    "cause": "Missing Asio include paths; no object, link, semantic RED or GREEN test executed.",
+    "source_changed_for_retry": false
+  },
+  "scope": "Unchanged helper unit source only. Actual adapter, diagnostic variant and rebuilt public ELF require separate qualification.",
+  "production_promoted": false,
+  "SDK_Get_Set": false,
+  "RPC30_accepted": false
+}

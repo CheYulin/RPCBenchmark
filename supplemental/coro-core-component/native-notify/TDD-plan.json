@@ -1,0 +1,46 @@
+{
+  "schema": "source-only-native-notify-batch-TDD-plan-v1",
+  "status": "SOURCES_READY_NOT_COMPILED_OR_EXECUTED",
+  "cases": [
+    "fresh_child_tls_and_fallback",
+    "capacity64_reject",
+    "sparse_tail_and_threshold",
+    "factory_and_start_failure",
+    "post_failure_accepted",
+    "zero_jobs_pending_callback_stop",
+    "startup_and_foreign_context_fallback",
+    "same_native_producer"
+  ],
+  "RED_expected_exit": {
+    "fresh_child_tls_and_fallback": 0,
+    "capacity64_reject": 0,
+    "sparse_tail_and_threshold": 1,
+    "factory_and_start_failure": 0,
+    "post_failure_accepted": 1,
+    "zero_jobs_pending_callback_stop": 1,
+    "startup_and_foreign_context_fallback": 0,
+    "same_native_producer": 1
+  },
+  "GREEN_expected_exit": {
+    "fresh_child_tls_and_fallback": 0,
+    "capacity64_reject": 0,
+    "sparse_tail_and_threshold": 0,
+    "factory_and_start_failure": 0,
+    "post_failure_accepted": 0,
+    "zero_jobs_pending_callback_stop": 0,
+    "startup_and_foreign_context_fallback": 0,
+    "same_native_producer": 0
+  },
+  "RED_semantics": "Immediate same-producer flush after each successful NOSIGNAL start; no queued tail/batch accounting. Existing/fallback behavior may pass. No compile failure qualifies as RED.",
+  "per_case_timeout_seconds": 8,
+  "fresh_process_per_case": true,
+  "unit_runtime": "Native default YLT io_context_pool plus actual fresh background bthreads; no SDK calls or Worker/network services.",
+  "separate_core_component_source": {
+    "status": "NOT_PREPARED_NOT_RUN",
+    "actual_Dispatcher_65th_job_test": false,
+    "reason": "K_MAX_CONNECTIONS64 prevents naive64heldsocket+65thClient test; original64job/64connection source preserved, not claimed validated by pure unit."
+  },
+  "unit_capacity_scope": "64 held tasks + rejected/unstarted Attempt cleanup only; does not claim to test actual Dispatcher admission. Separate two-Client core regression avoids measuring Client lane64 instead.",
+  "assert_no_task_execution_before_flush": false,
+  "actual_a13_ABI_symbol_and_behavior_qualification": false
+}
