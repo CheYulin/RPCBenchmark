@@ -1,0 +1,115 @@
+{
+  "scope": "OWNER8_FIXED_PLANNED_ARRIVAL_DIAGNOSTIC_SOURCE_CHECKPOINT_NOT_PERFORMANCE_ACCEPTANCE",
+  "profile": {
+    "protocol": "fixed-owner8-bounded-admission-v1",
+    "owner_period_ns": 16000000,
+    "hard_dispatch_lateness_ns_max_inclusive": 15999999,
+    "soft_late_threshold_ns_exclusive": 1000000,
+    "soft_late_budget_numerator": 1,
+    "soft_late_budget_denominator": 1000,
+    "pacing_policy": "early_wake_then_spin_v1",
+    "early_wake_ns": 1000000,
+    "no_debt_policy": "observer_end_strictly_before_scheduled_plus_owner_period_including_last"
+  },
+  "geometry": {
+    "callers": 8,
+    "rate_per_second": 500,
+    "formal_per_owner": [
+      512,
+      4096
+    ],
+    "formal_total": [
+      4096,
+      32768
+    ],
+    "smoke_per_owner": [
+      16,
+      32
+    ],
+    "smoke_total": [
+      128,
+      256
+    ],
+    "payload_bytes": 4096,
+    "capture_abi": 2,
+    "max_rpc_per_api": 16,
+    "sample_modulus": 1,
+    "sample_seed": 17,
+    "phase_lead_ns": 250000000
+  },
+  "business_trace": {
+    "Set": "global_arrival_id % 32",
+    "Get": "(global_arrival_id / 32 + global_arrival_id % 32) % 64, integer division",
+    "seed_keys": 64,
+    "final_key_readback_checks_per_case": 64,
+    "Set_hot_key_threshold": 32
+  },
+  "admission": {
+    "formal_soft_late_budgets": [
+      4,
+      32
+    ],
+    "smoke_soft_late_budgets": [
+      0,
+      0
+    ],
+    "observer_period_is_strict_including_last_call": true,
+    "no_epoch_reset_or_ID_drop_or_retry": true
+  },
+  "pacer_cost": "About0.5CPUcore from500times1ms is a theoretical estimate, not a measured value or bound. SDK CPU includes pacing and SDK IO interference.",
+  "capture_bytes_derived": 40992768,
+  "capture_metadata_reserve_bytes": 1048576,
+  "capture_budget_unchanged": 134217728,
+  "TDD": {
+    "private_GNU15_pure_RED_PASS_FAIL": [
+      3,
+      5
+    ],
+    "private_GNU15_pure_GREEN_PASS": 8,
+    "private_build_full_raw_sha256": "d0b5b007fae5bb4162aa0249cdc2adcd66a362e5c388b3d2917a23d23f592c41",
+    "Python_synthetic_tests": 20,
+    "public_wrapper_recompiled_or_runtime_qualified": false,
+    "synthetic_unit_fixtures_are_actual_SDK": false
+  },
+  "SDK4_functional": {
+    "status": "FOUR_NEW_OWNER8_ENABLED_FUNCTIONAL_CASES_PASSED",
+    "backends": [
+      "brpc",
+      "coro"
+    ],
+    "operations": [
+      "get",
+      "set"
+    ],
+    "complete_raw_sha256": "6ea5e8806b8ab4c7beaa48905bb944ff4d526fbc2e13730bdd59de8824d0ca14",
+    "complete_raw_two_readers": "PASS: both readers independently verified every indexed SHA and exact API/RPC/End joins",
+    "formal_or_backend_comparison_windows": 0,
+    "complete_raw_bytes": 59230949,
+    "regular_members": 563,
+    "indexed_members": 562,
+    "API_RPC_End_rows": 1536,
+    "Get_RPC": 768,
+    "Publish_RPC": 768,
+    "Get_validated_bytes": 3145728,
+    "final_key_readback_checks": 256,
+    "Set_case_readback_checks": 128,
+    "readback_errors": 0,
+    "soft_late_count": 0,
+    "debt_violations": 0
+  },
+  "history": {
+    "old32_sources_and_evidence_unchanged": true,
+    "old32_qualification_inherited": false,
+    "old32_bounded_calibration": "REJECT_QUALITY;4096warm successes,19softlate overbudget4,max13892582ns;measure32768notstarted. Not rescued/reclassified."
+  },
+  "limits": [
+    "Planned500QPS is not proof of identical instantaneous physicalRPC send rates.",
+    "The private source-identical build and SDK4 functional evidence do not qualify a public recompiledELF.",
+    "Observer3percent and backendRPC0.70P99 plusrank sensitivity gates are retained; neither accepted in this checkpoint.",
+    "Eight owners and early wake do not guarantee dispatch-lateness qualification.",
+    "No production DataSystem change, per-owner pin, threadpool or newRPC backend flag is introduced."
+  ],
+  "RPC30_accepted": false,
+  "performance_eligible": false,
+  "full_goal_achieved": false
+}

@@ -1,0 +1,11 @@
+{
+  "protocol": "fixed-owner8-bounded-admission-v1",
+  "owner_period_ns": 16000000,
+  "hard_dispatch_lateness_ns_max_inclusive": 15999999,
+  "soft_late_threshold_ns_exclusive": 1000000,
+  "soft_late_budget_numerator": 1,
+  "soft_late_budget_denominator": 1000,
+  "pacing_policy": "early_wake_then_spin_v1",
+  "early_wake_ns": 1000000,
+  "no_debt_policy": "observer_end_strictly_before_scheduled_plus_owner_period_including_last"
+}
