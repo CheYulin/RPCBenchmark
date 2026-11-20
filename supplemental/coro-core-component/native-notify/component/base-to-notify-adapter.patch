@@ -1,0 +1,61 @@
+--- base-private-core.cpp
++++ notify-adapter-core.cpp
+@@ -15,6 +15,7 @@
+  */
+ 
+ #include "datasystem/common/rpc/coro_unary.h"
++#include "native_bthread_notify_batch.h"
+ 
+ #include <algorithm>
+ #include <any>
+@@ -36,6 +37,7 @@
+ 
+ #include <asio/bind_allocator.hpp>
+ #include <bthread/condition_variable.h>
++#include <ylt/coro_io/io_context_pool.hpp>
+ #include <ylt/coro_rpc/coro_rpc_client.hpp>
+ #include <ylt/coro_rpc/coro_rpc_server.hpp>
+ 
+@@ -287,7 +289,10 @@
+ 
+     void InvokeV2(ReplyContext context, WireRequest wire)
+     {
++        auto *expected = *coro_io::get_current();
++        diagnostic::NativeBthreadNotifyBatch notify;
+         if (wire.remainingUs == 0 || wire.remainingUs > static_cast<uint64_t>(kMaxBudgetUs)) {
++            notify.FlushPrior();
+             Respond(std::move(context), Failure(wire.remainingUs == 0 ? K_RPC_DEADLINE_EXCEEDED : K_INVALID));
+             return;
+         }
+@@ -295,12 +300,14 @@
+                          std::move(wire.protobuf), wire.logSampleState, std::move(wire.method), {} };
+         auto code = CheckRequest(request);
+         if (code != K_OK) {
++            notify.FlushPrior();
+             Respond(std::move(context), Failure(code));
+             return;
+         }
+ 
+         code = Admit();
+         if (code != K_OK) {
++            notify.FlushPrior();
+             Respond(std::move(context), Failure(code));
+             return;
+         }
+@@ -310,7 +317,7 @@
+             if (!info->get_request_attachment().empty()) {
+                 request.attachment = info->release_request_attachment();
+             }
+-            if (StartBackgroundTask(nullptr, [this, context, request = std::move(request)]() mutable {
++            if (notify.Start(expected, nullptr, [this, context, request = std::move(request)]() mutable {
+                 Respond(std::move(context), Run(std::move(request)));
+                 Finish();
+             }) == 0) {
+@@ -320,6 +327,7 @@
+         } catch (const std::bad_alloc &) {
+             code = K_OUT_OF_MEMORY;
+         }
++        notify.FlushPrior();
+         Finish();
+         Respond(std::move(context), Failure(code));
+     }

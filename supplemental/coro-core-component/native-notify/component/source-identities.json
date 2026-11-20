@@ -1,0 +1,249 @@
+{
+  "schema": "native-notify-core-component-retained-no-latency-gain-v1",
+  "source_sha256": {
+    "base-to-notify-adapter.patch": "47602705c039544ee533e40971ea75981d329ecdd9ee64b9b4434bb00ff08258",
+    "native_bthread_notify_batch_diagnostic.cpp": "76ac9898c290bced59a5fbb2949387263333cd9bc308a9a6e86d5972ce02446a",
+    "native_notify_diagnostics.h": "63a81325628a887f01c6fcdfbdc351532fa297357f8e5db39d148d42871dcee1",
+    "native_notify_diagnostics.cpp": "8be8364fb95745c64fdca2ef09b06429e81114b6ade1faa5d53e8336170cb299",
+    "notify_echo_server_only.cpp": "5a7198611c538be094f1bd2fcb4dce751f8f5e9af47186919602395863b0b971",
+    "core_native_notify_probe.cpp": "3374ef83434e19b5c7f93aff57575e7702a3afda76b7ba45e418724b11e079cc",
+    "access-and-origin-addendum.md": "29df77702fa4bb41a3989e957f1a668b63dab1697d439d5f17f7abd3070a6aa6"
+  },
+  "pure_helper_source_checkpoint": "e08c8f47cf8d44595a8cd7aa6e0732675a218a0e",
+  "external_DataSystem_core_sha256": "23bb005761a9012c994a532f04fc2c7c60b446737b003c86ce63999936437566",
+  "external_DataSystem_header_sha256": "91d46287b36a964bf88aa42ef42a454ad36507a9cc8bac11f15f399dac653210",
+  "generated_base_core_sha256": "0ecf646a7256826ef66cf991b19fa99d7f7b9d64b2bb53f1f1d3739065052401",
+  "patched_core_sha256": "1b9fc80d878170de76853a3da153f3a6d6902faef78820b3ebeb1e7e090a2a23",
+  "build_evidence": {
+    "receipt_sha256": "35608fdb65b98593e55016faa229cffeb0a2b6fb4f1995a0e6679e02f8a0b776",
+    "archive_sha256": "7fc1a9703ed8c3e2df478b8b2e793bdb13abd913e3ccd043d39b8d2a903062b2",
+    "root_independent_reader_sha256": "58c86d2c0185c9164df1ba18c9fbf5ca46f7d11c128305509e60f23bb3674fcf",
+    "commands": 40,
+    "diagnostic_GREEN_cases": 8,
+    "CLI_checks": 9,
+    "precompile_dependencies": 928,
+    "input_pins_after": 1084,
+    "same_entry_and_provider_objects": true,
+    "baseline_old_core_object_reused": true,
+    "SDK_sha256": "56d6a4dceb98a62128900147e0d57ade5fa3105551a603117340ce6b1cc31791",
+    "brpc_sha256": "a13d0c43a022805a08151989adae6610806d09ff4290a78e4309bcf9815f94ca",
+    "images": {
+      "base": {
+        "sha256": "87211b52ea2475b6ac4ad02fc7a7d297b1cb5f5a44f7b91cd2e6527bbf24a717",
+        "bytes": 8082696
+      },
+      "notify": {
+        "sha256": "2a637a06d7975e644598212334bf6807cbd55874ccdcc326f17754d5a2bcadf5",
+        "bytes": 8131640
+      }
+    },
+    "client_sha256": "f38a12d328b01040b6cec3ce3a8b2ec757f78022b1d88908c2059be610cca447",
+    "public_rebuilt_ELF_runtime_qualified": false
+  },
+  "retained_compile_failure": {
+    "archive_sha256": "f65205525a67cda3c277da3b3a686f26378b24add4e683acdfe2baa8d27e7996",
+    "reason": "Private conn_ access; no link, diagnostic tests, CLI checks or server workload.",
+    "commands": 8
+  },
+  "component_evidence": {
+    "archive_sha256": "61339c13abd1b82f6da4be8947009dc6fd3e90859fac5ac75e7e4b89d77e7c23",
+    "bytes": 136372268,
+    "regular": 303,
+    "all_payload_SHA_sizes": 302,
+    "all_rows": 1179648,
+    "bound_pins": 1120,
+    "build_inputs": 1084,
+    "snapshots": 285,
+    "prepost_exact": true,
+    "boundary_role_proofs": 16,
+    "client_lifetime_maxrss_bytes": [
+      262889472,
+      262680576,
+      262676480,
+      263438336
+    ],
+    "measure": [
+      {
+        "index": 1,
+        "arm": "base",
+        "P50_ns": 144258,
+        "P99_ns": 185518,
+        "QPS": 217377.27416225264,
+        "server_ticks": 584,
+        "client_ticks": 539,
+        "notification_batch": {
+          "successful_nosignal_starts": 0,
+          "nonempty_flush_calls": 0,
+          "max_successful_starts_per_flush": 0,
+          "submission_histogram": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "scope": "successful submissions per helper flush; not OS wakeups or tasks held until flush"
+        },
+        "logical_mean_starts_per_flush": null
+      },
+      {
+        "index": 2,
+        "arm": "notify",
+        "P50_ns": 143994,
+        "P99_ns": 194003,
+        "QPS": 2.16768173398609215e+05,
+        "server_ticks": 544,
+        "client_ticks": 542,
+        "notification_batch": {
+          "successful_nosignal_starts": 294944,
+          "nonempty_flush_calls": 125494,
+          "max_successful_starts_per_flush": 7,
+          "submission_histogram": [
+            0,
+            23900,
+            46594,
+            42880,
+            11400,
+            706,
+            12,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "scope": "successful submissions per helper flush; not OS wakeups or tasks held until flush"
+        },
+        "logical_mean_starts_per_flush": 2.350263757629847
+      },
+      {
+        "index": 3,
+        "arm": "notify",
+        "P50_ns": 143301,
+        "P99_ns": 201850,
+        "QPS": 217033.75694642207,
+        "server_ticks": 544,
+        "client_ticks": 532,
+        "notification_batch": {
+          "successful_nosignal_starts": 294944,
+          "nonempty_flush_calls": 124758,
+          "max_successful_starts_per_flush": 6,
+          "submission_histogram": [
+            0,
+            23948,
+            45244,
+            42631,
+            12076,
+            843,
+            16,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "scope": "successful submissions per helper flush; not OS wakeups or tasks held until flush"
+        },
+        "logical_mean_starts_per_flush": 2.3641289536542747
+      },
+      {
+        "index": 4,
+        "arm": "base",
+        "P50_ns": 144035,
+        "P99_ns": 195483,
+        "QPS": 217035.8488729901,
+        "server_ticks": 580,
+        "client_ticks": 532,
+        "notification_batch": {
+          "successful_nosignal_starts": 0,
+          "nonempty_flush_calls": 0,
+          "max_successful_starts_per_flush": 0,
+          "submission_histogram": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "scope": "successful submissions per helper flush; not OS wakeups or tasks held until flush"
+        },
+        "logical_mean_starts_per_flush": null
+      }
+    ],
+    "arm_median_ratios": {
+      "P50_ns": 0.9965382440780733,
+      "P99_ns": 1.038981524982874,
+      "QPS": 0.9985930611719531,
+      "server_ticks": 0.9347079037800687,
+      "client_ticks": 1.0028011204481793
+    },
+    "scope": "Different actual QPS at fixed concurrency32; component server only, not actual Worker or Get/Set/bRPC/RPC30."
+  },
+  "independent_component_readers_sha256": {
+    "root": "01b7312fb47250a564dccb4fb75bd3e2aad60fbbc278dd17fd98f3a1b9283042",
+    "stream": "fd9eee29503e313ff3662455ed1dea429c955c5ab291345d85d421b3665a35d8"
+  },
+  "baseline_P99_drift": 0.05371446436464389,
+  "notification_scope": "Logical successful submissions per helper flush; not OS wakeups or tasks held until flush.",
+  "profile": {
+    "name": "closed-loop32-native-notify-screen",
+    "callers": 32,
+    "warm_per_owner": 1024,
+    "measure_per_owner": 8192,
+    "attachment_bytes": 4096,
+    "offered_rate_per_second": null,
+    "order": [
+      "base",
+      "notify",
+      "notify",
+      "base"
+    ],
+    "client_CPUs": 8,
+    "server_CPUs": 8,
+    "role_nice": 0
+  },
+  "production_promoted": false,
+  "DataSystem_production_changed": false,
+  "SDK_Get_Set": false,
+  "RPC30_accepted": false,
+  "derived_public_document": {
+    "path": "access-and-origin-addendum.md",
+    "sha256": "29df77702fa4bb41a3989e957f1a668b63dab1697d439d5f17f7abd3070a6aa6",
+    "original_private_sha256": "e14577730cb1b06e4fe3e88c7d331a3cf5a92d4e64794fb6ecee30f8ac603e5c",
+    "change": "Only replace three public header:line citation separators with header lines, avoiding endpoint-pattern false positives; code and lifetime contract unchanged."
+  }
+}
