@@ -1,0 +1,206 @@
+{
+  "scope": "OWNED_EIGHT_CALLER_FULL_SCHED_AND_EXACT_GET_DIAGNOSTIC_NOT_PERFORMANCE_QUALIFICATION",
+  "source_revision": "single-owned-mm-v6",
+  "source_identities": {
+    "owned_sched8.py": {
+      "sha256": "a829e20ea0a5f0aa70fa93ff1c03065b3577e67a83a6d9efdbddd06a3193b64a",
+      "bytes": 32077
+    },
+    "owned_sched8.bpf.c": {
+      "sha256": "637c048f275203c44278d2b10ae51c65a78366ac1eb207fe3b137a3ebe4800e7",
+      "bytes": 9976
+    },
+    "gate_model.py": {
+      "sha256": "0de93ba3bc90344323a6e9628e6812a12c1710fac13aa8751584e16185cee836",
+      "bytes": 3723
+    },
+    "test_gate_and_links.py": {
+      "sha256": "c82e26333f57c948d5d4ddf1d6be8b31e0d1fedea54bd5f383372c78bec7c0ca",
+      "bytes": 7235
+    },
+    "analyze_full_sched.py": {
+      "sha256": "1e2c4c0626ef3308e0b3e44d9dde4695bbdcd16d570e9950d6b1af469a6b7adf",
+      "bytes": 22389
+    },
+    "test_analyze_full_sched.py": {
+      "sha256": "3d98edeaaada93bb702a8cfc41009c8362f06a281d3988c8ea645574de81cb31",
+      "bytes": 10048
+    }
+  },
+  "snapshot_contract": {
+    "schema": "owner8-full-sched-snapshot-v1",
+    "record_bytes": 32,
+    "byte_order": "little",
+    "layout": "owner-major-stored-prefixes",
+    "struct": "<QQIIHHI",
+    "fields": [
+      "event_ns:u64",
+      "commit_index_plus_one:u64",
+      "owner_slot:u32",
+      "cpu:u32",
+      "kind:u16",
+      "flags:u16",
+      "value:u32"
+    ],
+    "kind": {
+      "1": "WAKE",
+      "2": "WAKE_NEW",
+      "3": "SWITCH_IN",
+      "4": "SWITCH_OUT",
+      "5": "GET_ENTRY",
+      "6": "GET_RETURN"
+    },
+    "flags": {
+      "bit0": "preempt, onlySWITCH_OUT",
+      "bit1": "invalidPair, onlyGET"
+    },
+    "value": {
+      "SWITCH_OUT": "rawtask.__state",
+      "GET": "exactperownerpair_id",
+      "other": "0"
+    },
+    "owner_capacity": 65536,
+    "owner_count": 8,
+    "prefix_semantics": "Concatenate8prefixes ofowner_stored_counts*32B; expectedstored=min(attempted,65536). Keepcommit0/tornslots inraw. Nooverwrite/sampling/topN. commit=ownerindex+1; CPUofWakeiswakerCPU.",
+    "metadata_required": [
+      "schema",
+      "record_bytes",
+      "byte_order",
+      "layout",
+      "owner_capacity",
+      "owner_tids[8]",
+      "owner_attempted_counts[8]",
+      "owner_stored_counts[8]",
+      "get_next[8]",
+      "get_pending[8]",
+      "bad[4]",
+      "enabled_begin_ns",
+      "enabled_end_ns",
+      "data_deadline_ns",
+      "disabled_begin_ns",
+      "disabled_end_ns",
+      "seal_begin_ns",
+      "seal_end_ns",
+      "gate_closed_drained",
+      "detach_errors",
+      "clock_alignment_verified",
+      "owner_cookies[8]"
+    ],
+    "cookie_exact_keys": [
+      "slot",
+      "tid",
+      "tgid",
+      "task_start_boottime_ns",
+      "leader_start_boottime_ns"
+    ],
+    "trusted_halfopen_interval": "[enabled_end_ns,min(data_deadline_ns,disabled_begin_ns))",
+    "disable_seal": "disabled_begin/end bracketfirstROIseal syscalls; kernel seal_begin/end lieinside. gate_closed_drained attestsclosedallpossibleCPUatomicOPEN/count leases,notFDclose alone.",
+    "clock_alignment_verified_default": false,
+    "offline_API": "analyze(metadata,event_bytes,ledger_rows)->dict; nohost/actions",
+    "CLI": "python3 -B analyze_full_sched.py --metadata SNAPSHOT.json --events EVENTS.bin --ledger all-arrivals.jsonl --output NEW_REPORT.json",
+    "output": "AllrawinputSHA,allmetadata/issues/duplicates/migrations/rawOUTstate-preempt/Getpairs,perownerdisjointstateuniontables,eachledgerIDand6halfopenintervalintersectiontotals+tablecliprefs. Cancellation/rejectionnevergetsynthesizedAPI/Getoractualaborttime.",
+    "qualification": "Clockunverified means states_ns=null forledgerjoin. Torn/overflow/unsealeddata retainsraw butnoqualifiedattribution. Outputdiagnosticonly,neverRPC30 orVM/network/bridgecause."
+  },
+  "runtime": {
+    "kernel_release": "5.14.0-514.el9.x86_64",
+    "BCC_version": "0.35.0",
+    "BCC_Python_source_sha256": "d828a02fd8761c4da759d10900beffdee3131d7be1f9bdeec12ad0947d4d0c3a",
+    "libbcc_sha256": "b36944e40964b829fe652fbbcbcc189d3aa294f3ab40752bebfd031504d41e36",
+    "backend_dependency": "libbcc DT_NEEDED libclang-cpp.so.21.1 and libLLVM.so.21.1",
+    "architecture": "x86_64 little-endian; runtime BTF and trace prototypes explicitly checked",
+    "Get_attachment": "Exactly two exact-object/exact-symbol consumers, positive owned unreaped SDK leader PID. BPF still filters eight current TIDs and exact task/leader birth cookies. No systemwide/wildcard attach.",
+    "resources": {
+      "caller_CPUs": [
+        1,
+        3,
+        5,
+        7,
+        9,
+        11,
+        13,
+        15
+      ],
+      "caller_policy": "SCHED_OTHER nice0 priority0, whole mask per caller",
+      "observer_CPU": 35,
+      "observer_policy": "SCHED_OTHER nice10 priority0",
+      "maps_limit_bytes": 20971520,
+      "observer_RSS_limit_bytes": 268435456,
+      "owner_capacity_records": 65536,
+      "data_cap_seconds": 80,
+      "data_cap_anchor": "SDK pre-warm GO monotonic epoch; bootstrap/attach time counts against horizon"
+    }
+  },
+  "writer_contract": {
+    "authorization": "Nonreturning increment then atomic read of OPEN and matching phase, with the increment already counted. Seal clears OPEN; accepted writers drain by counted release; late rejected entrants modify only gate bookkeeping.",
+    "finite_active_precondition": "61bit COUNT is simultaneous callbacks, not cumulative events. Active invocation depth must remain below this bound; finite kernel stack/memory prevents physical approach to2^61. No unconditional proof for forged-overflow concurrent words.",
+    "record_Get_reservation": "At most16 CAS attempts under an existing lease. bad2/bad3 on reservation failure makes capture incomplete; successful-reservation counters are then only lower bounds, not exact lost-event counts. No unbounded retry or silently qualified drop.",
+    "snapshot": "Disable, detach attempts and closed/drained gate precede streaming every reserved record including missing commits. FD close alone is not the writer fence."
+  },
+  "clock": {
+    "default_alignment_verified": false,
+    "required": "Actual mapped steady_clock implementation and target/observer initial time namespace must be verified; synthetic CLOCK_MONOTONIC fixture cannot qualify the SDK clock. No fitted offset.",
+    "actual_libstdcxx_sha256_source_evidence": "b44435e3ee2bd7f5318bff689d2da78f47071ae7226ee8bb483f4e70680aa386",
+    "source_relation": "Versioned steady_clock::now calls clock_gettime(CLOCK_MONOTONIC), then seconds*1000000000+nanoseconds without offset."
+  },
+  "evidence": {
+    "v6_actual_synthetic_qualification": "COMPLETE_OWNED_NATIVE8_MECHANISM_RAW_TWO_INDEPENDENT_READERS_PASS",
+    "v6_actual_SDK_diagnostic": "NOT_RUN_AT_THIS_SOURCE_CHECKPOINT",
+    "SDK_GetSet_performance_qualification": false,
+    "prior_v1_v4": "Compiler/backend/verifier failures retained; none accepted as kernel qualification or semantic model RED.",
+    "v5_failed_archive_sha256": "7b346678990091caf08f71e71e93e5a65650311447108a29af7b15202a866a9a",
+    "v5_observation": "Five complete physical fixturecalls each had eight entry/eight return callbacks, with nested/orphan pairing. A sixth had eight entries and was right-censored by seal. All512 fixturecalls returned. This is a kernel-integration behavior failure, not an SDK or backend comparison.",
+    "correction": "Positive perTID perf attachment did not establish currentTID-only BPF execution. UpstreamLinuxv5.14 mm-prefilter and BPF-before-perf-output source provides a mechanism consistent with independently observed v5 duplicate callbacks; exactEL9 kernel producer bytes are not attested. v6 uses one positive-leader entry/return pair and retains the eight-cookie kernel filter.",
+    "prior_failure_records_unchanged": true,
+    "RPC30_accepted": false,
+    "v6_reported_small_receipt": {
+      "fixture_calls": 512,
+      "owners": 8,
+      "exact_pairs_per_owner": 64,
+      "Get_links": 2,
+      "bad": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "pending_Get": 0,
+      "commit_errors": 0,
+      "owned_programs_released": 8,
+      "owned_maps_released": 13,
+      "normal_births_gone": 3,
+      "map_bytes": 16807784,
+      "observer_RSS_bytes": 142495744,
+      "full_raw_archive_sha256": "cb32c511bf3df523445c0382809d0e20b32f2b9749707e75b5669d8a4565edc2",
+      "independent_full_raw_review": true
+    },
+    "v6_complete_raw_verification": {
+      "archive_sha256": "cb32c511bf3df523445c0382809d0e20b32f2b9749707e75b5669d8a4565edc2",
+      "archive_bytes": 226906,
+      "regular_members": 35,
+      "indexed_members": 34,
+      "root_independent_review_sha256": "a464e79a7ae42214e5512032445a73c4c05c23bf64047717ce00b02b74168cf4",
+      "second_reader_delivery_sha256": "4028703396d4f0cf76e27c2e1dcc0e16b5b540c2aa34637b16f972c6f195f79c",
+      "second_reader_full_event_state_semantics_sha256": "17b82f04c0defa917b31cc446a3a94da6df30a1409473a8818caa96322f671bc",
+      "events": 24997,
+      "exact_pairs": 512,
+      "Get_boundaries_CPU_and_scheduled_matches": 1024,
+      "pairing_commit_state_CPU_issues": 0,
+      "preserved_migrations": 21,
+      "initial_final_scheduler_censor_preserved": true,
+      "qualification_scope": "One2second owned native8fixture only, not SDK/GetSet performance/formalobserver qualification/backend comparison. Public source/rebuilt artifacts do not inherit runtime qualification."
+    }
+  },
+  "limits": [
+    "All original ledger rows, cancelled/unattempted IDs, raw OUT state/preempt, partial Get pairs and observation boundaries remain explicit.",
+    "Unknown initial state, missing/torn records, overflow, ambiguous pair/CPU state and clock uncertainty forbid precise attribution.",
+    "Scheduled residence includes kernel/IRQ/other effects and does not establish executed user code, RPC/server bridge cost, network cause or whole-host pause.",
+    "Offline replay is separate from foreground collection; its Python memory use is not the observer RSS bound."
+  ],
+  "publication_adjustment": {
+    "file": "owned_sched8.py",
+    "private_qualified_source_sha256": "585a93e1c49162daab524e303fd6d5c3461d0e55016254c940d821b3c4dd3cf6",
+    "public_source_sha256": "a829e20ea0a5f0aa70fa93ff1c03065b3577e67a83a6d9efdbddd06a3193b64a",
+    "difference": "Remove two final empty lines (two LF bytes), retaining one terminating newline for git diff --check; all other loader bytes and Python AST unchanged.",
+    "new_BPF_or_SDK_runtime_qualification_inherited": false
+  }
+}
