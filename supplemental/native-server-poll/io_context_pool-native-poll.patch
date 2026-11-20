@@ -1,0 +1,42 @@
+--- a/ylt/coro_io/io_context_pool.hpp
++++ b/ylt/coro_io/io_context_pool.hpp
+@@ -24,6 +24,7 @@
+ #include <asio/steady_timer.hpp>
+ #include <atomic>
+ #include <cerrno>
++#include <chrono>
+ #include <cstddef>
+ #include <cstdint>
+ #include <future>
+@@ -228,6 +229,31 @@
+           [](io_context_ptr svr) {
+             auto ctx = get_current();
+             *ctx = svr.get();
++#if DS_CORO_IO_NATIVE_POLL_US > 0
++            using native_poll_clock = std::chrono::steady_clock;
++            constexpr auto native_poll_budget =
++                std::chrono::microseconds(DS_CORO_IO_NATIVE_POLL_US);
++            for (;;) {
++#ifdef DS_CORO_IO_NATIVE_POLL_TEST_PHASE
++              DS_CORO_IO_NATIVE_POLL_TEST_PHASE(
++                  svr.get(), 1, native_poll_clock::time_point{});
++#endif
++              if (svr->run_one() == 0) {
++                break;
++              }
++              const auto deadline = native_poll_clock::now() + native_poll_budget;
++#ifdef DS_CORO_IO_NATIVE_POLL_TEST_PHASE
++              DS_CORO_IO_NATIVE_POLL_TEST_PHASE(svr.get(), 2, deadline);
++#endif
++              while (!svr->stopped() && native_poll_clock::now() < deadline) {
++                svr->poll_one();
++              }
++#ifdef DS_CORO_IO_NATIVE_POLL_TEST_PHASE
++              DS_CORO_IO_NATIVE_POLL_TEST_PHASE(svr.get(), 3, deadline);
++#endif
++            }
++#else
+             svr->run();
++#endif
+           },
+           io_contexts_[i]));
