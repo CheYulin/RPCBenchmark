@@ -288,15 +288,24 @@ def analyze(metadata, event_bytes, ledger_rows):
             elif row['api_begin_ns']<start or row['api_end_ns']>end:get=dict(status='coverage_partial')
             else:problem('missing_Get_pair_for_API',row_index=index)
         entry=get.get('entry_ns');ret=get.get('return_ns')
+        previous_observer=prior.get('observer_end_ns')if prior else None
+        scheduled=row.get('scheduled_ns')
+        signed_gap=scheduled-previous_observer if integer(previous_observer)and integer(scheduled)else None
+        previous_overlap=signed_gap is not None and signed_gap<0
         spans={'scheduled_to_checked':(row.get('scheduled_ns'),row.get('dispatch_checked_ns')),
                'api_begin_to_get_entry':(row.get('api_begin_ns'),entry),
                'get_entry_to_return':(entry,ret),'get_return_to_api_end':(ret,row.get('api_end_ns')),
                'api_end_to_observer':(row.get('api_end_ns'),row.get('observer_end_ns')),
-               'previous_observer_to_scheduled':(prior.get('observer_end_ns')if prior else None,row.get('scheduled_ns'))}
+               'previous_observer_to_scheduled':((scheduled,previous_observer)if previous_overlap else(previous_observer,scheduled))}
+        intersections={name:overlap(owner,a,b,reference)for name,(a,b)in spans.items()}
+        intersections['previous_observer_to_scheduled'].update(
+            signed_gap_ns=signed_gap,recorded_endpoints_ns=[previous_observer,scheduled],
+            orientation=('scheduled_to_previous_observer_overlap'if previous_overlap
+                         else'previous_observer_to_scheduled_gap'if signed_gap is not None else'unavailable'))
         output_rows.append(dict(key=[row['phase_id'],row['arrival_id'],owner],ledger=row,state=row.get('state'),get=get,
             previous_observer_key=[prior['phase_id'],prior['arrival_id'],owner]if prior else None,
             previous_observer_is_cancel_time=False,
-            intervals={name:overlap(owner,a,b,reference)for name,(a,b)in spans.items()}))
+            intervals=intersections))
     complete=not issues
     for row in output_rows:
         for interval in row['intervals'].values():

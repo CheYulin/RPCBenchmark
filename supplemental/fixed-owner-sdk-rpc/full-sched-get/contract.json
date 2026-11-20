@@ -19,12 +19,16 @@
       "bytes": 7235
     },
     "analyze_full_sched.py": {
-      "sha256": "1e2c4c0626ef3308e0b3e44d9dde4695bbdcd16d570e9950d6b1af469a6b7adf",
-      "bytes": 22389
+      "sha256": "63909599e321738cee3eb35894e17f98295abc995ceb054e8cf0242ada9eeef2",
+      "bytes": 23075
     },
     "test_analyze_full_sched.py": {
       "sha256": "3d98edeaaada93bb702a8cfc41009c8362f06a281d3988c8ea645574de81cb31",
       "bytes": 10048
+    },
+    "test_synthetic_previous_gap.py": {
+      "sha256": "7e2c9eee6f7fcc3c3b11f1e2ab596a8c5a7259f629bb26126e8ff273ea5b0b32",
+      "bytes": 2816
     }
   },
   "snapshot_contract": {
@@ -202,5 +206,13 @@
     "public_source_sha256": "a829e20ea0a5f0aa70fa93ff1c03065b3577e67a83a6d9efdbddd06a3193b64a",
     "difference": "Remove two final empty lines (two LF bytes), retaining one terminating newline for git diff --check; all other loader bytes and Python AST unchanged.",
     "new_BPF_or_SDK_runtime_qualification_inherited": false
+  },
+  "offline_revision": "signed-previous-gap-v2",
+  "offline_signed_previous_gap": {
+    "field": "intervals.previous_observer_to_scheduled",
+    "signed_gap_ns": "scheduled_ns minus previous observer_end_ns",
+    "recorded_endpoints_ns": "Original [previous_observer_ns,scheduled_ns], including negative gap",
+    "orientation": "Positive gap or forward scheduled_to_previous_observer_overlap; all other inverse intervals remain invalid",
+    "regression_fixture": "Fully synthetic clocks, cookies, events and rows generated in Python; no actual trace artifacts included"
   }
 }
