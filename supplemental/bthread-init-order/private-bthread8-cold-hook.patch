@@ -1,0 +1,37 @@
+--- a/src/datasystem/common/rpc/brpc_factory.cpp
++++ b/src/datasystem/common/rpc/brpc_factory.cpp
+@@ -24,6 +24,17 @@
+ #include <gflags/gflags.h>
+ #include <mutex>
+
++#ifndef DS_PRIVATE_BTHREAD_CONCURRENCY
++#define DS_PRIVATE_BTHREAD_CONCURRENCY 0
++#endif
++#if DS_PRIVATE_BTHREAD_CONCURRENCY != 0 && DS_PRIVATE_BTHREAD_CONCURRENCY != 8
++#error "DS_PRIVATE_BTHREAD_CONCURRENCY must be 0 or 8"
++#endif
++#if DS_PRIVATE_BTHREAD_CONCURRENCY == 8
++#include <cstdio>
++#include <bthread/bthread.h>
++#endif
++
+ #include "datasystem/common/flags/common_flags.h"
+ #include "datasystem/common/log/log.h"
+
+@@ -147,6 +158,16 @@
+ {
+     static std::once_flag once;
+     std::call_once(once, []() {
++#if DS_PRIVATE_BTHREAD_CONCURRENCY == 8
++        const int previous = bthread_getconcurrency();
++        const int result = bthread_setconcurrency(8);
++        CHECK_EQ(result, 0);
++        const int configured = bthread_getconcurrency();
++        CHECK_EQ(configured, 8);
++        std::fprintf(stderr, "DS_PRIVATE_BTHREAD_PREINIT before=%d result=%d configured=%d\n",
++                     previous, result, configured);
++        std::fflush(stderr);
++#endif
+         LOG_IF_ERROR(RegisterRpcAuthChecksumColdOnce(), "RPC authentication capture registration failed");
+         EnsureBrpcEventDispatcherNum();
+         brpc::ChannelOptions opts;
