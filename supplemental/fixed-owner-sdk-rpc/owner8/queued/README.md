@@ -24,7 +24,7 @@ The binary accepts `get|set WORKER_PORT LOG_DIR NEW_CASE_DIR`. Before starting, 
 ## Synthetic tests and complete data
 
 ```sh
-PYTHONPATH=../.. python3 -B -m unittest -v test_owner8_queued_validation test_build_queued
+PYTHONPATH=../.. python3 -B -m unittest -v test_owner8_queued_validation test_build_queued test_queued_refs
 python3 build_queued.py --stage-only --output <NEW_STAGE_DIR>
 c++ -std=c++20 -O2 -pthread -Wall -Wextra -Werror -I<NEW_STAGE_DIR> \
   <NEW_STAGE_DIR>/owner8_queued_admission_test.cpp -o <NEW_STAGE_DIR>/unit-green
@@ -35,6 +35,8 @@ c++ -std=c++20 -O2 -pthread -Wall -Wextra -Werror -I<NEW_STAGE_DIR> \
 Run each pure unit binary under an 8-second watchdog: GREEN expects all eight PASS/exit0; semantic RED restores the period rejection and observer-debt abort, expecting five PASS/three FAIL/exit1. The C++ wake-delay fixture is the wholly synthetic 17,000,000ns value. Python populations and ABI2 containers are generated synthetically; their fake SDK identity is not an executable SDK. Unit sources, fake fixtures and RED code are never linked into production driver binaries.
 
 Use `validate_owner8_queued_case.validate_case` with explicit expected SDK path/hash, with `PYTHONPATH=../..` for the unchanged shared POD decoder. Preserve every planned ID and full successful cohort. The added `head_enter_ns` and `kv_call_begin_ns` distinguish FIFO backlog, pacing, pre-call work, SDK call, validation and observer tail. Full CDFs include zeros, ties, late calls and drain. Incomplete cohorts cannot provide successful-subset performance ranks. Existing 0.70 RPC-P99 and rank-sensitivity numerical gates remain descriptive; they do not establish observer overhead or identical actual send patterns.
+
+`qualification_refs.py` stores complete case qualifications behind immutable path/SHA references. Loading requires an explicit `expected_sdk_sha256` from the caller's frozen per-arm SDK selection, after checking the row identity against `campaign.planned_rows()`; the helper has no default SDK identity. `campaign.py` provides case ordering and result callbacks. The nine `test_queued_refs` cases use invented SDK hashes and metadata, including different baseline/candidate identities, and establish no runtime or SDK performance result.
 
 ## Limits and rollback
 
